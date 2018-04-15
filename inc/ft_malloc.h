@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/15 21:56:38 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/15 22:36:06 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,8 @@ typedef struct	s_mem
 	void	*small;
 	size_t	max_small;
 	void	*large;
-	size_t	max_large;
+//	size_t	max_large;
 }				t_mem;
-
-typedef struct	s_addr
-{
-	void	*start;
-	size_t	len;
-}				t_addr;
 
 extern	t_malloc	g_mem;
 

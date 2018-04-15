@@ -4,3 +4,11 @@ M octets
 ◦ Les mallocs “LARGE”, de (m+1) octets et plus, seront stockés hors zone, c’est
 à dire simplement avec un mmap(), ils seront en quelquesorte une zone à eux
 tout seul`.
+
+
+
+
+TINY => ajouter a la liste jsuqu a arriver a max
+SMALL => pareil;
+
+MAIS SI UN DES DEUX EST FULL QUE FAIRE ?
