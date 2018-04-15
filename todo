@@ -1,0 +1,6 @@
+◦ Les mallocs “TINY”, de 1 à n octets, seront stockés dans des zones de N octets
+◦ Les mallocs “SMALL”, de (n+1) à m octets, seront stockés dans des zones de
+M octets
+◦ Les mallocs “LARGE”, de (m+1) octets et plus, seront stockés hors zone, c’est
+à dire simplement avec un mmap(), ils seront en quelquesorte une zone à eux
+tout seul`.
