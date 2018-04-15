@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/15 21:27:39 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/15 21:56:38 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_MALLOC_H
 
 # include <string.h>
+# include <sys/mman.h>
 # include "../libft/libft.a"
 
 # define TINY	1
@@ -21,11 +22,11 @@
 
 typedef struct	s_mem
 {
-	t_list	*tiny;
+	void	*tiny;
 	size_t	max_tiny;
-	t_list	*small;
+	void	*small;
 	size_t	max_small;
-	t_list	*large;
+	void	*large;
 	size_t	max_large;
 }				t_mem;
 
