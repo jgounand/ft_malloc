@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/15 21:21:33 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/15 21:27:39 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TINY	1
 # define SMALL	2
 
-typedef struct	s_malloc
+typedef struct	s_mem
 {
 	t_list	*tiny;
 	size_t	max_tiny;
@@ -27,7 +27,7 @@ typedef struct	s_malloc
 	size_t	max_small;
 	t_list	*large;
 	size_t	max_large;
-}				t_malloc;
+}				t_mem;
 
 typedef struct	s_addr
 {

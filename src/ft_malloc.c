@@ -6,13 +6,18 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/15 21:21:37 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/15 21:27:38 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
 t_malloc	g_mem;
+
+void	init_mem(void)
+{
+
+}
 
 void *malloc(size_t size)
 {
