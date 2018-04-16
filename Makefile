@@ -10,7 +10,7 @@ INC_DIR			=	inc
 INCS			=	-I $(LIB_PATH)/$(INC_DIR) -I $(INC_DIR)
 
 SRC_DIR			=	src
-SRC_BASE		=	main.c
+SRC_BASE		=	main.c ft_malloc.c
 OBJ_DIR			=	obj
 
 SRCS			=	$(addprefix $(SRC_DIR)/, $(SRC_BASE))
