@@ -1,6 +1,6 @@
 CC				=	gcc
 NAME			=	ft_malloc
-FLAGS			=	-Wall -Wextra -Werror -g
+FLAGS			=	-Wall -Wextra -Werror -g -fsanitize=address
 
 LIB_PATH		=	libft
 LIB				=	$(LIB_PATH)/libft.a
@@ -10,8 +10,7 @@ INC_DIR			=	inc
 INCS			=	-I $(LIB_PATH)/$(INC_DIR) -I $(INC_DIR)
 
 SRC_DIR			=	src
-SRC_BASE		=	main.c ft_malloc
-
+SRC_BASE		=	main.c
 OBJ_DIR			=	obj
 
 SRCS			=	$(addprefix $(SRC_DIR)/, $(SRC_BASE))

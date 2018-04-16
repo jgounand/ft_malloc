@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/16 11:36:08 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/16 13:09:05 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,27 @@
 
 # include <string.h>
 # include <sys/mman.h>
-# include "../libft/libft.a"
+# include "../libft/libft.h"
 
 # define TINY	1
 # define SMALL	2
 
+typedef struct s_node
+{
+	struct s_node *next;
+}				t_node;
+
 typedef struct	s_mem
 {
-	void	*tiny;
+	t_node	*tiny;
 	size_t	max_tiny;
-	void	*small;
+	t_node	*small;
 	size_t	max_small;
-	void	*large;
+	t_node	*large;
 //	size_t	max_large;
-	t_mem	*next;
+	struct s_mem	*next;
 }				t_mem;
 
-extern	t_malloc	g_mem;
+extern	t_mem	*g_mem;
 
 #endif
