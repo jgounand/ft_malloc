@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 18:03:27 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/20 20:37:30 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 # include <sys/mman.h>
 # include "../libft/libft.h"
 
-# define TINY	100
+# define TINY	99
 # define SMALL	250
 # define NB_PAGES		150
 # define MAX_TINY getpagesize() * NB_PAGES * TINY
-# define MAX_SMALL getpagesize() * NB_PAGES * SMALL
+# define MAX_MED getpagesize() * NB_PAGES * SMALL
 
 typedef struct s_node
 {
@@ -55,4 +55,6 @@ typedef struct	s_key
 extern	t_mem	*g_mem;
 
 void *ft_malloc(size_t size);
+void show_alloc_mem(void);
+t_mem	*init_mem(void);
 #endif

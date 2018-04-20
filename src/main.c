@@ -25,20 +25,24 @@ int	main(int ac, char **av)
 	char	c;
 	size_t	i;
 	char	*str1[REPETITION];
-
+	char	*str[REPETITION];
 	(void)ac;
+	(void)(str);
+	(void)(str1);
 	i = atoi(av[2]);
 	c = av[1][0];
 	for (int j = 0; j < REPETITION ; j++)
 	{
-		write(1,"2",2);
+		//write(1,"2",2);
 		str1[j] = str_new_cpy(c, i);
-		write(1,"1\n",2);
-		//str[j] = str_new_cpy(c, i + 100);
+		//`write(1,"1\n",2);
+		str[j] = str_new_cpy(c, i + 98);
 	}
 	for (int j = 0; j < REPETITION ; j++)
 	{
-		printf("j str1 %p %s\n", str1[j], str1[j]);
+		printf("str1 \t%lu\n", strlen(str1[j]));
+		printf("str \t%lu\n", strlen(str[j]));
 	}
+	show_alloc_mem();
 	return (0); // ou erreur
 }
