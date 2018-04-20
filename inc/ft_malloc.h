@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 20:37:30 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/20 21:36:20 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@
 typedef struct s_node
 {
 	struct s_node	*next;
+	struct s_node	*previous;
 	void			*ptr;
 	size_t			size;
 	char			hexa;
 	void			*end;
+	bool			free;
 
 }				t_node;
 
@@ -57,4 +59,5 @@ extern	t_mem	*g_mem;
 void *ft_malloc(size_t size);
 void show_alloc_mem(void);
 t_mem	*init_mem(void);
+void ft_free(void *ptr);
 #endif

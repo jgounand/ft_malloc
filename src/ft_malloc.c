@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 21:03:03 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/20 21:31:32 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	*add_small_node(t_node *start, size_t lenght, size_t max)
 	}
 	new = tmp + 1;
 	tmp->next = new;
+	new->previous = tmp;
 	new->ptr = tmp->end + 1;
 	new->size = lenght;
 	new->hexa = 0;
@@ -82,6 +83,7 @@ void	*add_fat_node(t_node *start, size_t lenght)
 	}
 	new = tmp + 1;
 	tmp->next = new;
+	new->previous = tmp;
 	new->size = lenght;
 	new->end = (void *)tmp->end + lenght;
 	new->hexa = 0;
