@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 21:36:39 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/20 22:58:29 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void ft_free(void *ptr)
 		if (tmp->ptr == ptr)
 		{
 			tmp->previous->next = tmp->next;
-			tmp->free = 1;
+			tmp->free = tmp->size;
 		}
 		tmp = tmp->next;
 	}
@@ -37,7 +37,7 @@ void ft_free(void *ptr)
 		if (tmp->ptr == ptr)
 		{
 			tmp->previous->next = tmp->next;
-			tmp->free = 1;
+			tmp->free = tmp->size;
 		}
 		tmp = tmp->next;
 	}

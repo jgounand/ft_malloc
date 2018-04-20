@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 21:36:20 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/20 22:57:55 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_node
 	size_t			size;
 	char			hexa;
 	void			*end;
-	bool			free;
+	size_t			free;
 
 }				t_node;
 
