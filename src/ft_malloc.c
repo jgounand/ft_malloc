@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 18:21:12 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/20 18:52:00 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_mem	*g_mem = NULL;
 
 t_mem	*init_mem(void)
 {
-	t_key	*key;
 
 	if (g_mem)
 		return (g_mem);
@@ -28,9 +27,7 @@ t_mem	*init_mem(void)
 		return (NULL);
 	}
 	ft_bzero(g_mem, sizeof(t_mem) + MAX_TINY + MAX_SMALL + getpagesize() * 3);
-	key = (t_key *)(g_mem + 1);
-	key->key = 125;
-	g_mem->tiny = (t_tny *)(key + 1);
+	g_mem->tiny = (t_tny *)(g_mem + 1);
 	g_mem->med = (t_med *)(g_mem + getpagesize());
 	g_mem->fat = (t_fat *)(g_mem + getpagesize() * 2);
 	g_mem->next = NULL;
