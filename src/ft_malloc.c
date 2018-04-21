@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 21:31:32 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 13:51:00 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,34 +39,64 @@ t_mem	*init_mem(void)
 	return (g_mem);
 }
 
-void	*add_small_node(t_node *start, size_t lenght, size_t max)
+t_node *search_place(t_node *start, size_t lenght, size_t max, char type)
 {
 	t_node	*tmp;
-	t_node	*new;
 	size_t	total;
 
 	total = 0;
-	tmp = start;
 
+	tmp = init_mem()->free;
+	while (tmp)
+	{
+		if (((tmp->previous && lenght <= tmp->previous->free + tmp->free) || lenght <= tmp->free) && type == tmp->type)
+		{
+			return (tmp);
+		}
+		tmp = tmp->next;
+	}
+	tmp = start;
 	while (tmp->next)
 	{
 		total += tmp->size;
 		tmp = tmp->next;
 	}
-	if (total + lenght > max)
+	if (max && total + lenght > max)
 	{
 		printf("error\n");
 		return (NULL);
 	}
+	return (tmp);
+}
+
+void	*add_small_node(t_node *start, size_t lenght, size_t max)
+{
+	t_node *tmp;
+	t_node	*new;
+	char	type;
+
+	type = start == init_mem()->tiny ? 0 : 1;
+	if (!(tmp = search_place(start, lenght, max, type)))
+		return NULL;
+	if (tmp->free)
+	{
+		new = tmp;
+		new->free = new->free - lenght;
+		printf("new->free %lu\n", new->free);
+	}
+	else
+	{
 	new = tmp + 1;
 	tmp->next = new;
 	new->previous = tmp;
 	new->ptr = tmp->end + 1;
-	new->size = lenght;
-	new->hexa = 0;
 	new->end = (void *)tmp->end + lenght;
 	new->next = NULL;
-	printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
+	new->type = type;
+	}
+	new->size = lenght;
+	new->hexa = 0;
+//	printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
 	return (new->ptr);
 	}
 
@@ -74,23 +104,31 @@ void	*add_fat_node(t_node *start, size_t lenght)
 {
 	t_node	*tmp;
 	t_node	*new;
+	char	type;
 
-	tmp = start;
-	while (tmp->next)
+	type = start == init_mem()->tiny ? 0 : 1;
+	if (!(tmp = search_place(start, lenght, 0 ,type)))
+		return NULL;
+	if (tmp->free)
 	{
-		printf("tmp %p tmp->next %p\n", tmp, tmp->next);
-		tmp = tmp->next;
+		new = tmp;
+		new->free = new->free - lenght;
+		printf("new->free %lu\n", new->free);
 	}
+	else
+	{
 	new = tmp + 1;
 	tmp->next = new;
 	new->previous = tmp;
-	new->size = lenght;
 	new->end = (void *)tmp->end + lenght;
-	new->hexa = 0;
 	new->next = NULL;
+	new->type = 3;
+	}
+	new->size = lenght;
+	new->hexa = 0;
 	if (!(new->ptr = mmap(NULL, lenght, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (NULL);
-	printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
+	//printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
 	return (new->ptr);
 }
 void *ft_malloc(size_t size)

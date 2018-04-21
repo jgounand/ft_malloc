@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 21:13:25 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 13:55:24 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,30 @@ void show_alloc_mem(void)
 	{
 		if (first)
 			first = 0;
-		else
-		printf("%p - %p : %lu octets\n", tmp->ptr, tmp->end , tmp->size);
+		else if (tmp->size)
+		printf("%p - %p : %lu octets type %d\n", tmp->ptr, tmp->end , tmp->size, tmp->type);
 		tmp = tmp->next;
 	}
 	tmp = (t_med *)(g_mem + getpagesize());
-	printf("MED : %p\n", tmp->end);
+	printf("SMALL : %p\n", tmp->end);
 	first = 1;
 	while (tmp->next)
 	{
 		if (first)
 			first = 0;
-		else
-		printf("%p - %p : %lu octets\n", tmp->ptr, tmp->end , tmp->size);
+		else if (tmp->size)
+		printf("%p - %p : %lu octets type %d\n", tmp->ptr, tmp->end , tmp->size, tmp->type);
 		tmp = tmp->next;
 	}
 	tmp = (t_med *)(g_mem + getpagesize() * 2);
-	printf("FAT : %p\n", tmp->end + getpagesize());
+	printf("LARGE: %p\n", tmp->end + getpagesize());
 	first = 1;
 	while (tmp->next)
 	{
 		if (first)
 			first = 0;
-		else
-		printf("%p - %p : %lu octets\n", tmp->ptr, tmp->end , tmp->size);
+		else if (tmp->size)
+		printf("%p - %p : %lu octets type %d\n", tmp->ptr, tmp->end , tmp->size, tmp->type);
 		tmp = tmp->next;
 	}
 }

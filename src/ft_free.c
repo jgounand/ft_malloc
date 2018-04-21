@@ -6,11 +6,22 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 22:58:29 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 13:10:54 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
+
+static	t_node *search_ptr(t_node *tmp, void *ptr)
+{
+	while (tmp)
+	{
+		if (tmp->ptr == ptr)
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
 
 void ft_free(void *ptr)
 {
@@ -21,25 +32,21 @@ void ft_free(void *ptr)
 		return ;
 	tmp = init_mem()->tiny;
 	tmp = tmp->next;
-	while (tmp)
+	if ((tmp = search_ptr(tmp, ptr)))
 	{
-		if (tmp->ptr == ptr)
-		{
-			tmp->previous->next = tmp->next;
-			tmp->free = tmp->size;
-		}
-		tmp = tmp->next;
+		tmp->free = tmp->size;
+		tmp->size = 0;
+		tmp->next_free = g_mem->free;
+		g_mem->free = tmp;
 	}
 	tmp = init_mem()->med;
 	tmp = tmp->next;
-	while (tmp)
+	if ((tmp = search_ptr(tmp, ptr)))
 	{
-		if (tmp->ptr == ptr)
-		{
-			tmp->previous->next = tmp->next;
-			tmp->free = tmp->size;
-		}
-		tmp = tmp->next;
+		tmp->free = tmp->size;
+		tmp->size = 0;
+		tmp->next_free = g_mem->free;
+		g_mem->free = tmp;
 	}
 	tmp = init_mem()->fat;
 	tmp = tmp->next;

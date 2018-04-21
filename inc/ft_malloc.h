@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/20 22:57:55 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 13:26:47 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 
 typedef struct s_node
 {
+	char			type;
 	struct s_node	*next;
+	struct s_node	*next_free;
 	struct s_node	*previous;
 	void			*ptr;
 	size_t			size;
