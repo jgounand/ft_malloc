@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/21 13:51:00 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 14:57:33 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,30 @@ t_node *search_place(t_node *start, size_t lenght, size_t max, char type)
 
 	total = 0;
 
+	tmp = start;
+	while (tmp)
+	{
+		if (lenght <= tmp->free)
+		{
+				//decaller la structure
+				//regarder taile pour ne pas depasser le pagesize
+		}
+		tmp = tmp->next;
+	}
 	tmp = init_mem()->free;
 	while (tmp)
 	{
-		if (((tmp->previous && lenght <= tmp->previous->free + tmp->free) || lenght <= tmp->free) && type == tmp->type)
+		if (tmp->previous && lenght <= tmp->previous->free + tmp->free && type == tmp->type)
 		{
-			return (tmp);
+				tmp->ptr = tmp->ptr - tmp->previous->free;
+				tmp->free -= (lenght - tmp->previous->free);
+				tmp->previous->free = 0;
+				tmp->previous_free->next = tmp->next_free;
+				tmp->next_free->previous = tmp->previous_free;
+				return (tmp);
 		}
+		if (lenght <= tmp->free && type == tmp->type)
+			return (tmp);
 		tmp = tmp->next;
 	}
 	tmp = start;
@@ -81,7 +98,6 @@ void	*add_small_node(t_node *start, size_t lenght, size_t max)
 	if (tmp->free)
 	{
 		new = tmp;
-		new->free = new->free - lenght;
 		printf("new->free %lu\n", new->free);
 	}
 	else
@@ -97,7 +113,7 @@ void	*add_small_node(t_node *start, size_t lenght, size_t max)
 	new->size = lenght;
 	new->hexa = 0;
 //	printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
-	return (new->ptr);
+	return (new->ptr + new->hexa);
 	}
 
 void	*add_fat_node(t_node *start, size_t lenght)

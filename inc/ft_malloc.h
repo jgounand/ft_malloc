@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/21 13:26:47 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 14:58:53 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ typedef struct s_node
 {
 	char			type;
 	struct s_node	*next;
-	struct s_node	*next_free;
 	struct s_node	*previous;
+	struct s_node	*next_free;
+	struct s_node	*previous_free;
 	void			*ptr;
 	size_t			size;
 	char			hexa;
@@ -45,8 +46,11 @@ typedef t_node t_free;
 typedef struct	s_mem
 {
 	t_tny	*tiny;
+	size_t	size_tiny;
 	t_med	*med;
+	size_t	size_med;
 	t_fat	*fat;
+	size_t	size_fat;
 	t_free	*free;
 	struct s_mem	*next;
 }				t_mem;

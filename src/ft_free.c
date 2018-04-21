@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/21 13:10:54 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/21 14:45:56 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void ft_free(void *ptr)
 	{
 		tmp->free = tmp->size;
 		tmp->size = 0;
+		if (g_mem->free)
+		g_mem->free->previous = tmp;
 		tmp->next_free = g_mem->free;
 		g_mem->free = tmp;
 	}
@@ -45,6 +47,8 @@ void ft_free(void *ptr)
 	{
 		tmp->free = tmp->size;
 		tmp->size = 0;
+		if (g_mem->free)
+		g_mem->free->previous = tmp;
 		tmp->next_free = g_mem->free;
 		g_mem->free = tmp;
 	}
