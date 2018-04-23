@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/21 14:57:33 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/23 05:02:01 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,41 +31,37 @@ t_mem	*init_mem(void)
 	g_mem->med = (t_med *)(g_mem + getpagesize());
 	g_mem->fat = (t_fat *)(g_mem + getpagesize() * 2);
 	g_mem->next = NULL;
-	ft_bzero(g_mem->tiny, sizeof(t_tny));
-	ft_bzero(g_mem->med, sizeof(t_med));
-	ft_bzero(g_mem->fat, sizeof(t_fat));
-	g_mem->tiny->end = g_mem + getpagesize() * 3;
-	g_mem->med->end = g_mem->tiny->end + MAX_TINY;
 	return (g_mem);
 }
 
 t_node *search_place(t_node *start, size_t lenght, size_t max, char type)
 {
-	t_node	*tmp;
-	size_t	total;
-
-	total = 0;
-
-	tmp = start;
-	while (tmp)
+	t_node	*current;
+	t_node	*next;
+	size_t	*free;
+	while (current)
 	{
-		if (lenght <= tmp->free)
+		if (!current->size && (next = current + 1))
 		{
-				//decaller la structure
-				//regarder taile pour ne pas depasser le pagesize
+			
 		}
-		tmp = tmp->next;
 	}
-	tmp = init_mem()->free;
-	while (tmp)
-	{
+		if ()
 		if (tmp->previous && lenght <= tmp->previous->free + tmp->free && type == tmp->type)
 		{
 				tmp->ptr = tmp->ptr - tmp->previous->free;
 				tmp->free -= (lenght - tmp->previous->free);
 				tmp->previous->free = 0;
-				tmp->previous_free->next = tmp->next_free;
+				if (tmp->previous_free)
+				{
+					tmp->previous_free->next = tmp->next_free;
 				tmp->next_free->previous = tmp->previous_free;
+				}
+				else
+				{
+					g_mem->free = tmp->next_free;
+					tmp->next_free = g_mem->free;
+				}
 				return (tmp);
 		}
 		if (lenght <= tmp->free && type == tmp->type)
@@ -73,6 +69,19 @@ t_node *search_place(t_node *start, size_t lenght, size_t max, char type)
 		tmp = tmp->next;
 	}
 	tmp = start;
+	while (tmp)
+	{
+		if (lenght <= tmp->free)
+		{
+			total = nodecmpt(&tmp);
+			printf("lenght <= tmp->free %lu total\n", total);
+				//decaller la structure
+				//regarder taile pour ne pas depasser le pagesize
+		}
+		tmp = tmp->next;
+	}
+	tmp = start;
+	total = 0;
 	while (tmp->next)
 	{
 		total += tmp->size;

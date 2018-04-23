@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/21 13:55:24 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/23 04:05:50 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void show_alloc_mem(void)
 		if (first)
 			first = 0;
 		else if (tmp->size)
-		printf("%p - %p : %lu octets type %d\n", tmp->ptr, tmp->end , tmp->size, tmp->type);
+		printf("%p - %p : %lu octets type %lu\n", tmp->ptr, tmp->end , tmp->size, tmp->free);
 		tmp = tmp->next;
 	}
 	tmp = (t_med *)(g_mem + getpagesize());
@@ -38,7 +38,7 @@ void show_alloc_mem(void)
 		if (first)
 			first = 0;
 		else if (tmp->size)
-		printf("%p - %p : %lu octets type %d\n", tmp->ptr, tmp->end , tmp->size, tmp->type);
+		printf("%p - %p : %lu octets free %lu\n", tmp->ptr, tmp->end , tmp->size, tmp->free);
 		tmp = tmp->next;
 	}
 	tmp = (t_med *)(g_mem + getpagesize() * 2);

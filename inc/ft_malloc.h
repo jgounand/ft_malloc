@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/21 14:58:53 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/04/23 05:14:12 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,48 +17,35 @@
 # include <sys/mman.h>
 # include "../libft/libft.h"
 
-# define TINY	99
-# define SMALL	250
-# define NB_PAGES		150
+# define TINY	256
+# define SMALL	1024
+# define NB_PAGES		128
 # define MAX_TINY getpagesize() * NB_PAGES * TINY
 # define MAX_MED getpagesize() * NB_PAGES * SMALL
 
+typedef struct s_tiny
+{
+	void			*ptr;
+	int				size;
+}				t_tny;
+
 typedef struct s_node
 {
-	char			type;
-	struct s_node	*next;
-	struct s_node	*previous;
-	struct s_node	*next_free;
-	struct s_node	*previous_free;
 	void			*ptr;
 	size_t			size;
-	char			hexa;
-	void			*end;
-	size_t			free;
-
+	bool			free;
 }				t_node;
 
-typedef t_node t_tny;
-typedef t_node t_med;
+typedef t_tny t_med;
 typedef t_node t_fat;
-typedef t_node t_free;
 
 typedef struct	s_mem
 {
 	t_tny	*tiny;
-	size_t	size_tiny;
 	t_med	*med;
-	size_t	size_med;
 	t_fat	*fat;
-	size_t	size_fat;
-	t_free	*free;
 	struct s_mem	*next;
 }				t_mem;
-
-typedef struct	s_key
-{
-	unsigned short	key;
-}				t_key;
 
 extern	t_mem	*g_mem;
 
@@ -66,4 +53,5 @@ void *ft_malloc(size_t size);
 void show_alloc_mem(void);
 t_mem	*init_mem(void);
 void ft_free(void *ptr);
+size_t	nodecmpt(t_node **node);
 #endif
