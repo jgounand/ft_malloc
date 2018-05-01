@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/01 17:09:11 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/01 19:37:15 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ t_mem	*init_mem(void)
 		return (NULL);
 	}
 	ft_bzero(g_mem, sizeof(t_mem) + MAX_TINY + MAX_MED + getpagesize() * 3);
-	TINY_SIZE = getpagesize() / sizeof(t_tny);
-	MED_SIZE = getpagesize() / sizeof(t_med);
-	FAT_SIZE = getpagesize() / sizeof(t_fat);
+	TINY_SIZE = MAX_HEADER(t_tny);
+	MED_SIZE = MAX_HEADER(t_med);
+	FAT_SIZE = MAX_HEADER(t_fat);
 	g_mem->next = NULL;
 	return (g_mem);
 }

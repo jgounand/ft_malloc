@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/01 16:54:54 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/01 19:41:51 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define TINY_SIZE g_mem->max_size[0]
 # define MED_SIZE g_mem->max_size[1]
 # define FAT_SIZE g_mem->max_size[2]
+# define MAX_HEADER(s) getpagesize() / sizeof(s) - 1
 
 typedef struct s_tiny
 {
