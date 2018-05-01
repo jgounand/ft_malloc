@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/23 05:14:12 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/01 16:54:54 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,25 @@
 # define TINY	256
 # define SMALL	1024
 # define NB_PAGES		128
-# define MAX_TINY getpagesize() * NB_PAGES * TINY
-# define MAX_MED getpagesize() * NB_PAGES * SMALL
+# define MAX_TINY getpagesize() * NB_PAGES
+# define MAX_MED getpagesize() * NB_PAGES
+# define H_TINY (t_tny *)(g_mem + 1)
+# define H_MED (t_med *)(g_mem + getpagesize())
+# define H_FAT (t_fat *)(g_mem + getpagesize() * 2)
+# define TINY_SIZE g_mem->max_size[0]
+# define MED_SIZE g_mem->max_size[1]
+# define FAT_SIZE g_mem->max_size[2]
 
 typedef struct s_tiny
 {
 	void			*ptr;
-	int				size;
+	short				size;
 }				t_tny;
 
 typedef struct s_node
 {
 	void			*ptr;
 	size_t			size;
-	bool			free;
 }				t_node;
 
 typedef t_tny t_med;
@@ -41,9 +46,7 @@ typedef t_node t_fat;
 
 typedef struct	s_mem
 {
-	t_tny	*tiny;
-	t_med	*med;
-	t_fat	*fat;
+	size_t	max_size[3];
 	struct s_mem	*next;
 }				t_mem;
 

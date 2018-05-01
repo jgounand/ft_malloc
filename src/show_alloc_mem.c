@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/23 04:05:50 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:05:24 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,31 @@
 
 void show_alloc_mem(void)
 {
-	bool first;
+	t_tny	*tmp;
+	t_fat	*fat;
 
-	first = 1;
 	init_mem();
-	t_node	*tmp;
-	tmp = (t_node *)(g_mem + 1);
-	printf("TINY : %p\n", tmp->end);
-	while (tmp->next)
+	tmp = H_TINY;
+	printf("TINY : %p\n", (void *)g_mem + getpagesize() * 3);
+	while (tmp->ptr)
 	{
-		if (first)
-			first = 0;
-		else if (tmp->size)
-		printf("%p - %p : %lu octets type %lu\n", tmp->ptr, tmp->end , tmp->size, tmp->free);
-		tmp = tmp->next;
+		printf("%p : %d octets\n", tmp->ptr, tmp->size);
+		tmp++;
 	}
-	tmp = (t_med *)(g_mem + getpagesize());
-	printf("SMALL : %p\n", tmp->end);
-	first = 1;
-	while (tmp->next)
+	printf("%lu header tiny left\n", TINY_SIZE);
+	tmp = H_MED;
+	printf("SMALL : %p\n", (void *)g_mem + getpagesize() * 3 + MAX_TINY);
+	while (tmp->ptr)
 	{
-		if (first)
-			first = 0;
-		else if (tmp->size)
-		printf("%p - %p : %lu octets free %lu\n", tmp->ptr, tmp->end , tmp->size, tmp->free);
-		tmp = tmp->next;
+		printf("%p : %d octets\n", tmp->ptr, tmp->size);
+		tmp++;
 	}
-	tmp = (t_med *)(g_mem + getpagesize() * 2);
-	printf("LARGE: %p\n", tmp->end + getpagesize());
-	first = 1;
-	while (tmp->next)
+	printf("%lu header med left\n",MED_SIZE);
+	fat = H_FAT;
+	printf("LARGE: %p\n", (void *)g_mem + getpagesize() *3 + MAX_TINY + MAX_MED);
+	while (tmp->ptr)
 	{
-		if (first)
-			first = 0;
-		else if (tmp->size)
-		printf("%p - %p : %lu octets type %d\n", tmp->ptr, tmp->end , tmp->size, tmp->type);
-		tmp = tmp->next;
+		printf("%p : %d octets\n", tmp->ptr, tmp->size);
+		tmp++;
 	}
 }

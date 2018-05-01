@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/23 05:02:01 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:09:11 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,144 +27,77 @@ t_mem	*init_mem(void)
 		return (NULL);
 	}
 	ft_bzero(g_mem, sizeof(t_mem) + MAX_TINY + MAX_MED + getpagesize() * 3);
-	g_mem->tiny = (t_tny *)(g_mem + 1);
-	g_mem->med = (t_med *)(g_mem + getpagesize());
-	g_mem->fat = (t_fat *)(g_mem + getpagesize() * 2);
+	TINY_SIZE = getpagesize() / sizeof(t_tny);
+	MED_SIZE = getpagesize() / sizeof(t_med);
+	FAT_SIZE = getpagesize() / sizeof(t_fat);
 	g_mem->next = NULL;
 	return (g_mem);
 }
 
-t_node *search_place(t_node *start, size_t lenght, size_t max, char type)
+void *get_addr(void *ptr)
 {
-	t_node	*current;
-	t_node	*next;
-	size_t	*free;
-	while (current)
-	{
-		if (!current->size && (next = current + 1))
-		{
-			
-		}
-	}
-		if ()
-		if (tmp->previous && lenght <= tmp->previous->free + tmp->free && type == tmp->type)
-		{
-				tmp->ptr = tmp->ptr - tmp->previous->free;
-				tmp->free -= (lenght - tmp->previous->free);
-				tmp->previous->free = 0;
-				if (tmp->previous_free)
-				{
-					tmp->previous_free->next = tmp->next_free;
-				tmp->next_free->previous = tmp->previous_free;
-				}
-				else
-				{
-					g_mem->free = tmp->next_free;
-					tmp->next_free = g_mem->free;
-				}
-				return (tmp);
-		}
-		if (lenght <= tmp->free && type == tmp->type)
-			return (tmp);
-		tmp = tmp->next;
-	}
-	tmp = start;
-	while (tmp)
-	{
-		if (lenght <= tmp->free)
-		{
-			total = nodecmpt(&tmp);
-			printf("lenght <= tmp->free %lu total\n", total);
-				//decaller la structure
-				//regarder taile pour ne pas depasser le pagesize
-		}
-		tmp = tmp->next;
-	}
-	tmp = start;
-	total = 0;
-	while (tmp->next)
-	{
-		total += tmp->size;
-		tmp = tmp->next;
-	}
-	if (max && total + lenght > max)
-	{
-		printf("error\n");
-		return (NULL);
-	}
-	return (tmp);
+	while ((uintptr_t)ptr % 8)
+		ptr++;
+	printf("%lu %p\n", (size_t)&ptr % 8,ptr);
+	return (ptr);
 }
 
-void	*add_small_node(t_node *start, size_t lenght, size_t max)
+void	*add_small(short type, size_t lenght)
 {
-	t_node *tmp;
-	t_node	*new;
-	char	type;
+	t_tny *tmp;
+	size_t	i;
 
-	type = start == init_mem()->tiny ? 0 : 1;
-	if (!(tmp = search_place(start, lenght, max, type)))
-		return NULL;
-	if (tmp->free)
+	i = 0;
+	tmp = type  == 0? H_TINY : H_MED;
+	if (!g_mem->max_size[(int)type])
 	{
-		new = tmp;
-		printf("new->free %lu\n", new->free);
+		printf("il faut realouer !!\n");
+		return (NULL);
+	}
+	while (tmp->size)
+	{
+		if (tmp->size < 0)
+		{
+			//checker si possible ajouter ici
+			printf("ELEMENT FREEDC'est good\n");
+			break;
+		}
+		tmp++;
+	}
+	if (tmp == H_TINY)
+	{
+		printf("tmp == H_TINY\n");
+		tmp->ptr = get_addr((void *)g_mem + getpagesize()* 3);
+		tmp->size = lenght;
+	}
+	else if (tmp == H_MED)
+	{
+		printf("tmp == H_MDE\n");
+		tmp->ptr = get_addr((void *)g_mem + getpagesize()* 3 + MAX_TINY);
+		tmp->size = lenght;
 	}
 	else
 	{
-	new = tmp + 1;
-	tmp->next = new;
-	new->previous = tmp;
-	new->ptr = tmp->end + 1;
-	new->end = (void *)tmp->end + lenght;
-	new->next = NULL;
-	new->type = type;
+		tmp->ptr = get_addr(1 + (tmp - 1)->ptr + (tmp - 1)->size);
+		tmp->size = lenght;
 	}
-	new->size = lenght;
-	new->hexa = 0;
-//	printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
-	return (new->ptr + new->hexa);
-	}
-
-void	*add_fat_node(t_node *start, size_t lenght)
-{
-	t_node	*tmp;
-	t_node	*new;
-	char	type;
-
-	type = start == init_mem()->tiny ? 0 : 1;
-	if (!(tmp = search_place(start, lenght, 0 ,type)))
-		return NULL;
-	if (tmp->free)
-	{
-		new = tmp;
-		new->free = new->free - lenght;
-		printf("new->free %lu\n", new->free);
-	}
+	if (!type)
+		TINY_SIZE--;
 	else
-	{
-	new = tmp + 1;
-	tmp->next = new;
-	new->previous = tmp;
-	new->end = (void *)tmp->end + lenght;
-	new->next = NULL;
-	new->type = 3;
-	}
-	new->size = lenght;
-	new->hexa = 0;
-	if (!(new->ptr = mmap(NULL, lenght, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)))
-		return (NULL);
-	//printf("last %p new %p %lu %lu\n",tmp, new , &new - &tmp,sizeof(t_node));
-	return (new->ptr);
+		MED_SIZE--;
+	return (tmp->ptr);
 }
+
 void *ft_malloc(size_t size)
 {
 	if (!size)
 		return (NULL);
+	init_mem();
 	if (size <= TINY)
-		return (add_small_node(init_mem()->tiny, size, MAX_TINY));
+		return (add_small(0, size));
 	else if (size <= SMALL)
-		return (add_small_node(init_mem()->med, size, MAX_MED));
+		return (add_small(1, size));
 	else
-		return (add_fat_node(init_mem()->fat, size));
+		return (NULL);
 	return (NULL);
 }
