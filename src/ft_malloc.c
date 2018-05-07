@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/01 19:37:15 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/07 18:41:39 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,12 @@ void	*add_small(short type, size_t lenght)
 	}
 	while (tmp->size)
 	{
-		if (tmp->size < 0)
+		if (tmp->size < 0 && lenght <= (size_t)-tmp->size)
 		{
+			if ((size_t)-tmp->size - lenght >= 8)
+			{
+					printf("crer un nouveau free\n");
+			}
 			//checker si possible ajouter ici
 			printf("ELEMENT FREEDC'est good\n");
 			break;

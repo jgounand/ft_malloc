@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/01 20:57:13 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/07 18:16:09 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,25 @@ static void	try_defragment(t_tny *tofree, size_t cpt)
 			printf("0\n");
 		if ((tofree + 1)->size < 0)
 		{
-			ft_memmove(tofree + 1, tofree + 2, MAX_HEADER(t_tny) - cpt -1);
-			tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr) + (tofree +1)->size;
-			ft_bzero(tofree + 1, sizeof(t_tny));
-			if (!cpt)
-				TINY_SIZE++;
-			else
-				MED_SIZE++;
+			tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
+			printf("tofree->size %d\n", tofree->size);
+			ft_memmove(tofree + 1, tofree + 2, (void *)H_TINY + MAX_HEADER(t_tny) - (void *)(tofree + 2));
+			printf("tofree + 1)->ptr %p\n", (tofree + 1)->ptr);
+			TINY_SIZE++;
 			printf("1\n");
 		}
 		else
 		{
 			printf("2\n");
-			tofree->size = -tofree->size;
+			tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr);
+			printf("tofree->size %d\n", tofree->size);
 		}
 	}
 	else
 	{
 			printf("3\n");
+				TINY_SIZE++;
+
 		ft_bzero(tofree, sizeof(t_tny));
 	}
 
@@ -65,17 +66,20 @@ static void	try_defragment(t_tny *tofree, size_t cpt)
 	{
 		if ((tofree -1)->size < 0)
 		{
+			printf("4\n");
 			if (!tofree->size)
 			{
+			printf("5\n");
 			ft_bzero(tofree - 1, sizeof(t_tny));
-			if (!cpt)
 				TINY_SIZE++;
-			else
-				MED_SIZE++;
 			}
 			else
 			{
-		tofree->size = -((uintptr_t)(tofree)->ptr - (uintptr_t)(tofree - 1)->ptr) + (tofree +1)->size;
+			printf("6\n");
+			(tofree- 1)->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)(tofree - 1)->ptr);
+			ft_memmove(tofree, tofree + 1, ((void *)H_TINY + MAX_HEADER(t_tny)) - (void *)(tofree + 1));
+			printf("tofree->size %d\n", tofree->size);
+				TINY_SIZE++;
 			}
 		}
 	}
@@ -99,7 +103,10 @@ static void free_tny_small(t_tny *tofree, void *ptr)
 		printf("error tmp null\n");
 		exit(2);
 	}
-	try_defragment(tofree, cpt);
+	else
+	{
+		try_defragment(tofree, cpt);
+	}
 }
 
 static t_fat	*get_fat(void *ptr)
