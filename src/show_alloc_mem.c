@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/07 15:18:50 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/08 17:38:28 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void show_alloc_mem(void)
 
 	init_mem();
 	tmp = H_TINY;
+	printf("MAX_HEADER(t_tny) %lu %lu \n", MAX_HEADER(t_tny) ,TINY_SIZE);
+	return ;
 	nb_node = MAX_HEADER(t_tny) - TINY_SIZE;
 	printf("\n\nTINY : %p %lu\n", (void *)g_mem + getpagesize() * 3, nb_node);
 	while (nb_node--)
@@ -39,11 +41,11 @@ void show_alloc_mem(void)
 	}
 	printf("%lu header med left\n",MED_SIZE);
 	fat = H_FAT;
-	printf("LARGE: %p\n", (void *)g_mem + getpagesize() *3 + MAX_TINY + MAX_MED);
-	nb_node =MAX_HEADER(t_fat) -  FAT_SIZE;
+	nb_node = MAX_HEADER(t_fat) -  FAT_SIZE;
+	printf("LARGE: %p %lu\n", (void *)g_mem + getpagesize() *3 + MAX_TINY + MAX_MED, nb_node);
 	while (nb_node--)
 	{
-		printf("%p : %d octets\n", tmp->ptr, tmp->size);
-		tmp++;
+		printf("%p : %lu octets\n", fat->ptr, fat->size);
+		fat++;
 	}
 }

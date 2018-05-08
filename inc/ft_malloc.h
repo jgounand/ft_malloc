@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/01 19:41:51 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/08 17:40:54 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,13 @@
 # define NB_PAGES		128
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
-# define H_TINY (t_tny *)(g_mem + 1)
-# define H_MED (t_med *)(g_mem + getpagesize())
-# define H_FAT (t_fat *)(g_mem + getpagesize() * 2)
+# define H_TINY (t_tny *)((void *)(g_mem) + getpagesize() * S_HEADER_A)
+# define H_MED (t_med *)((void *)(g_mem) + getpagesize() * (S_HEADER_T + S_HEADER_T))
+# define H_FAT (t_fat *)((void *)(g_mem) + getpagesize() * (S_HEADER_M + S_HEADER_A + S_HEADER_T))
+# define S_HEADER_A g_mem->nb_pages_header[0]
+# define S_HEADER_T g_mem->nb_pages_header[1]
+# define S_HEADER_M g_mem->nb_pages_header[2]
+# define S_HEADER_F g_mem->nb_pages_header[3]
 # define TINY_SIZE g_mem->max_size[0]
 # define MED_SIZE g_mem->max_size[1]
 # define FAT_SIZE g_mem->max_size[2]
@@ -36,20 +40,25 @@ typedef struct s_tiny
 	short				size;
 }				t_tny;
 
-typedef struct s_node
+typedef struct s_fat
 {
 	void			*ptr;
 	size_t			size;
-}				t_node;
+}				t_fat;
 
 typedef t_tny t_med;
-typedef t_node t_fat;
 
 typedef struct	s_mem
 {
-	size_t	max_size[3];
+	size_t	max_size[4];// je dois pouvoir le suprimer 
+	int		nb_pages_header[4];
 	struct s_mem	*next;
 }				t_mem;
+
+typedef struct	t_start
+{
+	void *start;
+}				t_start;
 
 extern	t_mem	*g_mem;
 
@@ -57,5 +66,6 @@ void *ft_malloc(size_t size);
 void show_alloc_mem(void);
 t_mem	*init_mem(void);
 void ft_free(void *ptr);
-size_t	nodecmpt(t_node **node);
+short gettype(void *ptr);
+t_mem	*init_mem(void);
 #endif

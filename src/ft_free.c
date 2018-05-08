@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/07 18:16:09 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/08 17:55:56 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 short gettype(void *ptr)
 {
-	if (ptr < (void *)g_mem + getpagesize() * 3 + MAX_TINY)
+	t_start	*start;
+
+	start = (t_start *)(g_mem + 1);
+	printf("ptr %p tiny %p\n", ptr, (void *)start->start + MAX_TINY);
+	if (ptr < ((void *)start->start + MAX_TINY))
 	{
 		printf("FREE TINY\n");
 		return (0);
 	}
-	else if (ptr < (void *)g_mem + getpagesize() * 3 + MAX_TINY + MAX_MED)
+	else if (ptr < (void *)start->start + MAX_TINY + MAX_MED)
 	{
 		printf("FREE MED\n");
 		return (1);
@@ -31,9 +35,11 @@ short gettype(void *ptr)
 	}
 }
 
-static void	try_defragment(t_tny *tofree, size_t cpt)
+static void	try_defragment(t_tny *tofree)
 {
-	(void)cpt;
+	short	type;
+
+	type = gettype(tofree->ptr);
 	printf("tofree + 1 %p\n",(tofree + 1)->ptr);
 	if ((tofree + 1)->ptr)
 	{
@@ -42,9 +48,12 @@ static void	try_defragment(t_tny *tofree, size_t cpt)
 		{
 			tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
 			printf("tofree->size %d\n", tofree->size);
-			ft_memmove(tofree + 1, tofree + 2, (void *)H_TINY + MAX_HEADER(t_tny) - (void *)(tofree + 2));
+			ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny) - (void *)(tofree + 2));
 			printf("tofree + 1)->ptr %p\n", (tofree + 1)->ptr);
-			TINY_SIZE++;
+			if (!type)
+				TINY_SIZE++;
+			else
+				MED_SIZE++;
 			printf("1\n");
 		}
 		else
@@ -57,7 +66,10 @@ static void	try_defragment(t_tny *tofree, size_t cpt)
 	else
 	{
 			printf("3\n");
+			if (!type)
 				TINY_SIZE++;
+			else
+				MED_SIZE++;
 
 		ft_bzero(tofree, sizeof(t_tny));
 	}
@@ -71,15 +83,21 @@ static void	try_defragment(t_tny *tofree, size_t cpt)
 			{
 			printf("5\n");
 			ft_bzero(tofree - 1, sizeof(t_tny));
+			if (!type)
 				TINY_SIZE++;
+			else
+				MED_SIZE++;
 			}
 			else
 			{
 			printf("6\n");
 			(tofree- 1)->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)(tofree - 1)->ptr);
-			ft_memmove(tofree, tofree + 1, ((void *)H_TINY + MAX_HEADER(t_tny)) - (void *)(tofree + 1));
+			ft_memmove(tofree, tofree + 1, ((void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny)) - (void *)(tofree + 1));
 			printf("tofree->size %d\n", tofree->size);
+			if (!type)
 				TINY_SIZE++;
+			else
+				MED_SIZE++;
 			}
 		}
 	}
@@ -87,14 +105,10 @@ static void	try_defragment(t_tny *tofree, size_t cpt)
 
 static void free_tny_small(t_tny *tofree, void *ptr)
 {
-	size_t	cpt;
-
-	cpt = 0;
 	while (tofree->ptr)
 	{
 		if (ptr == tofree->ptr)
 		break;
-		cpt++;
 		tofree++;
 	}
 	//voir quand on realou une deuxieme fois
@@ -105,40 +119,40 @@ static void free_tny_small(t_tny *tofree, void *ptr)
 	}
 	else
 	{
-		try_defragment(tofree, cpt);
+		try_defragment(tofree);
 	}
 }
 
-static t_fat	*get_fat(void *ptr)
+static int	free_fat(void *ptr)
 {
 	t_fat	*tofree;
 
-	tofree = (void *)g_mem + getpagesize() * 3;
+	printf("FREE FAT\n");
+	tofree = H_FAT;
 	while (tofree->ptr)
 	{
 		if (ptr == tofree->ptr)
-			return (tofree);
+			break;
 		tofree++;
 	}
+	if ((tofree + 1)->size)
+	{
+		ft_memmove(tofree, tofree + 1, (void *)H_FAT + MAX_HEADER(t_fat) - (void *)(tofree + 1));
+	}
+	FAT_SIZE++;
 	//voir quand on realou une deuxieme fois
-	return (NULL);
+	return (0);
 }
-
 
 void ft_free(void *ptr)
 {
 	short	type;
-	t_tny	*tofree_small;
-	t_fat	*tofree_fat;
 
-	tofree_small = NULL;
-	tofree_fat = NULL;
+	type = 99;
+	printf("type %d ptr %p\n", type, ptr);
 	type = gettype(ptr);
 	if (type <= 1)
 		free_tny_small(!type ? H_TINY : H_MED, ptr);
 	else
-		tofree_fat = get_fat(ptr);
-	if (tofree_small)
-		printf("tofree %p %d\n", tofree_small->ptr, tofree_small->size);
-
+		free_fat(ptr);
 }
