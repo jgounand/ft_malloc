@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/08 17:55:56 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 11:45:12 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ short gettype(void *ptr)
 	t_start	*start;
 
 	start = (t_start *)(g_mem + 1);
-	printf("ptr %p tiny %p\n", ptr, (void *)start->start + MAX_TINY);
-	if (ptr < ((void *)start->start + MAX_TINY))
+	printf("ptr %p\n", ptr);
+	if (ptr < ((void *)start->start + MAX_TINY) && ptr >= start->start)
 	{
 		printf("FREE TINY\n");
 		return (0);
 	}
-	else if (ptr < (void *)start->start + MAX_TINY + MAX_MED)
+	else if (ptr < (void *)start->start + MAX_TINY + MAX_MED && ptr >= start->start+ MAX_MED)
 	{
 		printf("FREE MED\n");
 		return (1);
@@ -127,7 +127,7 @@ static int	free_fat(void *ptr)
 {
 	t_fat	*tofree;
 
-	printf("FREE FAT\n");
+	printf("FREE FAT ptr => %p\n", ptr);
 	tofree = H_FAT;
 	while (tofree->ptr)
 	{
@@ -149,9 +149,15 @@ void ft_free(void *ptr)
 	short	type;
 
 	type = 99;
-	printf("type %d ptr %p\n", type, ptr);
+	
+	if (!ptr)
+	{
+		printf("!ptr n existe pas\n");
+		return ;
+	}
 	type = gettype(ptr);
-	if (type <= 1)
+	printf("type %d ptr %p\n", type, ptr);
+	if (type == 1 || type == 0)
 		free_tny_small(!type ? H_TINY : H_MED, ptr);
 	else
 		free_fat(ptr);

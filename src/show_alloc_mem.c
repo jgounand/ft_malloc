@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/08 17:38:28 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 10:11:40 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void show_alloc_mem(void)
 	init_mem();
 	tmp = H_TINY;
 	printf("MAX_HEADER(t_tny) %lu %lu \n", MAX_HEADER(t_tny) ,TINY_SIZE);
-	return ;
 	nb_node = MAX_HEADER(t_tny) - TINY_SIZE;
 	printf("\n\nTINY : %p %lu\n", (void *)g_mem + getpagesize() * 3, nb_node);
 	while (nb_node--)

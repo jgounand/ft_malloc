@@ -35,10 +35,10 @@ int	main(int ac, char **av)
 	for (int j = 0; j < REPETITION ; j++)
 	{
 		write(1,"1",2);
-	//	str1[j] = str_new_cpy(c, 1000);
+		str1[j] = str_new_cpy(c+j, 1000);
 		write(1,"2\n",2);
-		str[j] = str_new_cpy(c, 2056);
-	//	str2[j] = str_new_cpy(c, 5);
+		str[j] = str_new_cpy(c+j, 2056 + j);
+		str2[j] = str_new_cpy(c+j, 5);
 //		if (!(j %1000))
 //			printf("%d\n",j);
 	}
@@ -49,12 +49,15 @@ int	main(int ac, char **av)
 //		printf("str \t%lu\n", strlen(str[j]));
 	}
 	show_alloc_mem();
-	//ft_free(str1[2]);
-	ft_free(str[1]);
-	//ft_free(str1[1]);
-	//ft_free(str1[0]);
+//	ft_free(str1[2]);
+//	ft_free(str1[1]);
+//	ft_free(str[3]);
+	//ft_free(NULL);
+	char	*a = ft_malloc(2500);
+	ft_free(a);
+//	ft_free(str1[0]);
 //	ft_free(str2[3]);
-	//ft_free(str2[2]);
+//	ft_free(str2[2]);
 //ft_free(str2[3]);
 //	ft_malloc(7);
 //	ft_free(str1[3]);
