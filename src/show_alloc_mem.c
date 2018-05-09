@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 16:15:32 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:46:51 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,5 @@ void show_alloc_mem(void)
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
+	printf("A_SIZE %lu\n", MAX_HEADER(t_start,S_HEADER_A) - A_SIZE);
 }

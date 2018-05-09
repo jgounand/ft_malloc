@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 17:01:01 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 18:49:04 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static t_mem	*mem_header(unsigned int nb_pages[4])
 	if (!new)
 	{
 		write(2, "ERROR MMAP in mem_header mem.c\n", 20);
+		exit(1);
 		return (NULL);
 	}
 	ft_bzero(new, sizeof(t_mem) + getpagesize() * size);
@@ -38,7 +39,7 @@ static void	*mem_data(void)
 	if (!new)
 	{
 		write(2, "ERROR MMAP in mem_data() mem.c\n", 20);
-		return (NULL);
+		exit(1);
 	}
 	return (new);
 }
@@ -75,7 +76,7 @@ start = (t_start *)(g_mem + 1);
 	printf("TINY_SIZE %lu\n", TINY_SIZE);
 	printf("MED_SIZE %lu\n", MED_SIZE);
 	printf("FAT_SIZE %lu\n", FAT_SIZE);
-	printf("aaa size %d\n", 0);
+	printf("start->start size %p\n", start->start);
 	printf("S_HEADER_A %d\n", S_HEADER_A);
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
@@ -116,7 +117,7 @@ void	add_mem_header(short type)
 	ft_memcpy(new, g_mem, s_cpy);
 	ft_memcpy((void *)new + s_cpy + getpagesize(),(void *)g_mem + s_cpy, total - s_cpy);
 	ft_memcpy(new->nb_pages_header, g_mem->nb_pages_header, sizeof(unsigned int[4]));
-
+	ft_memcpy(new->max_size, g_mem->max_size, sizeof(unsigned int[4]));
 	new->max_size[0] = MAX_HEADER(t_tny, 1);
 	new->max_size[1] = MAX_HEADER(t_med, 1);
 	new->max_size[2] = MAX_HEADER(t_fat,1);
@@ -144,11 +145,35 @@ void	add_mem_header(short type)
 	//show_alloc_mem();
 }
 
-t_start	*give_other_data(void)
+void	*get_data(void *ptr,short type, size_t lenght)
 {
 	t_start	*start;
+	size_t	cpt;
 
+	cpt = 0;
 	start = (t_start *)(g_mem + 1);
+	while (start->start)
+	{
+		printf("ptr %p min %p max %p type %d %lu cpt %lu\n",ptr + lenght,start->start + MAX_TINY, start->start + MAX_TINY + MAX_MED, type, A_SIZE, cpt);
+
+		if (ptr + lenght < start->start + (type ? MAX_MED + MAX_TINY : MAX_TINY) && ptr >= start->start + (type ? MAX_TINY : 0))
+			break;
+		start++;
+		cpt++;
+	if (cpt == 1)
+	{
+		printf("(start-1)->start %p", ((t_start *)(g_mem + 1))->start);
+	exit(1);
+	}
+	}
+	if (!start->start)
+	{
+		dprintf(2,"il faut add space\n");
+		start->start = mem_data();
+		A_SIZE--;
+		return (start->start + (type ? MAX_TINY : 0));
+		}
+		return (start);
 }
 
 void	add_mem_data(void)

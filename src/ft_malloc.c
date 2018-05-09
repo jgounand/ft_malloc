@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 16:52:44 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 18:44:26 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ void	*add_small(short type, size_t lenght)
 	
 
 	printf("type %d %p\n", type, tmp);
+
+	start = (t_start *)(g_mem + 1);
+		printf("start->start %p", start->start);
 	while (tmp->size)
 	{
 		if (tmp->size < 0 && lenght <= (size_t)-tmp->size)
@@ -86,7 +89,6 @@ void	*add_small(short type, size_t lenght)
 		tmp++;
 //		printf("+");
 	}
-	start = (t_start *)(g_mem + 1);
 		printf("\n");
 		printf("tmp %p tmp - 1 %p\n", tmp, tmp -1);
 	if (split_node_free == 1)
@@ -113,14 +115,15 @@ add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 	}
 	else
 	{
-		if (get_addr((tmp - 1)->ptr + (tmp - 1)->size) + lenght > start->start + MAX_TINY + MAX_MED)
-		{
-			printf("je dous realouer !!\n");
-			exit (1);
-		}
+		printf("tmp -1 ptr %p\n", (tmp-1)->ptr);
+//		if (get_addr((tmp - 1)->ptr + (tmp - 1)->size) + lenght > start->start + MAX_TINY + MAX_MED)
+//		{
+//			printf("je dous realouer !!\n");
+//			exit (1);
+//		}
 		// checker si ce n est pas trop grand
 				printf("13 prt -1 %p\n", (tmp-1)->ptr);
-		tmp->ptr = get_addr((tmp - 1)->ptr + (tmp - 1)->size);
+		tmp->ptr = get_data(get_addr((tmp - 1)->ptr + (tmp - 1)->size + 1),type, lenght);
 		tmp->size = lenght;
 		printf("ptr %p\n", tmp->ptr);
 	}

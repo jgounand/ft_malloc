@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 16:27:54 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 18:32:04 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,5 @@ void ft_free(void *ptr);
 short gettype(void *ptr);
 t_mem	*init_mem(void);
 void	add_mem_header(short type);
+void	*get_data(void *ptr,short type, size_t lengh);
 #endif
