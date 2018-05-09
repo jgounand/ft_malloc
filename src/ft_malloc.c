@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/08 17:30:45 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 16:52:44 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void *get_addr(void *ptr)
 
 void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 {
-		ft_memmove(tmp + 2, tmp + 1,(void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny) - (void *)(tmp + 1));
+		ft_memmove(tmp + 2, tmp + 1,(void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, 0 + (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tmp + 1));
 	(tmp + 1)->ptr = ptr;
 	(tmp + 1)->size = -((uintptr_t)(tmp + 2)->ptr - (uintptr_t)(tmp + 1)->ptr);
 	printf("add_node_free\n");
@@ -57,16 +57,18 @@ void	*add_small(short type, size_t lenght)
 	short	split_node_free;
 
 	split_node_free = 0;
-	if (type == 1)
-		tmp = H_MED;
-	else
-		tmp = H_TINY;
 	//tmp = type == 1? H_MED : H_TINY;
 	if (!g_mem->max_size[(int)type])
 	{
 		printf("il faut realouer !!\n");
-		return (NULL);
+		add_mem_header(type);
 	}
+	if (type == 1)
+		tmp = H_MED;
+	else
+		tmp = H_TINY;
+	
+
 	printf("type %d %p\n", type, tmp);
 	while (tmp->size)
 	{
@@ -111,6 +113,12 @@ add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 	}
 	else
 	{
+		if (get_addr((tmp - 1)->ptr + (tmp - 1)->size) + lenght > start->start + MAX_TINY + MAX_MED)
+		{
+			printf("je dous realouer !!\n");
+			exit (1);
+		}
+		// checker si ce n est pas trop grand
 				printf("13 prt -1 %p\n", (tmp-1)->ptr);
 		tmp->ptr = get_addr((tmp - 1)->ptr + (tmp - 1)->size);
 		tmp->size = lenght;
@@ -135,7 +143,7 @@ void	*add_fat(size_t lenght)
 	if (!g_mem->max_size[2])
 	{
 		printf("il faut realouer !!\n");
-		return (NULL);
+		add_mem_header(2);
 	}
 	tmp = H_FAT; 
 	printf("type %p tmp->size %lu \n", tmp, tmp->size);

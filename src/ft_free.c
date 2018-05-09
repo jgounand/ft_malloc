@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 11:45:12 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/09 16:32:20 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	try_defragment(t_tny *tofree)
 		{
 			tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
 			printf("tofree->size %d\n", tofree->size);
-			ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny) - (void *)(tofree + 2));
+			ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tofree + 2));
 			printf("tofree + 1)->ptr %p\n", (tofree + 1)->ptr);
 			if (!type)
 				TINY_SIZE++;
@@ -92,7 +92,7 @@ static void	try_defragment(t_tny *tofree)
 			{
 			printf("6\n");
 			(tofree- 1)->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)(tofree - 1)->ptr);
-			ft_memmove(tofree, tofree + 1, ((void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny)) - (void *)(tofree + 1));
+			ft_memmove(tofree, tofree + 1, ((void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T))) - (void *)(tofree + 1));
 			printf("tofree->size %d\n", tofree->size);
 			if (!type)
 				TINY_SIZE++;
@@ -118,9 +118,7 @@ static void free_tny_small(t_tny *tofree, void *ptr)
 		exit(2);
 	}
 	else
-	{
 		try_defragment(tofree);
-	}
 }
 
 static int	free_fat(void *ptr)
@@ -135,10 +133,18 @@ static int	free_fat(void *ptr)
 			break;
 		tofree++;
 	}
+	if (!tofree->ptr)
+	{
+		//error
+	}
+	else
+		munmap(tofree->ptr, tofree->size);
 	if ((tofree + 1)->size)
 	{
-		ft_memmove(tofree, tofree + 1, (void *)H_FAT + MAX_HEADER(t_fat) - (void *)(tofree + 1));
+		ft_memmove(tofree, tofree + 1, (void *)H_FAT + MAX_HEADER(t_fat, S_HEADER_F) - (void *)(tofree + 1));
 	}
+	else
+		ft_bzero(tofree, sizeof (t_fat));
 	FAT_SIZE++;
 	//voir quand on realou une deuxieme fois
 	return (0);

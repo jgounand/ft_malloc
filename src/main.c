@@ -1,6 +1,6 @@
 
 #include "../inc/ft_malloc.h"
-# define REPETITION 5
+# define REPETITION 3000
 char	*str_new_cpy(char c, size_t i)
 {
 	size_t	j;
@@ -34,11 +34,12 @@ int	main(int ac, char **av)
 	c = av[1][0];
 	for (int j = 0; j < REPETITION ; j++)
 	{
+		printf("j = %d\n", j);
 		write(1,"1",2);
-		str1[j] = str_new_cpy(c+j, 1000);
+//		str1[j] = str_new_cpy(c+j, 1000);
 		write(1,"2\n",2);
-		str[j] = str_new_cpy(c+j, 2056 + j);
-		str2[j] = str_new_cpy(c+j, 5);
+		str[j] = str_new_cpy(c+j, 850);
+//		str2[j] = str_new_cpy(c+j, 1);
 //		if (!(j %1000))
 //			printf("%d\n",j);
 	}
@@ -53,13 +54,14 @@ int	main(int ac, char **av)
 //	ft_free(str1[1]);
 //	ft_free(str[3]);
 	//ft_free(NULL);
-	char	*a = ft_malloc(2500);
-	ft_free(a);
+//	char	*a = ft_malloc(2500);
+//	ft_free(a);
 //	ft_free(str1[0]);
 //	ft_free(str2[3]);
 //	ft_free(str2[2]);
 //ft_free(str2[3]);
-//	ft_malloc(7);
+//:w
+//ft_malloc(7);
 //	ft_free(str1[3]);
 //	ft_free(str1[2]);
 //	printf("malloc 1\n");
@@ -78,8 +80,7 @@ int	main(int ac, char **av)
 //	printf("malloc 2\n");
 //	ft_malloc(105);
 //	ft_malloc(110);
-	show_alloc_mem();
-	printf("size t s_meme %lu\n",( getpagesize() - sizeof(t_mem)) / sizeof(void*) );
+//	show_alloc_mem();
 	return (0); // ou erreur
 }
 
