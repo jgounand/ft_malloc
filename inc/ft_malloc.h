@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 18:32:04 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/15 17:49:38 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
 # define H_TINY (t_tny *)((void *)(g_mem) + getpagesize() * S_HEADER_A)
-# define H_MED (t_med *)((void *)(g_mem) + getpagesize() * (S_HEADER_T + S_HEADER_T))
+# define H_MED (t_med *)((void *)(g_mem) + getpagesize() * (S_HEADER_A + S_HEADER_T))
 # define H_FAT (t_fat *)((void *)(g_mem) + getpagesize() * (S_HEADER_M + S_HEADER_A + S_HEADER_T))
 # define S_HEADER_T g_mem->nb_pages_header[0]
 # define S_HEADER_M g_mem->nb_pages_header[1]
@@ -70,5 +70,6 @@ void ft_free(void *ptr);
 short gettype(void *ptr);
 t_mem	*init_mem(void);
 void	add_mem_header(short type);
-void	*get_data(void *ptr,short type, size_t lengh);
+void	*get_data(void *ptr,short type, size_t lengh, t_tny *current);
+void *get_addr(void *ptr);
 #endif

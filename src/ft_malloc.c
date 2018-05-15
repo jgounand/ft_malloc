@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/15 12:20:14 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/15 17:56:13 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 t_mem	*g_mem = NULL;
 /*
-t_mem	*init_mem(void)
-{
+   t_mem	*init_mem(void)
+   {
 
-	if (g_mem)
-		return (g_mem);
-	g_mem = mmap(NULL, sizeof(t_mem) + getpagesize() * 4 + MAX_TINY + MAX_MED,
-			PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (g_mem == NULL)
-	{
-		write(2, "ERROR\n",6);
-		return (NULL);
-	}
-	ft_bzero(g_mem, sizeof(t_mem) + MAX_TINY + MAX_MED + getpagesize() * 4);
-	TINY_SIZE = MAX_HEADER(t_tny);
-	MED_SIZE = MAX_HEADER(t_med);
-	FAT_SIZE = MAX_HEADER(t_fat);
-	return (g_mem);
-}
-*/
+   if (g_mem)
+   return (g_mem);
+   g_mem = mmap(NULL, sizeof(t_mem) + getpagesize() * 4 + MAX_TINY + MAX_MED,
+   PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+   if (g_mem == NULL)
+   {
+   write(2, "ERROR\n",6);
+   return (NULL);
+   }
+   ft_bzero(g_mem, sizeof(t_mem) + MAX_TINY + MAX_MED + getpagesize() * 4);
+   TINY_SIZE = MAX_HEADER(t_tny);
+   MED_SIZE = MAX_HEADER(t_med);
+   FAT_SIZE = MAX_HEADER(t_fat);
+   return (g_mem);
+   }
+   */
 void *get_addr(void *ptr)
 {
 	while ((uintptr_t)ptr % 8)
@@ -43,11 +43,11 @@ void *get_addr(void *ptr)
 
 void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 {
-		ft_memmove(tmp + 2, tmp + 1,(void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, 0 + (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tmp + 1));
+	ft_memmove(tmp + 2, tmp + 1,(void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, 0 + (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tmp + 1));
 	(tmp + 1)->ptr = ptr;
 	(tmp + 1)->size = -((uintptr_t)(tmp + 2)->ptr - (uintptr_t)(tmp + 1)->ptr);
 	printf("add_node_free\n");
-return (NULL);
+	return (NULL);
 }
 
 void	*add_small(short type, size_t lenght)
@@ -58,27 +58,27 @@ void	*add_small(short type, size_t lenght)
 
 	split_node_free = 0;
 	//tmp = type == 1? H_MED : H_TINY;
-	if (!g_mem->max_size[(int)type])
+	if (g_mem->max_size[(int)type]  <= 0)
 	{
-		printf("il faut realouer !!\n");
+		printf("il faut realouer !! type %d\n", type);
 		add_mem_header(type);
 	}
 	if (type == 1)
 		tmp = H_MED;
 	else
 		tmp = H_TINY;
-	
+
 
 	printf("type %d %p\n", type, tmp);
 
 	start = (t_start *)(g_mem + 1);
-		printf("ADD_SMALL start %p start->start %p", start, start->start);
+	printf("ADD_SMALL start->start %p max_size header %lu", start->start + (type ? MAX_TINY : 0), g_mem->max_size[(int)type]);
 	while (tmp->size)
 	{
 		if (tmp->size < 0 && lenght <= (size_t)-tmp->size)
 		{
 			split_node_free = 2;
-				printf("10 lenght %lu => %lu type %d %d\n",lenght ,((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)), type, (type ? TINY + 1 : 1)) ;
+			printf("10 lenght %lu => %lu type %d %d\n",lenght ,((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)), type, (type ? TINY + 1 : 1)) ;
 			if  (((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)) > (1 + type ? 0 : TINY))
 			{
 				printf("10.1\n");
@@ -87,27 +87,27 @@ void	*add_small(short type, size_t lenght)
 			break;
 		}
 		tmp++;
-//		printf("+");
+		//		printf("+");
 	}
-		printf("\n");
-		printf("tmp %p tmp - 1 %p\n", tmp, tmp -1);
+	printf("\n");
+	printf("tmp %p tmp - 1 %p\n", tmp, tmp -1);
 	if (split_node_free == 1)
 	{
 		printf("tmp->ptr %p , new (tmp +1)->ptr %p , tmp + 1->ptr %p", tmp->ptr, get_addr(tmp->ptr + lenght + 1), (tmp+1)->ptr);
-add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
+		add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 	}
 	if (tmp == H_TINY)
 	{
-				printf("11\n");
+		printf("11\n");
 		printf("tmp == H_TINY size %lu\n", lenght);
-//retroruver addresse du ptr;
+		//retroruver addresse du ptr;
 		tmp->ptr = get_addr(start->start);
 		tmp->size = lenght;
 		printf("ptr %p\n", tmp->ptr);
 	}
 	else if (tmp == H_MED)
 	{
-				printf("=>12 lenght %lu\n", lenght);
+		printf("=>12 lenght %lu\n", lenght);
 		printf("tmp == H_MDE\n");
 		tmp->ptr = get_addr(start->start+ MAX_TINY);
 		tmp->size = lenght;
@@ -115,26 +115,32 @@ add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 	}
 	else
 	{
-	//	printf("start %p\n", (start)->start);
-	printf("HEADER_A %p\n", (t_start *)(g_mem + 1));
-//		if (get_addr((tmp - 1)->ptr + (tmp - 1)->size) + lenght > start->start + MAX_TINY + MAX_MED)
-//		{
-//			printf("je dous realouer !!\n");
-//			exit (1);
-//		}
+		//	printf("start %p\n", (start)->start);
+		printf("HEADER_A %p\n", (t_start *)(g_mem + 1));
+		//		if (get_addr((tmp - 1)->ptr + (tmp - 1)->size) + lenght > start->start + MAX_TINY + MAX_MED)
+		//		{
+		//			printf("je dous realouer !!\n");
+		//			exit (1);
+		//		}
 		// checker si ce n est pas trop grand
-				printf("13 prt -1 %p\n", (tmp-1)->ptr);
-		tmp->ptr = get_data(get_addr((tmp - 1)->ptr + (tmp - 1)->size + 1),type, lenght);
-		tmp->size = lenght;
-		printf("ptr %p\n", tmp->ptr);
+		printf("13 ptr -1 %p ptr -1 size %d getptr %p\n", (tmp-1)->ptr,(tmp -1)->size ,get_addr((tmp - 1)->ptr + (tmp - 1)->size + 1));
+		void *ptr =	get_data(get_addr((tmp - 1)->ptr + (tmp - 1)->size + 1),type, lenght, tmp);
+		if (ptr)
+		{
+			tmp->ptr = ptr;
+			tmp->size = lenght;
+		}
+		else
+			tmp++;
 	}
 	if (split_node_free != 2)
 	{
 		printf("add 1\n");
-	if (!type)
-		TINY_SIZE--;
-	else
-		MED_SIZE--;
+		if (!type)
+			TINY_SIZE--;
+		else
+			MED_SIZE--;
+		printf("\n");
 	}return (tmp->ptr);
 }
 
@@ -156,12 +162,12 @@ void	*add_fat(size_t lenght)
 		printf("+");
 		tmp++;
 	}
-		printf("-\n");
+	printf("-\n");
 	printf("tmp == H_FAT size %lu\n", lenght);
-//retroruver addresse du ptr;
+	//retroruver addresse du ptr;
 	tmp->ptr = mmap(NULL,lenght, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	tmp->size = lenght;
-		printf("ptr %p\n", tmp->ptr);
+	printf("ptr %p\n", tmp->ptr);
 	FAT_SIZE--;
 	return (tmp->ptr);
 }

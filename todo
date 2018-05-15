@@ -12,3 +12,11 @@ TINY => ajouter a la liste jsuqu a arriver a max
 SMALL => pareil;
 
 MAIS SI UN DES DEUX EST FULL QUE FAIRE ?
+
+commit avant changement ajout header neagtif a la fin 1295adc1caa649f2b43615b38b796b38cce8b931
+ajouter fin un header negatif a la place du NULL;
+
+
+last TINY 109c207f0
+last SMALL 109cdfff0:Q
+
