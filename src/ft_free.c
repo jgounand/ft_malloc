@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 16:32:20 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/15 18:28:22 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ static void	try_defragment(t_tny *tofree)
 	else
 	{
 			printf("3\n");
-			if (!type)
-				TINY_SIZE++;
-			else
-				MED_SIZE++;
-
-		ft_bzero(tofree, sizeof(t_tny));
+			//if (!type)
+			//	TINY_SIZE++;
+		//	else
+		//		MED_SIZE++;
+		tofree->size = tofree->size - 1;
+	//	ft_bzero(tofree, sizeof(t_tny));
 	}
 
 	if (tofree != H_TINY && tofree != H_MED && (tofree - 1)->ptr)

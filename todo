@@ -20,3 +20,5 @@ ajouter fin un header negatif a la place du NULL;
 last TINY 109c207f0
 last SMALL 109cdfff0:Q
 
+
+revoir le free et init car a la fin de chaque fichier je raujoute un case (en negatuf pour la place qui reste.
