@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/09 18:44:26 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/15 12:20:14 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	*add_small(short type, size_t lenght)
 	printf("type %d %p\n", type, tmp);
 
 	start = (t_start *)(g_mem + 1);
-		printf("start->start %p", start->start);
+		printf("ADD_SMALL start %p start->start %p", start, start->start);
 	while (tmp->size)
 	{
 		if (tmp->size < 0 && lenght <= (size_t)-tmp->size)
@@ -115,7 +115,8 @@ add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 	}
 	else
 	{
-		printf("tmp -1 ptr %p\n", (tmp-1)->ptr);
+	//	printf("start %p\n", (start)->start);
+	printf("HEADER_A %p\n", (t_start *)(g_mem + 1));
 //		if (get_addr((tmp - 1)->ptr + (tmp - 1)->size) + lenght > start->start + MAX_TINY + MAX_MED)
 //		{
 //			printf("je dous realouer !!\n");

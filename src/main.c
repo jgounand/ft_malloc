@@ -1,6 +1,6 @@
 
 #include "../inc/ft_malloc.h"
-# define REPETITION 614
+# define REPETITION 6000
 char	*str_new_cpy(char c, size_t i)
 {
 	size_t	j;
@@ -38,16 +38,16 @@ int	main(int ac, char **av)
 		write(1,"1",2);
 //		str1[j] = str_new_cpy(c+j, 1000);
 		write(1,"2\n",2);
-		str[j] = str_new_cpy(c+j, 850);
-//		str2[j] = str_new_cpy(c+j, 1);
+		str[j] = str_new_cpy('a', 1023);
+		str2[j] = str_new_cpy('b', 1);
 //		if (!(j %1000))
 //			printf("%d\n",j);
 	}
 	for (int j = 0; j < REPETITION ; j++)
 	{
-	//	printf("str2 \t%lu\n", strlen(str2[j]));
+		printf("str2 \t%lu\n", strlen(str2[j]));
 	//	printf("str1 \t%lu\n", strlen(str1[j]));
-//		printf("str \t%lu\n", strlen(str[j]));
+		printf("str \t%lu\n", strlen(str[j]));
 	}
 	show_alloc_mem();
 //	ft_free(str1[2]);
