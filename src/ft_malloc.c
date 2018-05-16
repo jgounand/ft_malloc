@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/15 17:56:13 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/16 15:19:48 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void *get_addr(void *ptr)
 {
 	while ((uintptr_t)ptr % 8)
 		ptr++;
-	printf("%lu %p\n", (size_t)&ptr % 8,ptr);
 	return (ptr);
 }
 
@@ -46,53 +45,87 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 	ft_memmove(tmp + 2, tmp + 1,(void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, 0 + (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tmp + 1));
 	(tmp + 1)->ptr = ptr;
 	(tmp + 1)->size = -((uintptr_t)(tmp + 2)->ptr - (uintptr_t)(tmp + 1)->ptr);
-	printf("add_node_free\n");
 	return (NULL);
 }
 
 void	*add_small(short type, size_t lenght)
 {
 	t_tny *tmp;
-	t_start	*start;
-	short	split_node_free;
+	size_t	node;
 
-	split_node_free = 0;
 	//tmp = type == 1? H_MED : H_TINY;
 	if (g_mem->max_size[(int)type]  <= 0)
 	{
-		printf("il faut realouer !! type %d\n", type);
+		dprintf(2,"il faut realouer !! type %d\n", type);
 		add_mem_header(type);
 	}
 	if (type == 1)
+	{
 		tmp = H_MED;
+		node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
+	}
 	else
+	{
 		tmp = H_TINY;
+		node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+	}
+	
+	dprintf(2,"type %d %p node %lu\n", type, tmp, node);
 
-
-	printf("type %d %p\n", type, tmp);
-
-	start = (t_start *)(g_mem + 1);
-	printf("ADD_SMALL start->start %p max_size header %lu", start->start + (type ? MAX_TINY : 0), g_mem->max_size[(int)type]);
-	while (tmp->size)
+	while (node)
 	{
 		if (tmp->size < 0 && lenght <= (size_t)-tmp->size)
-		{
-			split_node_free = 2;
-			printf("10 lenght %lu => %lu type %d %d\n",lenght ,((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)), type, (type ? TINY + 1 : 1)) ;
-			if  (((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)) > (1 + type ? 0 : TINY))
-			{
-				printf("10.1\n");
-				split_node_free = 1;
-			}
-			break;
-		}
+			break ;
+		if (!node)
+			break ;
 		tmp++;
-		//		printf("+");
+		node--;
 	}
-	printf("\n");
+		dprintf(2,"node %lu tmp->size %d lenght %lu\n", node, tmp->size, lenght);
+			//printf("10 lenght %lu => %lu type %d %d node %llu\n",lenght ,((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)), type, (type ? TINY + 1 : 1), node) ;
+		//		printf("+");
+	if (!node)
+	{
+		dprintf(2,"1\n");
+		dprintf(2,"\til faut realouer data !! type %d\n", type);
+		tmp->ptr = get_addr(get_new_data()->start + (type ? MAX_TINY : 0));
+		tmp->size = -((tmp->ptr + MAX_TINY + (type ? : MAX_MED + 0)) - (tmp->ptr +(type ? MAX_TINY : 0)));
+		dprintf(2, "tmp->ptr %p size %d\n", tmp->ptr, tmp->size);
+		node++;
+		exit (1);
+	}
+	else if (!node - 1)
+	{
+		dprintf(2,"2\n");
+		dprintf(2,"\ttmp size %d ptr %p\n", (tmp)->size, tmp->ptr);
+		(tmp + 1)->ptr = get_addr(tmp->ptr + lenght + 1);
+		(tmp + 1)->size = (tmp + 1)->ptr - (get_start(tmp->ptr)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
+		dprintf(2,"\ttmp+1 size %d ptr %p\n", (tmp +1)->size, (tmp +1)->ptr);
+	}
+	else if (-tmp->size - lenght >= (type ? SMALL : 8))
+	{
+		// ajouter un free apres tmp et le mmemove
+		dprintf(2,"3\n");
+		dprintf(2,"\tajouter free apres\n");
+		if (!type)
+			TINY_SIZE++;
+		else
+			MED_SIZE++;
+		exit (1);
+	}
+	tmp->size = lenght;
+	if (!type)
+		TINY_SIZE--;
+	else
+		MED_SIZE--;
+	return (tmp->ptr);
+}
+	/*
 	printf("tmp %p tmp - 1 %p\n", tmp, tmp -1);
 	if (split_node_free == 1)
 	{
+		
+		printf("split_node_free\n");
 		printf("tmp->ptr %p , new (tmp +1)->ptr %p , tmp + 1->ptr %p", tmp->ptr, get_addr(tmp->ptr + lenght + 1), (tmp+1)->ptr);
 		add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 	}
@@ -101,6 +134,10 @@ void	*add_small(short type, size_t lenght)
 		printf("11\n");
 		printf("tmp == H_TINY size %lu\n", lenght);
 		//retroruver addresse du ptr;
+		if (split_node_free == 1)
+		{
+
+		}
 		tmp->ptr = get_addr(start->start);
 		tmp->size = lenght;
 		printf("ptr %p\n", tmp->ptr);
@@ -142,7 +179,8 @@ void	*add_small(short type, size_t lenght)
 			MED_SIZE--;
 		printf("\n");
 	}return (tmp->ptr);
-}
+	}
+*/
 
 void	*add_fat(size_t lenght)
 {

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/15 18:22:09 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/16 15:20:48 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,22 @@ t_mem	*init_mem(void)
 	A_SIZE = MAX_HEADER(t_start, S_HEADER_F);
 	start = (t_start *)(g_mem + 1);
 
-	start->start = (t_start *)(g_mem + 1);
-	if (!(start->start = mem_data()))
-		exit (1);
+	//start->start = (t_start *)(g_mem + 1);
+	start->start = mem_data();
+	t_tny	*tny;
+
+	tny = H_TINY;
+	tny->ptr = get_addr(start->start);
+	tny->size = - ((tny->ptr + MAX_TINY) - tny->ptr);
+	printf("tny->ptr %p size %d\n", tny->ptr, tny->size);
+	tny = H_MED;
+	tny->ptr = get_addr(start->start + MAX_TINY);
+	tny->size = - ((start->start + MAX_TINY + MAX_MED) - tny->ptr + MAX_TINY);//revoir la !!!!
+			TINY_SIZE--;
+			MED_SIZE--;
+			A_SIZE--;
+	printf("med->ptr %p size %d\n", tny->ptr, tny->size);
+	
 	printf("HEADER_A %p\n", (t_start *)(g_mem + 1));
 	printf("HEADER_T %p\n", H_TINY);
 	printf("HEADER_M %p\n", H_MED);
@@ -82,6 +95,7 @@ t_mem	*init_mem(void)
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
+	exit (1);
 	return (g_mem);
 }
 
@@ -209,4 +223,36 @@ void	*get_data(void *ptr,short type, size_t lenght, t_tny *current)
 	printf("return get_data %p next ptr %p \n\n\n", ptr, get_addr(ptr + lenght + 1) + 2);
 	//printf("A_SIZE %lu\n", A_SIZE);
 	return (ptr);
+}
+
+t_start	*get_start(void *ptr)
+{
+	t_start	*start;
+	size_t	node;
+
+	node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
+	start = (t_start *)(g_mem + 1);
+	while (node--)
+	{
+		if (ptr >= start->start && ptr <= start->start + MAX_MED + MAX_TINY)
+			break;
+		start++;
+	}
+	return (start);
+}
+
+t_start	*get_new_data(void)
+{
+	t_start	*new;
+
+	if (!S_HEADER_A)
+	{
+		dprintf(2,"ilfaut realouer HEADER A\n");
+		exit (1);
+	}
+	new = get_start(NULL);
+	new->start = mem_data();
+	A_SIZE--;
+	dprintf(2,"new %p\n",new->start);
+	return (new);
 }
