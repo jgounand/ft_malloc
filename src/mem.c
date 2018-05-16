@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/16 15:20:48 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/16 17:02:45 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_mem	*init_mem(void)
 	TINY_SIZE = MAX_HEADER(t_tny, S_HEADER_T);
 	MED_SIZE = MAX_HEADER(t_med, S_HEADER_M);
 	FAT_SIZE = MAX_HEADER(t_fat, S_HEADER_F);
-	A_SIZE = MAX_HEADER(t_start, S_HEADER_F);
+	A_SIZE = MAX_HEADER(t_start, S_HEADER_A);
 	start = (t_start *)(g_mem + 1);
 
 	//start->start = (t_start *)(g_mem + 1);
@@ -73,12 +73,12 @@ t_mem	*init_mem(void)
 
 	tny = H_TINY;
 	tny->ptr = get_addr(start->start);
-	tny->size = - ((tny->ptr + MAX_TINY) - tny->ptr);
+	tny->size = - MAX_TINY;
 	printf("tny->ptr %p size %d\n", tny->ptr, tny->size);
 	tny = H_MED;
 	tny->ptr = get_addr(start->start + MAX_TINY);
-	tny->size = - ((start->start + MAX_TINY + MAX_MED) - tny->ptr + MAX_TINY);//revoir la !!!!
-			TINY_SIZE--;
+	tny->size = - MAX_MED;
+	TINY_SIZE--;
 			MED_SIZE--;
 			A_SIZE--;
 	printf("med->ptr %p size %d\n", tny->ptr, tny->size);
@@ -95,7 +95,7 @@ t_mem	*init_mem(void)
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
-	exit (1);
+//	exit (1);
 	return (g_mem);
 }
 
@@ -106,11 +106,12 @@ void	add_mem_header(short type)
 	size_t	s_cpy;
 	size_t	total;
 
-	show_alloc_mem();
+	//show_alloc_mem();
 	printf("S_HEADER_A %d\n", S_HEADER_A);
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
+	printf("TINY_SIZE %lu\n", TINY_SIZE);
 	total = getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
 	if (type == 0)
 	{
@@ -177,9 +178,13 @@ void	add_mem_header(short type)
 	//exit(1);
 	//checker ici !!!! le nombre de header
 	//	exit (1);
-	show_alloc_mem();
+//	show_alloc_mem();
+	//if (i ==3)
+//	exit(1);
+	if (TINY_SIZE > 300 || MED_SIZE >300)
+		exit(1);
 }
-
+/*
 void	*get_data(void *ptr,short type, size_t lenght, t_tny *current)
 {
 	t_start	*start;
@@ -224,7 +229,7 @@ void	*get_data(void *ptr,short type, size_t lenght, t_tny *current)
 	//printf("A_SIZE %lu\n", A_SIZE);
 	return (ptr);
 }
-
+*/
 t_start	*get_start(void *ptr)
 {
 	t_start	*start;
@@ -247,12 +252,13 @@ t_start	*get_new_data(void)
 
 	if (!S_HEADER_A)
 	{
-		dprintf(2,"ilfaut realouer HEADER A\n");
+		add_mem_header(3);
 		exit (1);
 	}
 	new = get_start(NULL);
 	new->start = mem_data();
 	A_SIZE--;
+	dprintf(2, "\t\t\t\t\t\t\t\tA_SIZE %lu\n", A_SIZE);
 	dprintf(2,"new %p\n",new->start);
 	return (new);
 }

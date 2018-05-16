@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/16 14:40:37 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/16 16:19:29 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void show_alloc_mem(void)
 		printf("%p : %lu octets\n", fat->ptr, fat->size);
 		fat++;
 	}
+	printf("HEADER_A left %lu\n",A_SIZE );
 	/*
 	printf("S_HEADER_A %d\n", S_HEADER_A);
 	printf("S_HEADER_T %d\n", S_HEADER_T);
