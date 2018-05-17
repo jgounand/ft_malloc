@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 14:25:15 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 17:06:35 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void	*add_small(short type, size_t lenght)
 			TINY_SIZE--;
 		else
 			MED_SIZE--;
+	clear_header();
 		return (tmp->ptr);
 	}
 	/*

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 13:51:44 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 15:59:06 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ void	*get_data(void *ptr,short type, size_t lengh, t_tny *current);
 void *get_addr(void *ptr);
 t_start	*get_start(void *ptr, bool next);
 t_start	*get_new_data(void *ptr);
+void	clear_header(void);
 #endif

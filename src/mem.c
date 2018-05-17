@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 14:23:05 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 15:58:58 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,31 @@ static void	*mem_data(void)
 		exit(1);
 	}
 	return (new);
+}
+
+void	clear_header(void)
+{
+	t_tny	*tny;
+	size_t	node;
+
+	node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
+	tny = H_MED;
+	while (node)
+	{
+		if (!tny->ptr && !tny->size)
+			MED_SIZE++;
+		tny++;
+		node--;
+	}
+	node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+	tny = H_TINY;
+	while (node)
+	{
+		if (!tny->ptr && !tny->size)
+			TINY_SIZE++;
+		tny++;
+		node--;
+	}
 }
 
 t_mem	*init_mem(void)
@@ -127,7 +152,7 @@ void	add_mem_header(short type)
 	}
 	else if (type == 2)
 	{
-		s_cpy = getpagesize()*( S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
+		s_cpy = getpagesize()* (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
 		S_HEADER_F++;
 	}
 	else
@@ -263,6 +288,7 @@ t_start	*get_new_data(void *ptr)
 	t_start	*new;
 
 	dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
+	dprintf(2, "ptr %p\n", ptr);
 	if (!S_HEADER_A)
 	{
 		add_mem_header(3);
