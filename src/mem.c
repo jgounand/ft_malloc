@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 15:58:58 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 20:33:58 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,26 @@ t_mem	*init_mem(void)
 	return (g_mem);
 }
 
+void	cpy_header_start(t_mem *new)
+{
+	ft_memcpy(new+ 1, g_mem + 1, ((void *)H_TINY - 1) - (void *)(g_mem + 1));
+}
+
+void	cpy_header_tiny(t_mem *new, bool move_one)
+{
+	ft_memcpy(new + getpagesize() * S_HEADER_A, H_TINY,(void*)H_MED - (void *)H_TINY - 1);
+}
+
+void	cpy_header_med(t_mem *new, bool move_one)
+{
+	ft_memcpy(new + getpagesize() * (S_HEADER_A +  S_HEADER_T + move_one), H_TINY,((void *)H_FAT - (void *)H_MED) - 1);
+}
+
+void	cpy_header_fat(t_mem *new, bool move_one)
+{
+	ft_memcpy(new + getpagesize() * (S_HEADER_A +  S_HEADER_T +  S_HEADER_M + move_one), H_TINY,((void *)H_FAT - (void *)H_MED) - 1);
+}
+
 void	add_mem_header(short type)
 {
 	//	show_alloc_mem();
@@ -142,28 +162,34 @@ void	add_mem_header(short type)
 	total = getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
 	if (type == 0)
 	{
-		s_cpy = getpagesize() * (S_HEADER_A + S_HEADER_T);
+	//	s_cpy = getpagesize() * (S_HEADER_A + S_HEADER_T);
 		S_HEADER_T++;
 	}
 	else if (type == 1)
 	{
-		s_cpy =getpagesize() * ( S_HEADER_A + S_HEADER_T + S_HEADER_M);
+	//	s_cpy =getpagesize() * ( S_HEADER_A + S_HEADER_T + S_HEADER_M);
 		S_HEADER_M++;
 	}
 	else if (type == 2)
 	{
-		s_cpy = getpagesize()* (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
+	//	s_cpy = getpagesize()* (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
 		S_HEADER_F++;
 	}
 	else
 	{
-		s_cpy = getpagesize() * S_HEADER_A;
+	//	s_cpy = getpagesize() * S_HEADER_A;
 		S_HEADER_A++;
 	}
 	if (!(new = mem_header(g_mem->nb_pages_header)))
 		exit (1);
-	ft_memcpy(new , g_mem , s_cpy);
-	ft_memcpy((void *)(new) + s_cpy + getpagesize(), (void *)(g_mem) + s_cpy, total - s_cpy);
+	cpy_header_start(new);
+	cpy_header_tiny(new, type == 3 ? 1 : 0);
+	if (type == 3 || type == 0)
+		cpy_header_med(new, 1);
+	else
+		cpy_header_med(new , 0);
+	//ft_memcpy(new , g_mem , s_cpy);
+	//ft_memcpy((void *)(new) + s_cpy + getpagesize(), (void *)(g_mem) + s_cpy, total - s_cpy);
 	ft_memcpy(new, g_mem, sizeof (t_mem));
 	ft_memcpy(new->nb_pages_header, g_mem->nb_pages_header, sizeof(unsigned int[4]));
 	ft_memcpy(new->max_size, g_mem->max_size, sizeof(unsigned int[4]));
@@ -289,14 +315,13 @@ t_start	*get_new_data(void *ptr)
 
 	dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
 	dprintf(2, "ptr %p\n", ptr);
-	if (!S_HEADER_A)
-	{
-		add_mem_header(3);
-		exit (1);
-	}
 	if (get_start(ptr, 1) != (t_start *)0)
 		return (get_start(ptr,0));
 	new = get_start(ptr, 0) + 1;
+	if ((t_tny *)(new + 1) >= (t_tny *)H_TINY)
+	{
+		add_mem_header (3);
+	}
 	new->start = mem_data();
 	A_SIZE--;
 	dprintf(2, "\t\t\t\t\t\t\t\tA_SIZE %lu\n", A_SIZE);
@@ -306,5 +331,6 @@ t_start	*get_new_data(void *ptr)
 			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
 			exit (3);
 	}
+		dprintf(2,"new %p H_TINY %p\n", new, H_TINY);
 	return (new);
 }

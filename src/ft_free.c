@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 17:14:23 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 17:30:21 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static bool	not_begin_data(t_tny *tofree)
 	void	*ptr;
 
 	ptr = get_start(tofree->ptr, 0);
-	if (ptr == tofree->ptr || (ptr + MAX_TINY)== tofree->ptr)
+	if (ptr == tofree->ptr || (ptr + MAX_TINY) == tofree->ptr)
 		return (0);
 	return (1);
 }
@@ -83,6 +83,7 @@ static void	try_defragment(t_tny *tofree)
 	printf("0\n");
 	if ((tofree + 1)->size < 0)
 	{
+		show_alloc_mem();
 		tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
 		printf("tofree->size %d\n", tofree->size);
 		ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tofree + 2));
@@ -100,7 +101,7 @@ static void	try_defragment(t_tny *tofree)
 		printf("tofree->size %d\n", tofree->size);
 	}
 
-	if (tofree != H_TINY && tofree != H_MED && (tofree - 1)->ptri && not_begin_data(tofree))
+	if (not_begin_data(tofree))
 	{
 		if ((tofree -1)->size < 0)
 		{
