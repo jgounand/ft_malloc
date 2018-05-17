@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/16 17:02:45 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 14:23:05 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	add_mem_header(short type)
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
 	printf("TINY_SIZE %lu\n", TINY_SIZE);
+//	show_alloc_mem();
+	printf("\n\n");
 	total = getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
 	if (type == 0)
 	{
@@ -135,8 +137,9 @@ void	add_mem_header(short type)
 	}
 	if (!(new = mem_header(g_mem->nb_pages_header)))
 		exit (1);
-	ft_memcpy(new, g_mem, s_cpy);
-	ft_memcpy((void *)new + s_cpy + getpagesize(), (void *)g_mem + s_cpy, total - s_cpy);
+	ft_memcpy(new , g_mem , s_cpy);
+	ft_memcpy((void *)(new) + s_cpy + getpagesize(), (void *)(g_mem) + s_cpy, total - s_cpy);
+	ft_memcpy(new, g_mem, sizeof (t_mem));
 	ft_memcpy(new->nb_pages_header, g_mem->nb_pages_header, sizeof(unsigned int[4]));
 	ft_memcpy(new->max_size, g_mem->max_size, sizeof(unsigned int[4]));
 	if (type == 0)
@@ -183,6 +186,8 @@ void	add_mem_header(short type)
 //	exit(1);
 	if (TINY_SIZE > 300 || MED_SIZE >300)
 		exit(1);
+//	show_alloc_mem();
+//	exit (1);
 }
 /*
 void	*get_data(void *ptr,short type, size_t lenght, t_tny *current)
@@ -230,35 +235,50 @@ void	*get_data(void *ptr,short type, size_t lenght, t_tny *current)
 	return (ptr);
 }
 */
-t_start	*get_start(void *ptr)
+t_start	*get_start(void *ptr, bool next)
 {
 	t_start	*start;
 	size_t	node;
 
 	node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
 	start = (t_start *)(g_mem + 1);
+	printf ("get_start ptr %p\n", ptr);
 	while (node--)
 	{
 		if (ptr >= start->start && ptr <= start->start + MAX_MED + MAX_TINY)
 			break;
+	//	printf("start %p node %lu\n", start, node);
 		start++;
+	}
+	printf("get_start ret node %lu\n", node);
+	if (next)
+	{
+		return ((t_start *)node);
 	}
 	return (start);
 }
 
-t_start	*get_new_data(void)
+t_start	*get_new_data(void *ptr)
 {
 	t_start	*new;
 
+	dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
 	if (!S_HEADER_A)
 	{
 		add_mem_header(3);
 		exit (1);
 	}
-	new = get_start(NULL);
+	if (get_start(ptr, 1) != (t_start *)0)
+		return (get_start(ptr,0));
+	new = get_start(ptr, 0) + 1;
 	new->start = mem_data();
 	A_SIZE--;
 	dprintf(2, "\t\t\t\t\t\t\t\tA_SIZE %lu\n", A_SIZE);
 	dprintf(2,"new %p\n",new->start);
+		if (TINY_SIZE > 300 || MED_SIZE > 300)
+		{
+			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
+			exit (3);
+	}
 	return (new);
 }

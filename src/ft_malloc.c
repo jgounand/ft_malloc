@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/16 17:05:14 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/17 14:25:15 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,17 @@ void	*add_small(short type, size_t lenght)
 		if (TINY_SIZE > 300 || MED_SIZE > 300)
 		{
 			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
+		//	show_alloc_mem();
 			exit (3);
+	}
 	//tmp = type == 1? H_MED : H_TINY;
-	if (!g_mem->max_size[(int)type])
+	if (!(g_mem->max_size[(int)type] - 2))
 	{
-		dprintf(2,"il faut realouer !! type %d\n", type);
+		dprintf(2,"il faut realouer !! type nbr %d %lu\n", type, g_mem->max_size[(int)type] - 1);
 		add_mem_header(type);
 		}
 
 		//exit(1);
-	}
 	if (type == 1)
 	{
 		tmp = H_MED;
@@ -95,28 +96,29 @@ void	*add_small(short type, size_t lenght)
 	{
 		dprintf(2,"1\n");
 		dprintf(2,"\til faut realouer data !! type %d\n", type);
-		tmp->ptr = get_addr(get_new_data()->start + (type ? MAX_TINY : 0));
+		tmp->ptr = get_addr(get_new_data((tmp - 1)->ptr)->start + (type ? MAX_TINY : 0));
 		tmp->size = - MAX_MED;
-		node = 1;
+		node++;
 		dprintf(2, "tmp->ptr %p size %d\n", tmp->ptr, tmp->size);
 		if (!type)
 			TINY_SIZE--;
 		else
 			MED_SIZE--;
-		if (!g_mem->max_size[(int)type - 1])
-		{
-			dprintf(2,"1.4\n");
-			add_mem_header(type);
-			return(add_small(type, lenght));
-		}
+	//	show_alloc_mem();
 	}
 		if (!node - 1)
 		{
 			dprintf(2,"2\n");
 			dprintf(2,"\ttmp size %d ptr %p\n", (tmp)->size, tmp->ptr);
 			(tmp + 1)->ptr = get_addr(tmp->ptr + lenght + 1);
-			(tmp + 1)->size = (tmp + 1)->ptr - (get_start(tmp->ptr)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
+			dprintf(2, "(tmp+1)->ptr %p max %p\n",(tmp+1)->ptr, (get_start(tmp->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY)));
+			(tmp + 1)->size = (tmp + 1)->ptr - (get_start(tmp->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
 			dprintf(2,"\ttmp+1 size %d ptr %p\n", (tmp +1)->size, (tmp +1)->ptr);
+			if ((tmp + 1)->size > 0)
+			{
+				//show_alloc_mem();
+				exit(1);
+			}
 		}
 		else if (-tmp->size - lenght >= (type ? SMALL : 8))
 		{

@@ -1,6 +1,6 @@
 
 #include "../inc/ft_malloc.h"
-# define REPETITION 509
+# define REPETITION 35000
 char	*str_new_cpy(char c, size_t i)
 {
 	size_t	j;
