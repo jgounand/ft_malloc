@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/16 16:19:29 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/18 18:39:58 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ void show_alloc_mem(void)
 	while (nb_node--)
 	{
 		printf("H %p %p : %d octets\n",tmp, tmp->ptr, tmp->size);
+		if (tmp->size > 0 && tmp->size != 2)
+		{
+		//	exit (11);
+		}
 		tmp++;
 	}
 	printf("%lu header tiny left\n", TINY_SIZE);
@@ -36,7 +40,7 @@ void show_alloc_mem(void)
 	printf("SMALL : %p %lu\n", start->start + MAX_TINY, nb_node);
 	while (nb_node--)
 	{
-		printf("%p : %d octets\n", tmp->ptr, tmp->size);
+		printf("M  %p %p : %d octets\n",tmp, tmp->ptr, tmp->size);
 		tmp++;
 	}
 	printf("%lu header med left\n",MED_SIZE);

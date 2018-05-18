@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 17:37:48 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/18 19:09:03 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,12 @@ void	*add_small(short type, size_t lenght)
 	t_tny *tmp;
 	size_t	node;
 
-		if (TINY_SIZE > 300 || MED_SIZE > 300)
-		{
-			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
-		//	show_alloc_mem();
-			exit (3);
-	}
-	//tmp = type == 1? H_MED : H_TINY;
-	if (!(g_mem->max_size[(int)type] - 2))
+	debug_check_MAX_HEADER();
+	if (!(g_mem->max_size[(int)type]))
 	{
 		dprintf(2,"il faut realouer !! type nbr %d %lu\n", type, g_mem->max_size[(int)type] - 1);
 		add_mem_header(type);
-		}
-
-		//exit(1);
+	}
 	if (type == 1)
 	{
 		tmp = H_MED;
@@ -78,7 +70,7 @@ void	*add_small(short type, size_t lenght)
 		node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 	}
 
-	dprintf(2,"type %d %p node %lu\n", type, tmp, node);
+	dprintf(2,"\t\t\t\ttype %d %p node %lu\n", type, tmp, node);
 
 	while (node)
 	{
@@ -94,9 +86,23 @@ void	*add_small(short type, size_t lenght)
 	//		printf("+");
 	if (!node)
 	{
+		if (!(tmp-1)->ptr)
+		{
+			show_alloc_mem();
+			dprintf(2, "tmp -1 ptr %p, tmp-2 ptr %p tmp -3 ptr %p\n", (tmp - 1)->ptr, (tmp -2)->ptr, (tmp -3)->ptr);
+			exit (9);
+		}
+	if (!((g_mem->max_size[(int)type]) - 1))
+	{
+		add_mem_header(type);
+	//	exit (999);
+		return (add_small(type, lenght));
+		//ici plus de place need more header et plus de data
+	}
 		dprintf(2,"1\n");
 		dprintf(2,"\til faut realouer data !! type %d\n", type);
 		tmp->ptr = get_addr(get_new_data((tmp - 1)->ptr)->start + (type ? MAX_TINY : 0));
+		printf("get_start->start %p ptr- %p\n", tmp->ptr, get_start(tmp->ptr, 0)->start + MAX_TINY);
 		tmp->size = - MAX_MED;
 		node++;
 		dprintf(2, "tmp->ptr %p size %d\n", tmp->ptr, tmp->size);
@@ -116,8 +122,8 @@ void	*add_small(short type, size_t lenght)
 			dprintf(2,"\ttmp+1 size %d ptr %p\n", (tmp +1)->size, (tmp +1)->ptr);
 			if ((tmp + 1)->size > 0)
 			{
-				//show_alloc_mem();
-				exit(1);
+				show_alloc_mem();
+				exit(22);
 			}
 		}
 		else if (-tmp->size - lenght >= (type ? SMALL : 8))
@@ -137,9 +143,6 @@ void	*add_small(short type, size_t lenght)
 		else
 			MED_SIZE--;
 	clear_header();
-	tmp = H_TINY;
-	if (tmp->size != 2)
-		exit (1);
 		return (tmp->ptr);
 	}
 	/*

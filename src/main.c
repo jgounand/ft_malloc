@@ -1,6 +1,6 @@
 
 #include "../inc/ft_malloc.h"
-# define REPETITION 100000
+# define REPETITION 130560
 char	*str_new_cpy(char c, size_t i)
 {
 	size_t	j;
@@ -23,9 +23,8 @@ int	main(int ac, char **av)
 {
 	char	c;
 	size_t	i;
-//	char	*str1[REPETITION];
 	char	*str[REPETITION];
-	char	*str2[REPETITION];
+	char	*str1[REPETITION];
 	(void)ac;
 //	(void)(str);
 //	(void)(str1);
@@ -40,19 +39,24 @@ int	main(int ac, char **av)
 		write(1,"2\n",2);
 //		ft_malloc(256);
 //		ft_malloc(1024);
-		str2[j] = str_new_cpy('b', 1);
+	//	dprintf(5,"%s\n",str_new_cpy('b', 1));
 		str[j] = str_new_cpy('a', 1023);
+		str1[j] = str_new_cpy('a', 1);
+		dprintf(3,"str :%lu\n", strlen(str[j]));
+		dprintf(4,"str1 :%lu\n", strlen(str1[j]));
 //		if (!(j %1000))
 //			printf("%d\n",j);
 	//	show_alloc_mem();
 	}
+	show_alloc_mem();
 	for (int j = 0; j < REPETITION ; j++)
 	{
-//		printf("str2 \t%lu\n", strlen(str2[j]));
+		dprintf(3,"str :%p\n", str[j]);
+		dprintf(4,"str1 :%p\n", str1[j]);
+	}
+//	show_alloc_mem();
 	//	printf("str1 \t%lu\n", strlen(str1[j]));
 	//	printf("str \t%lu\n", strlen(str[j]));
-	}
-	show_alloc_mem();
 //	ft_free(str2[2]);
 //	ft_free(str2[1]);
 //	ft_free(str[3]);

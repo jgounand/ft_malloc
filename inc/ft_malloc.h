@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 15:59:06 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/18 18:38:57 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 
 # define TINY	256
 # define SMALL	1024
-# define NB_PAGES		2 //32 pour le projet
+# define NB_PAGES		1 //32 pour le projet
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
-# define H_TINY (t_tny *)((void *)(g_mem) + getpagesize() * S_HEADER_A)
-# define H_MED (t_med *)((void *)(g_mem) + getpagesize() * (S_HEADER_A + S_HEADER_T))
-# define H_FAT (t_fat *)((void *)(g_mem) + getpagesize() * (S_HEADER_M + S_HEADER_A + S_HEADER_T))
+# define H_TINY (t_tny *)((void *)(g_mem + 1) + getpagesize() * S_HEADER_A)
+# define H_MED (t_med *)((void *)(H_TINY) + getpagesize() * S_HEADER_T)
+# define H_FAT (t_fat *)((void *)H_MED + getpagesize() * S_HEADER_M)
 # define S_HEADER_T g_mem->nb_pages_header[0]
 # define S_HEADER_M g_mem->nb_pages_header[1]
 # define S_HEADER_F g_mem->nb_pages_header[2]
@@ -74,4 +74,8 @@ void *get_addr(void *ptr);
 t_start	*get_start(void *ptr, bool next);
 t_start	*get_new_data(void *ptr);
 void	clear_header(void);
+
+
+//DEBUG
+void	debug_check_MAX_HEADER(void);
 #endif

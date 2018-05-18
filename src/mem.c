@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 20:33:58 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/18 19:03:45 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_mem	*mem_header(unsigned int nb_pages[4])
 	size_t	size;
 
 	size = nb_pages[0] + nb_pages[1] + nb_pages[2] + nb_pages[3];
-	new = mmap(NULL, sizeof(t_mem) + getpagesize() * size,
+	new = mmap(NULL, sizeof(t_mem) + getpagesize() * size *NB_PAGES ,
 			PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	if (!new)
 	{
@@ -27,6 +27,8 @@ static t_mem	*mem_header(unsigned int nb_pages[4])
 		return (NULL);
 	}
 	ft_bzero(new, sizeof(t_mem) + getpagesize() * size);
+	printf("sizeotf t_meme %lu\n", sizeof (t_mem));
+	printf("size init %lu nb page %lu\n", sizeof(t_mem) + getpagesize () * size ,size);
 	return (new);
 }
 
@@ -109,6 +111,11 @@ t_mem	*init_mem(void)
 	printf("med->ptr %p size %d\n", tny->ptr, tny->size);
 	
 	printf("HEADER_A %p\n", (t_start *)(g_mem + 1));
+	printf("size beetween g_mem et H_A %lu\n",  (void *)(g_mem + 1) - (void *)g_mem);
+	printf("size beetween header_a et H_tiny %lu\n",  ((void *)(g_mem + 1) + getpagesize()) - (void *)(g_mem + 1));
+	printf("size beetween H_T et H_ME %lu\n", ((void *)(g_mem + 1) + getpagesize() * 2) - ((void *)(g_mem + 1) + getpagesize()));
+	printf("size beetween H_M et H_FAT %lu\n", ((void *)(g_mem + 1) + getpagesize() * 3) - ((void *)(g_mem + 1) + (getpagesize() * 2)));
+	printf("size beetween H_F et H_END %lu\n", ((void *)(g_mem + 1) + getpagesize() * 4) - ((void *)(g_mem + 1) + (getpagesize() * 3)));
 	printf("HEADER_T %p\n", H_TINY);
 	printf("HEADER_M %p\n", H_MED);
 	printf("HEADER_F %p\n", H_FAT);
@@ -120,38 +127,15 @@ t_mem	*init_mem(void)
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
-//	exit (1);
 	return (g_mem);
-}
-
-void	cpy_header_start(t_mem *new)
-{
-	ft_memcpy(new+ 1, g_mem + 1, ((void *)H_TINY - 1) - (void *)(g_mem + 1));
-}
-
-void	cpy_header_tiny(t_mem *new, bool move_one)
-{
-	ft_memcpy(new + getpagesize() * S_HEADER_A, H_TINY,(void*)H_MED - (void *)H_TINY - 1);
-}
-
-void	cpy_header_med(t_mem *new, bool move_one)
-{
-	ft_memcpy(new + getpagesize() * (S_HEADER_A +  S_HEADER_T + move_one), H_TINY,((void *)H_FAT - (void *)H_MED) - 1);
-}
-
-void	cpy_header_fat(t_mem *new, bool move_one)
-{
-	ft_memcpy(new + getpagesize() * (S_HEADER_A +  S_HEADER_T +  S_HEADER_M + move_one), H_TINY,((void *)H_FAT - (void *)H_MED) - 1);
 }
 
 void	add_mem_header(short type)
 {
 	//	show_alloc_mem();
 	t_mem	*new;
-	size_t	s_cpy;
-	size_t	total;
-
 	//show_alloc_mem();
+//	show_alloc_mem();
 	printf("S_HEADER_A %d\n", S_HEADER_A);
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
@@ -159,67 +143,66 @@ void	add_mem_header(short type)
 	printf("TINY_SIZE %lu\n", TINY_SIZE);
 //	show_alloc_mem();
 	printf("\n\n");
-	total = getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
-	if (type == 0)
-	{
-	//	s_cpy = getpagesize() * (S_HEADER_A + S_HEADER_T);
-		S_HEADER_T++;
-	}
-	else if (type == 1)
-	{
-	//	s_cpy =getpagesize() * ( S_HEADER_A + S_HEADER_T + S_HEADER_M);
-		S_HEADER_M++;
-	}
-	else if (type == 2)
-	{
-	//	s_cpy = getpagesize()* (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F);
-		S_HEADER_F++;
-	}
-	else
-	{
-	//	s_cpy = getpagesize() * S_HEADER_A;
-		S_HEADER_A++;
-	}
+	//show_alloc_mem();
+	S_HEADER_A++;
 	if (!(new = mem_header(g_mem->nb_pages_header)))
 		exit (1);
-	cpy_header_start(new);
-	cpy_header_tiny(new, type == 3 ? 1 : 0);
-	if (type == 3 || type == 0)
-		cpy_header_med(new, 1);
-	else
-		cpy_header_med(new , 0);
-	//ft_memcpy(new , g_mem , s_cpy);
-	//ft_memcpy((void *)(new) + s_cpy + getpagesize(), (void *)(g_mem) + s_cpy, total - s_cpy);
-	ft_memcpy(new, g_mem, sizeof (t_mem));
-	ft_memcpy(new->nb_pages_header, g_mem->nb_pages_header, sizeof(unsigned int[4]));
-	ft_memcpy(new->max_size, g_mem->max_size, sizeof(unsigned int[4]));
+	S_HEADER_A--;
+	ft_memcpy(new, g_mem, sizeof(t_mem) + getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F) + sizeof(t_mem));
 	if (type == 0)
 	{
 		printf("reset 0\n");
+		ft_memmove(
+				(t_med *)((void *)(new + 1) + getpagesize() * (S_HEADER_A + S_HEADER_T + 1)),
+				(t_med *)((void *)(g_mem + 1) + getpagesize() * (S_HEADER_A + S_HEADER_T)), getpagesize() * (S_HEADER_M + S_HEADER_F));
+	g_mem = new;
+		ft_bzero((void *)(g_mem+ 1) + getpagesize() * (S_HEADER_A + S_HEADER_T), getpagesize());
+	S_HEADER_T++;
 		new->max_size[0] = MAX_HEADER(t_tny, 1);
+		printf("wtf\n");
 	}
 	else if (type == 1)
 	{
 		printf("reset 1\n");
+		ft_memmove(
+				(t_med *)((void *)(new +1) + getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + 1)),
+				(t_med *)((void *)(g_mem + 1) + getpagesize() * (S_HEADER_A + S_HEADER_T  + S_HEADER_M)), getpagesize() * (S_HEADER_F));
+	g_mem = new;
+		ft_bzero((void *)(g_mem + 1) + getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M), getpagesize());
+		S_HEADER_M++;
 		new->max_size[1] = MAX_HEADER(t_med, 1);
 	}
 	else if (type == 2)
 	{
 		printf("reset 2\n");
+	g_mem = new;
+		S_HEADER_F++;
 		new->max_size[2] = MAX_HEADER(t_fat,1);
+		exit (10);
 	}
 	else if (type == 3)
 	{
 		printf("reset 3\n");
+	ft_memmove(
+				(t_med *)((void *)(new + 1) + getpagesize() * (S_HEADER_A +  1)),
+				(t_med *)((void *)(g_mem + 1) + getpagesize() * (S_HEADER_A ))
+				, getpagesize() * (S_HEADER_F + S_HEADER_T + S_HEADER_M));
+	g_mem = new;
+		ft_bzero((void *)(g_mem + 1) + getpagesize() * (S_HEADER_A), getpagesize());
+		S_HEADER_A++;
 		new->max_size[3] = MAX_HEADER(t_start,1);
+	//	exit (9);
 	}
 	t_start	*start = (t_start *)(g_mem + 1);
-	munmap(g_mem, total);
-	g_mem = new;
+//	munmap(g_mem, total);
+//	g_mem = new;
 	start = (t_start *)(g_mem + 1);
+	//show_alloc_mem();
+	printf("et la\n");
 	printf("\nHEADER_A %p\n\n", start->start);
 	printf("HEADER_T %p\n", H_TINY);
 	printf("HEADER_M %p\n", H_MED);
+	printf("MAX_HEADER M %lu\n", MAX_HEADER(t_med, 1));
 	printf("HEADER_F %p\n", H_FAT);
 	printf("TINY_SIZE %lu\n", TINY_SIZE);
 	printf("MED_SIZE %lu\n", MED_SIZE);
@@ -229,7 +212,8 @@ void	add_mem_header(short type)
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
-	//exit(1);
+	//show_alloc_mem();
+	//exit(3);
 	//checker ici !!!! le nombre de header
 	//	exit (1);
 //	show_alloc_mem();
@@ -237,55 +221,10 @@ void	add_mem_header(short type)
 //	exit(1);
 	if (TINY_SIZE > 300 || MED_SIZE >300)
 		exit(1);
+//	exit (1);
 //	show_alloc_mem();
 //	exit (1);
 }
-/*
-void	*get_data(void *ptr,short type, size_t lenght, t_tny *current)
-{
-	t_start	*start;
-	size_t	cpt;
-
-	cpt = 0;
-	start = (t_start *)(g_mem + 1);
-	printf("=>Get_DATAstart->start %p ptr %p\n", start->start + (type ? MAX_TINY + MAX_MED : MAX_TINY), ptr);
-	printf("type %d lenght %lu ptr %p\n", type, lenght ,ptr);
-	while (start->start)
-	{
-		printf("ptr + lenght %p max %p min %p type %d %lu cpt %lu\n",ptr + lenght, start->start + (type ? MAX_TINY + MAX_MED : MAX_TINY), start->start + (type ? MAX_TINY : 0), type, A_SIZE, cpt);
-		printf("doit etre plus petit %d soit etre plus grand %d\n", ptr + lenght <= start->start + (type ? MAX_MED + MAX_TINY : MAX_TINY), ptr + lenght >= start->start + (type ? MAX_TINY : 0));
-
-		if (ptr + lenght < start->start + (type ? MAX_MED + MAX_TINY : MAX_TINY) && ptr + lenght >= start->start + (type ? MAX_TINY : 0))
-			break;
-		start++;
-		cpt++;
-	}
-	if (!start->start)
-	{
-		printf("start->data %p\n", ((t_start *)(g_mem + 1))->start);
-		printf("(start - 1)->start %p\n", (start -1)->start);
-		dprintf(2,"il faut add space cpt %lu\n", cpt);
-		start->start = mem_data();
-		current->ptr = ptr;
-		current->size = -((start->start + (type ? MAX_MED + MAX_TINY : MAX_TINY))-((current -1)->ptr + (current -1)->size));
-		(current + 1)->ptr = start->start + (type ? MAX_TINY : 0);
-		(current + 1)->size = lenght;
-		A_SIZE--;
-		if (!type)
-			TINY_SIZE--;
-		else
-			MED_SIZE--;
-		//	if (cpt == 2)
-		//		exit(1);
-		printf("ptr free fin size %d et serait %lu\n", current->size, (uintptr_t)((current -1)->ptr + (current -1)->size) - (uintptr_t)(start->start + MAX_TINY));
-		//exit (1);
-		return (NULL);
-	}
-	printf("return get_data %p next ptr %p \n\n\n", ptr, get_addr(ptr + lenght + 1) + 2);
-	//printf("A_SIZE %lu\n", A_SIZE);
-	return (ptr);
-}
-*/
 t_start	*get_start(void *ptr, bool next)
 {
 	t_start	*start;
@@ -315,13 +254,14 @@ t_start	*get_new_data(void *ptr)
 
 	dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
 	dprintf(2, "ptr %p\n", ptr);
+	if (!A_SIZE)
+	{
+		add_mem_header (3);
+	//	show_alloc_mem();
+	}
 	if (get_start(ptr, 1) != (t_start *)0)
 		return (get_start(ptr,0));
 	new = get_start(ptr, 0) + 1;
-	if ((t_tny *)(new + 1) >= (t_tny *)H_TINY)
-	{
-		add_mem_header (3);
-	}
 	new->start = mem_data();
 	A_SIZE--;
 	dprintf(2, "\t\t\t\t\t\t\t\tA_SIZE %lu\n", A_SIZE);
