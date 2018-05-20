@@ -6,36 +6,11 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/17 17:30:21 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/20 13:55:18 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
-
-/*
-   short gettype(void *ptr)
-   {
-   t_start	*start;
-
-   start = (t_start *)(g_mem + 1);
-   printf("ptr %p\n", ptr);
-   if (ptr < ((void *)start->start + MAX_TINY) && ptr >= start->start)
-   {
-   printf("FREE TINY\n");
-   return (0);
-   }
-   else if (ptr < (void *)start->start + MAX_TINY + MAX_MED && ptr >= start->start+ MAX_MED)
-   {
-   printf("FREE MED\n");
-   return (1);
-   }
-   else
-   {
-   printf("FREE FAT\n");
-   return (2);
-   }
-   }
-   */
 
 short	get_type(void *ptr)
 {

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/18 19:03:45 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/20 13:56:05 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,6 @@ void	add_mem_header(short type)
 	g_mem = new;
 		S_HEADER_F++;
 		new->max_size[2] = MAX_HEADER(t_fat,1);
-		exit (10);
 	}
 	else if (type == 3)
 	{
@@ -212,18 +211,8 @@ void	add_mem_header(short type)
 	printf("S_HEADER_T %d\n", S_HEADER_T);
 	printf("S_HEADER_M %d\n", S_HEADER_M);
 	printf("S_HEADER_F %d\n", S_HEADER_F);
-	//show_alloc_mem();
-	//exit(3);
-	//checker ici !!!! le nombre de header
-	//	exit (1);
-//	show_alloc_mem();
-	//if (i ==3)
-//	exit(1);
 	if (TINY_SIZE > 300 || MED_SIZE >300)
 		exit(1);
-//	exit (1);
-//	show_alloc_mem();
-//	exit (1);
 }
 t_start	*get_start(void *ptr, bool next)
 {
@@ -237,7 +226,6 @@ t_start	*get_start(void *ptr, bool next)
 	{
 		if (ptr >= start->start && ptr <= start->start + MAX_MED + MAX_TINY)
 			break;
-	//	printf("start %p node %lu\n", start, node);
 		start++;
 	}
 	printf("get_start ret node %lu\n", node);
@@ -255,10 +243,7 @@ t_start	*get_new_data(void *ptr)
 	dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
 	dprintf(2, "ptr %p\n", ptr);
 	if (!A_SIZE)
-	{
 		add_mem_header (3);
-	//	show_alloc_mem();
-	}
 	if (get_start(ptr, 1) != (t_start *)0)
 		return (get_start(ptr,0));
 	new = get_start(ptr, 0) + 1;
