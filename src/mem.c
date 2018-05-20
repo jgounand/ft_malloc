@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 16:43:07 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/20 17:26:46 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,6 @@ t_start	*get_start(void *ptr, bool next)
 	printf ("get_start ptr %p node %lu\n", ptr, node);
 	while (node--)
 	{
-		printf("min %p max %p\n",start->start, start->start + MAX_MED + MAX_TINY);
 		if (ptr >= start->start && ptr <= start->start + MAX_MED + MAX_TINY)
 			break;
 		start++;
@@ -252,11 +251,7 @@ t_start	*get_new_data(void *ptr)
 	A_SIZE--;
 	dprintf(2, "\t\t\t\t\t\t\t\tA_SIZE %lu\n", A_SIZE);
 	dprintf(2,"new %p\n",new->start);
-		if (TINY_SIZE > 300 || MED_SIZE > 300)
-		{
-			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
-			exit (3);
-	}
+	debug_check_MAX_HEADER();
 		dprintf(2,"new %p H_TINY %p\n", new, H_TINY);
 	return (new);
 }

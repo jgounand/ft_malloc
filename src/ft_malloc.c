@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 16:58:08 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/20 17:16:32 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	*add_small(short type, size_t lenght)
 		if (type)
 			tmp->ptr = get_addr(start->start + MAX_TINY);
 		else
-		tmp->ptr = get_addr(start->start);
+			tmp->ptr = get_addr(start->start);
 		printf("get_start->start %p ptr- %p\n", tmp->ptr, get_start(tmp->ptr, 0)->start + MAX_TINY);
 		tmp->size = - MAX_MED;
 		node++;
