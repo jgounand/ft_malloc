@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 13:53:06 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/20 16:58:08 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	*add_small(short type, size_t lenght)
 	size_t	node;
 
 	debug_check_MAX_HEADER();
-	if (!(g_mem->max_size[(int)type]))
+	if (!(g_mem->max_size[(int)type] - 1))
 	{
 		dprintf(2,"il faut realouer !! type nbr %d %lu\n", type, g_mem->max_size[(int)type] - 1);
 		add_mem_header(type);
@@ -95,13 +95,18 @@ void	*add_small(short type, size_t lenght)
 	if (!(g_mem->max_size[(int)type] - 2))
 	{
 		add_mem_header(type);
-	//	exit (999);
+		exit (254);
 		return (add_small(type, lenght));
 		//ici plus de place need more header et plus de data
 	}
 		dprintf(2,"1\n");
 		dprintf(2,"\til faut realouer data !! type %d\n", type);
-		tmp->ptr = get_addr(get_new_data((tmp - 1)->ptr)->start + (type ? MAX_TINY : 0));
+		t_start	*start = get_new_data((tmp - 1)->ptr);
+		printf("=>start->start %p\n", start->start);
+		if (type)
+			tmp->ptr = get_addr(start->start + MAX_TINY);
+		else
+		tmp->ptr = get_addr(start->start);
 		printf("get_start->start %p ptr- %p\n", tmp->ptr, get_start(tmp->ptr, 0)->start + MAX_TINY);
 		tmp->size = - MAX_MED;
 		node++;

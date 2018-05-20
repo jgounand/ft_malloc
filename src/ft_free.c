@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 13:55:18 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/20 15:54:24 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,16 @@ static bool	not_begin_data(t_tny *tofree)
 		return (0);
 	return (1);
 }
+static bool	not_diff_data(t_tny *tofree)
+{
+	if (get_start(tofree->ptr, 0)->start == get_start((tofree + 1)->ptr, 0)->start)
+	{
+		printf("%p == %p return 1\n", get_start(tofree->ptr, 0),get_start((tofree + 1)->ptr, 0));
+	return (1);
+	}
+	printf("not_diff_data ret 0\n");
+return (0);
+}
 
 static void	try_defragment(t_tny *tofree)
 {
@@ -58,9 +68,11 @@ static void	try_defragment(t_tny *tofree)
 	printf("0\n");
 	if ((tofree + 1)->size < 0)
 	{
-		show_alloc_mem();
-		tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
 		printf("tofree->size %d\n", tofree->size);
+		if (!not_diff_data(tofree +1))
+		tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr) + (tofree+1)->size;
+		else
+		tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
 		ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tofree + 2));
 		printf("tofree + 1)->ptr %p\n", (tofree + 1)->ptr);
 		if (!type)
