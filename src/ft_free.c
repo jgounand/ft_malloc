@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 17:56:23 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/23 18:23:36 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,16 @@ static bool	not_diff_data(t_tny *tofree)
 	printf("not_diff_data ret 0\n");
 	return (0);
 }
+/*
+   static bool	free_end_data(t_tny *tofree)
+   {
+   t_start	*start;
 
+   if (!not_diff_data(tofree + 1))
+   tofree->size += (tofree +1)->size;
+
+   }
+   */
 static void	try_defragment(t_tny *tofree)
 {
 	short	type;
@@ -71,12 +80,15 @@ static void	try_defragment(t_tny *tofree)
 		printf("tofree->size %d\n", tofree->size);
 		if (!not_diff_data(tofree +1))
 		{
-	printf("0.1\n");
-			tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr) + (tofree+1)->size;
+			printf("0.1\n");
+			tofree->size = (uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr;
+			tofree->size = -tofree->size + (tofree +1)->size;
+			printf("tofree->size %d\n", tofree->size);
+	//		tofree->size = (tofree +1)->size;
 		}
 		else
 		{
-	printf("0.2\n");
+			printf("0.2\n");
 			tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
 		}
 		ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tofree + 2));
@@ -93,13 +105,15 @@ static void	try_defragment(t_tny *tofree)
 		tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr);
 		printf("tofree->size %d\n", tofree->size);
 	}
-
 	if (not_begin_data(tofree))
 	{
 		if ((tofree -1)->size < 0)
 		{
 			printf("6\n");
-			(tofree- 1)->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)(tofree - 1)->ptr);
+			if (!not_diff_data(tofree))
+				(tofree - 1)->size += tofree->size;
+			else
+				(tofree- 1)->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)(tofree - 1)->ptr);
 			ft_memmove(tofree, tofree + 1, ((void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T))) - (void *)(tofree + 1));
 			printf("tofree->size %d\n", tofree->size);
 			if (!type)

@@ -51,12 +51,13 @@ int	main(int ac, char **av)
 	//	show_alloc_mem();
 	}
 	printf("\n\n\n");
-	ft_free(str1[4]);
-	ft_free(str1[3]);
+//	ft_free(str1[4]);
+//	ft_free(str1[3]);
 //	ft_free(str1[0]);
 	ft_free(str1[1]);
 	show_alloc_mem();
 	ft_free(str1[2]);
+	ft_free(str1[0]);
 //	ft_free(str1[5]);
 	show_alloc_mem();
 	return (0);
