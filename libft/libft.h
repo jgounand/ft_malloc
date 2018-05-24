@@ -6,7 +6,7 @@
 /*   By: jgounand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/08 09:07:05 by jgounand          #+#    #+#             */
-/*   Updated: 2018/01/11 04:08:08 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:29:49 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstadd(t_list **alst, t_list *new_lst);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void			ft_lstaddback(t_list **alst, t_list *new);
 int				get_next_line(int const fd, char **line);
 void			ft_delmaillon(t_list **lst, unsigned int position);

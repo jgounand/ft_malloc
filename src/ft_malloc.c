@@ -6,33 +6,14 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 17:16:32 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:29:59 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
 t_mem	*g_mem = NULL;
-/*
-   t_mem	*init_mem(void)
-   {
 
-   if (g_mem)
-   return (g_mem);
-   g_mem = mmap(NULL, sizeof(t_mem) + getpagesize() * 4 + MAX_TINY + MAX_MED,
-   PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-   if (g_mem == NULL)
-   {
-   write(2, "ERROR\n",6);
-   return (NULL);
-   }
-   ft_bzero(g_mem, sizeof(t_mem) + MAX_TINY + MAX_MED + getpagesize() * 4);
-   TINY_SIZE = MAX_HEADER(t_tny);
-   MED_SIZE = MAX_HEADER(t_med);
-   FAT_SIZE = MAX_HEADER(t_fat);
-   return (g_mem);
-   }
-   */
 void *get_addr(void *ptr)
 {
 	while ((uintptr_t)ptr % 8)

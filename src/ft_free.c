@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 12:23:17 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 13:30:58 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static bool	not_diff_data(t_tny *tofree)
 	return (0);
 }
 
-static t_tny	*ret_node(t_tny	*tofree, void *ptr)
+t_tny	*ret_node(t_tny	*tofree, void *ptr)
 {
 	size_t	node;
 	node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;

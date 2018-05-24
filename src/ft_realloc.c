@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 12:27:24 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 12:52:30 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:30:42 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	need_alloc(t_tny *node, size_t size)
 {
-	if ((node + 1)->ptr - node->ptr >= size)
+	if ((node + 1)->ptr - (void *)node->ptr >= (long)size)
 		return (0);
 	return (1);
 }
@@ -22,6 +22,7 @@ static bool	need_alloc(t_tny *node, size_t size)
 static void	*ft_realloc_small(void *ptr, size_t size, short type)
 {
 	t_tny	*node;
+	void	*new;
 
 	if (!type)
 		node = H_TINY;
@@ -34,13 +35,44 @@ static void	*ft_realloc_small(void *ptr, size_t size, short type)
 	}
 	if (need_alloc(node, size))
 	{
+		new = ft_malloc(size);
+		ft_memcpy(new, node, ((int)size < node->size ? size : node->size));
 		ft_free(ptr);
-		return (ft_malloc(size));
+		return (new);
 	}
 	else
 	{
-
+		node->size = size;
+		add_node_free(node, ptr, type);
+		return (node->ptr);
 	}
+}
+static	void	*ft_realloc_fat(void *ptr, size_t size)
+{
+	t_fat	*fat;
+	size_t	node;
+	void	*new;
+
+	fat = H_FAT;
+	node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
+	while(node)
+	{
+		if (fat->ptr == ptr)
+			break ;
+		fat++;
+		node--;
+	}
+	if (!node)
+	{
+		printf("Error %p non reconnu\n", ptr);
+	}
+	new = ft_malloc(size);
+	if (size < fat->size)
+		ft_memcpy(new, ptr, size);
+	else
+		ft_memcpy(new, ptr, fat->size);
+	ft_free(ptr);
+	return (new);
 }
 
 void *ft_realloc(void *ptr, size_t size)
@@ -51,5 +83,5 @@ void *ft_realloc(void *ptr, size_t size)
 	if (type != 2)
 		return (ft_realloc_small(ptr, size, type));
 	else
-		ft_realloc_fat(ptr, size);
+		return(ft_realloc_fat(ptr, size));
 }
