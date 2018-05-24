@@ -63,6 +63,7 @@ int	main(int ac, char **av)
 	str1[3] = str_new_cpy('a', 1023);
 	str1[4] = str_new_cpy('a', 1023);
 	str1[5] = str_new_cpy('a', 1023);
+	ft_realloc(str1[5], 11);
 	ft_free(str1[0]);
 	ft_free(str1[1]);
 	ft_free(str1[2]);

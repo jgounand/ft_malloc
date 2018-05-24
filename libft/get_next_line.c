@@ -6,7 +6,7 @@
 /*   By: jgounand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 13:29:13 by jgounand          #+#    #+#             */
-/*   Updated: 2018/01/15 15:38:26 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:36:05 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		find_the_line(t_gnl *gnl, char **line, int i)
 			return (*line ? 1 : gnl->size);
 		ptr = ft_memchr(gnl->buff, '\n', gnl->size);
 		gnl->size = !ptr ? gnl->size : gnl->size - (ptr - gnl->buff) - 1;
-		if (!(*line = ft_realloc(*line, i, !ptr ? gnl->size + i + 1 :
+		if (!(*line = ft_realloc_p(*line, i, !ptr ? gnl->size + i + 1 :
 						(ptr - gnl->buff) + 1 + i)))
 			return (-1);
 		ft_memmove((*line) + i, gnl->buff, !ptr ? gnl->size : ptr - gnl->buff);

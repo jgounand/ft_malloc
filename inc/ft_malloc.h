@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:10:09 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:37:39 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ extern	t_mem	*g_mem;
 
 void *ft_malloc(size_t size);
 void show_alloc_mem(void);
+void *ft_realloc(void *ptr, size_t size);
 t_mem	*init_mem(void);
 void ft_free(void *ptr);
 short gettype(void *ptr);

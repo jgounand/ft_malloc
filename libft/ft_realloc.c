@@ -6,13 +6,13 @@
 /*   By: jgounand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 18:05:32 by jgounand          #+#    #+#             */
-/*   Updated: 2017/11/08 09:33:11 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:35:48 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+void	*ft_realloc_p(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new;
 

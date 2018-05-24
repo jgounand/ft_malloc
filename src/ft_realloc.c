@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 12:27:24 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:30:42 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:48:09 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ static bool	need_alloc(t_tny *node, size_t size)
 	if ((node + 1)->ptr - (void *)node->ptr >= (long)size)
 		return (0);
 	return (1);
+}
+
+static bool	same_node(size_t size, short type)
+{
+	if ((size <= TINY && type == 0) || (size > TINY && size <= SMALL && type == 1))
+		return (1);
+	return (0);
 }
 
 static void	*ft_realloc_small(void *ptr, size_t size, short type)
@@ -33,7 +40,7 @@ static void	*ft_realloc_small(void *ptr, size_t size, short type)
 			printf("Error ptr inconnu\n");
 			exit (65);
 	}
-	if (need_alloc(node, size))
+	if (need_alloc(node, size) || !same_node(size, type))
 	{
 		new = ft_malloc(size);
 		ft_memcpy(new, node, ((int)size < node->size ? size : node->size));
@@ -46,6 +53,7 @@ static void	*ft_realloc_small(void *ptr, size_t size, short type)
 		add_node_free(node, ptr, type);
 		return (node->ptr);
 	}
+		return (new);
 }
 static	void	*ft_realloc_fat(void *ptr, size_t size)
 {
