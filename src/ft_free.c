@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/23 18:23:36 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 12:23:17 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,83 @@ static bool	not_diff_data(t_tny *tofree)
 	printf("not_diff_data ret 0\n");
 	return (0);
 }
-/*
-   static bool	free_end_data(t_tny *tofree)
-   {
-   t_start	*start;
 
-   if (!not_diff_data(tofree + 1))
-   tofree->size += (tofree +1)->size;
+static t_tny	*ret_node(t_tny	*tofree, void *ptr)
+{
+	size_t	node;
+	node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
+while (node)
+	{
+		if (ptr == tofree->ptr)
+			break;
+		tofree++;
+		node--;
+	}
+return	(node ?tofree : NULL);
+}
 
-   }
-   */
+static	void	rm_h_start(t_tny	*node, t_tny	*node1)
+{
+	t_start	*start;
+
+	start = get_start(node->ptr,0);
+	printf("start %p g +1 %p\n", start, g_mem + 1);
+	if (start == (t_start *)(g_mem + 1))
+		return ;
+	ft_memmove(start, start + 1, ((void *)(g_mem + 1) + getpagesize() * S_HEADER_A) - (void *)(start + 1));
+	munmap(start->start, MAX_TINY + MAX_MED);
+	A_SIZE++;
+	if (node < H_MED)
+	{
+		ft_memmove(node, node + 1, ((void *)H_TINY + MAX_HEADER(t_tny, S_HEADER_T)) - (void *)(node + 1));
+		TINY_SIZE++;
+	}
+	else
+	{
+		ft_memmove(node, node + 1, (void *)H_MED + MAX_HEADER(t_tny, S_HEADER_M) - (void *)(node + 1));
+		MED_SIZE++;
+	}
+	if (!node1)
+		return ;
+	if (node1 < H_MED)
+	{
+		ft_memmove(node1, node1 + 1, ((void *)H_TINY + MAX_HEADER(t_tny, S_HEADER_T)) - (void *)(node1 + 1));
+		TINY_SIZE++;
+	}
+	else
+	{
+		ft_memmove(node1, node1 + 1, (void *)H_MED + MAX_HEADER(t_tny, S_HEADER_M) - (void *)(node1 + 1));
+		MED_SIZE++;
+	}
+}
+
+static bool check_header_free(t_tny *tofree)
+{
+	t_start	*start;
+	t_tny	*node;
+	void	*ptr;
+
+	start = get_start(tofree->ptr, 0);
+	if (start->start == tofree->ptr)
+	{
+		node = H_MED;
+		ptr = start->start + MAX_TINY;
+	}
+	else
+	{
+		node = H_TINY;
+		ptr = start->start;
+	}
+	if (tofree->size == - MAX_TINY)
+	{
+		node = ret_node(node, ptr);
+		if (!node || node->size == - MAX_TINY)
+			rm_h_start(tofree, node);
+	}
+	return (0);
+}
+
+
 static void	try_defragment(t_tny *tofree)
 {
 	short	type;
@@ -122,17 +189,15 @@ static void	try_defragment(t_tny *tofree)
 				MED_SIZE++;
 		}
 	}
+	if (check_header_free(tofree))
+	{
+	}
 }
+
 
 static void free_tny_small(t_tny *tofree, void *ptr)
 {
-	while (tofree->ptr)
-	{
-		if (ptr == tofree->ptr)
-			break;
-		tofree++;
-	}
-	//voir quand on realou une deuxieme fois
+	tofree = ret_node(tofree, ptr);
 	if (!tofree)
 	{
 		printf("error tmp null\n");
