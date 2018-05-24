@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 12:27:24 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:48:09 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:58:23 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static void	*ft_realloc_small(void *ptr, size_t size, short type)
 	{
 		node->size = size;
 		add_node_free(node, ptr, type);
+	//	try_defragment(node +1);
 		return (node->ptr);
 	}
 		return (new);

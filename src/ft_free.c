@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 13:30:58 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:50:22 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ static bool check_header_free(t_tny *tofree)
 }
 
 
-static void	try_defragment(t_tny *tofree)
+void	try_defragment(t_tny *tofree)
 {
 	short	type;
 

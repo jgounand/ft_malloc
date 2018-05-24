@@ -40,7 +40,7 @@ int	main(int ac, char **av)
 		write(1,"2\n",2);
 //		ft_malloc(256);
 //		ft_malloc(1024);
-		dprintf(5,"%s\n",str_new_cpy('b', 1));
+		str[j] = str_new_cpy('b', 1);
 		str1[j] = str_new_cpy('a', 1023);
 	//	str2[j] = str_new_cpy('a', 15000);
 		dprintf(3,"str1 :%lu\n", strlen(str1[j]));
@@ -54,7 +54,9 @@ int	main(int ac, char **av)
 	ft_free(str1[3]);
 	ft_free(str1[5]);
 	ft_free(str1[1]);
-	show_alloc_mem();
+	ft_free(str[3]);
+	ft_free(str[1]);
+	ft_free(str[2]);
 	ft_free(str1[2]);
 	ft_free(str1[0]);
 	str1[0] = str_new_cpy('a', 1023);
@@ -63,11 +65,12 @@ int	main(int ac, char **av)
 	str1[3] = str_new_cpy('a', 1023);
 	str1[4] = str_new_cpy('a', 1023);
 	str1[5] = str_new_cpy('a', 1023);
+	show_alloc_mem();
 	ft_realloc(str1[5], 11);
-	ft_free(str1[0]);
-	ft_free(str1[1]);
-	ft_free(str1[2]);
-	str_new_cpy('a', 1020);
+	//ft_free(str1[0]);
+	//ft_free(str1[1]);
+	//ft_free(str1[2]);
+	//str_new_cpy('a', 1020);
 	show_alloc_mem();
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:37:39 by jgounand         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:50:33 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	clear_header(void);
 t_tny	*ret_node(t_tny	*tofree, void *ptr);
 short	get_type(void *ptr);
 void	*add_node_free(t_tny *tmp, void *ptr, bool type);
+void	try_defragment(t_tny *tofree);
 
 
 //DEBUG
