@@ -54,10 +54,15 @@ int	main(int ac, char **av)
 	ft_free(str1[3]);
 	ft_free(str1[5]);
 	ft_free(str1[1]);
-	ft_free(str[3]);
 	ft_free(str[1]);
 	ft_free(str[2]);
+	show_alloc_mem();
+	exit (1);
+	show_alloc_mem();
+	exit (1);
 	ft_free(str1[2]);
+	exit (1);
+	ft_free(str[5]);
 	ft_free(str1[0]);
 	str1[0] = str_new_cpy('a', 1023);
 	str1[1] = str_new_cpy('a', 1023);
@@ -66,6 +71,7 @@ int	main(int ac, char **av)
 	str1[4] = str_new_cpy('a', 1023);
 	str1[5] = str_new_cpy('a', 1023);
 	show_alloc_mem();
+//	ft_malloc(11);
 	ft_realloc(str1[5], 11);
 	//ft_free(str1[0]);
 	//ft_free(str1[1]);

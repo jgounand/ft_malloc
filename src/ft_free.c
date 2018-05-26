@@ -33,6 +33,7 @@ short	get_type(void *ptr)
 	}
 	else
 	{
+	show_alloc_mem();
 		printf("Error free %p doesn't exist\n", ptr);
 		exit (4);
 	}
@@ -61,8 +62,15 @@ static bool	not_diff_data(t_tny *tofree)
 
 t_tny	*ret_node(t_tny	*tofree, void *ptr)
 {
+	short	type;
 	size_t	node;
-	node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
+
+	type = get_type(ptr);
+	if (!type)
+		node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+	else
+		node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
+	printf("nb node %lu\n", node);
 while (node)
 	{
 		if (ptr == tofree->ptr)
@@ -70,7 +78,8 @@ while (node)
 		tofree++;
 		node--;
 	}
-return	(node ?tofree : NULL);
+	printf("ret_node ptr %p\n", tofree->ptr);
+return	(node ? tofree : NULL);
 }
 
 static	void	rm_h_start(t_tny	*node, t_tny	*node1)
@@ -200,7 +209,8 @@ static void free_tny_small(t_tny *tofree, void *ptr)
 	tofree = ret_node(tofree, ptr);
 	if (!tofree)
 	{
-		printf("error tmp null\n");
+	show_alloc_mem();
+		printf("error tmp nulli %p\n", ptr);
 		exit(2);
 	}
 	else

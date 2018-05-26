@@ -98,7 +98,7 @@ void	*add_small(short type, size_t lenght)
 			MED_SIZE--;
 	//	show_alloc_mem();
 	}
-		if (!node - 1)
+		if (!(node - 1))
 		{
 			dprintf(2,"2\n");
 			dprintf(2,"\ttmp size %d ptr %p\n", (tmp)->size, tmp->ptr);
@@ -115,13 +115,13 @@ void	*add_small(short type, size_t lenght)
 		else if (-tmp->size - lenght >= (type ? SMALL : 8))
 		{
 			// ajouter un free apres tmp et le mmemove
+			add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 			dprintf(2,"3\n");
 			dprintf(2,"\tajouter free apres\n");
-			if (!type)
-				TINY_SIZE++;
-			else
-				MED_SIZE++;
-			exit (1);
+		//	if (!type)
+		//		TINY_SIZE++;
+		//	else
+		//		MED_SIZE++;
 		}
 		tmp->size = lenght;
 		if (!type)
