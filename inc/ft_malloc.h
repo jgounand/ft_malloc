@@ -62,11 +62,11 @@ typedef struct	s_start
 
 extern	t_mem	*g_mem;
 
-void *malloc(size_t size);
+void *ft_malloc(size_t size);
 void show_alloc_mem(void);
-void *realloc(void *ptr, size_t size);
+void *ft_realloc(void *ptr, size_t size);
 t_mem	*init_mem(void);
-void free(void *ptr);
+void ft_free(void *ptr);
 short gettype(void *ptr);
 t_mem	*init_mem(void);
 void	add_mem_header(short type);
