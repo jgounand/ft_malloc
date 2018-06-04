@@ -40,6 +40,7 @@ int	main(int ac, char **av)
 //		ft_malloc(1024);
 		str[j] = str_new_cpy('b', 1);
 		str1[j] = str_new_cpy('a', 1023);
+		str2[j] = str_new_cpy('c', 2055);
 	//	str2[j] = str_new_cpy('a', 15000);
 		dprintf(3,"str1 :%p\n", str1[j]);
 		dprintf(3,"\t\tstr :%p\n", str1[j]);
@@ -68,7 +69,13 @@ int	main(int ac, char **av)
 //	ft_malloc(11);
 	show_alloc_mem();
 	ft_realloc(str1[5], 11);
+	ft_realloc(str2[5], 12);
 	ft_free(str1[0]);
+	ft_free(str2[0]);
+	ft_free(str2[1]);
+	ft_free(str2[2]);
+	ft_free(str2[3]);
+	ft_free(str2[4]);
 	ft_free(str1[1]);
 	ft_free(str1[2]);
 	str_new_cpy('a', 1000);

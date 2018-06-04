@@ -12,6 +12,22 @@
 
 #include "../inc/ft_malloc.h"
 
+t_fat	*get_fat(void *ptr)
+{
+	size_t	node;
+	t_fat		*fat;
+
+	node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
+	fat = H_FAT;
+	while (node)
+	{
+		if (ptr == fat->ptr)
+		break;
+		fat++;
+		node--;
+	}
+	return ((node ? fat : NULL));
+}
 short	get_type(void *ptr)
 {
 	t_start	*start;
@@ -23,9 +39,8 @@ printf("get type ptr %p\n", ptr);
 		return (0);
 	else if (ptr < start->start + MAX_TINY + MAX_MED && ptr >= start->start + MAX_TINY)
 		return (1);
-	else if (0)
+	else if ( get_fat(ptr))
 	{
-		//check fat
 		return (2);
 	}
 	else
@@ -148,7 +163,6 @@ printf("check_header_free %p\n", tofree->ptr);
 	return (0);
 }
 
-
 void	try_defragment(t_tny *tofree)
 {
 	short	type;
@@ -166,7 +180,6 @@ printf("try_defragment get_type %p\n", tofree->ptr);
 			tofree->size = (uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr;
 			tofree->size = -tofree->size + (tofree +1)->size;
 			printf("tofree->size %d\n", tofree->size);
-	//		tofree->size = (tofree +1)->size;
 		}
 		else
 		{
@@ -237,20 +250,9 @@ static int	free_fat(void *ptr)
 			break;
 		tofree++;
 	}
-	if (!tofree->ptr)
-	{
-		//error
-	}
-	else
-		munmap(tofree->ptr, tofree->size);
-	if ((tofree + 1)->size)
-	{
-		ft_memmove(tofree, tofree + 1, (void *)H_FAT + MAX_HEADER(t_fat, S_HEADER_F) - (void *)(tofree + 1));
-	}
-	else
-		ft_bzero(tofree, sizeof (t_fat));
+	munmap(tofree->ptr, tofree->size);
+	ft_memmove(tofree, tofree + 1, (void *)H_FAT + MAX_HEADER(t_fat, S_HEADER_F) - (void *)(tofree + 1));
 	FAT_SIZE++;
-	//voir quand on realou une deuxieme fois
 	return (0);
 }
 
