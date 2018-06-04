@@ -75,7 +75,7 @@ static	void	*ft_realloc_fat(void *ptr, size_t size)
 	{
 		printf("Error %p non reconnu\n", ptr);
 	}
-	new = ft_malloc(size);
+	new = malloc(size);
 	if (size < fat->size)
 		ft_memcpy(new, ptr, size);
 	else
@@ -84,7 +84,7 @@ static	void	*ft_realloc_fat(void *ptr, size_t size)
 	return (new);
 }
 
-void *ft_realloc(void *ptr, size_t size)
+void *realloc(void *ptr, size_t size)
 {
 	short	type;
 

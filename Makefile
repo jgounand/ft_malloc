@@ -1,57 +1,50 @@
-CC				=	gcc
-NAME			=	ft_malloc
-FLAGS			=	-Wall -Wextra -Werror -g -fsanitize=address
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
 
-LIB_PATH		=	libft
-LIB				=	$(LIB_PATH)/libft.a
-LIB_LINK		=	-L $(LIB_PATH) -lft
+NAME = libft_malloc_$(HOSTTYPE).so
 
-INC_DIR			=	inc
-INCS			=	-I $(LIB_PATH)/$(INC_DIR) -I $(INC_DIR)
+CC = gcc
 
-SRC_DIR			=	src
+LIB = libft/libft.a
+
+CFLAGS = -Wall -Wextra -Werror
+
 SRC_BASE		=	main.c ft_malloc.c  show_alloc_mem.c ft_free.c mem.c debug.c ft_realloc.c
-OBJ_DIR			=	obj
 
-SRCS			=	$(addprefix $(SRC_DIR)/, $(SRC_BASE))
-OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC_BASE:.c=.o))
+OBJ = $(SRC:.c=.o)
 
-# COLORS
-C_NO			=	"\033[00m"
-C_OK			=	"\033[35m"
-C_GOOD			=	"\033[32m"
-C_ERROR			=	"\033[31m"
-C_WARN			=	"\033[33m"
+.PHONY: all libft clean fclean re
 
-# DBG MESSAGE
-SUCCESS			=	$(C_GOOD)SUCCESS$(C_NO)
-OK				=	$(C_OK)OK$(C_NO)
+all : libft $(NAME)
 
-all: $(NAME)
+$(NAME):  $(OBJ)
+	@$(CC) -shared -o $(NAME) $(OBJ) $(LIB)
+	@ln -s $(NAME) libft_malloc.so
+	@echo "!"
+	@echo "$(NAME) compiled\033[0m"
 
-$(NAME): $(LIB) $(OBJS)
-	@$(CC) $(FLAGS) -o $@ $^ $(LIB_LINK)
-	@echo "Compiling" [ $(NAME) ] $(SUCCESS)
+libft :
+	@make -C libft/
 
-$(LIB):
-	@make -C $(LIB_PATH)
+%.o : %.c
+	@$(CC) -c $(CFLAGS) -I./includes/ -I./libft/includes $<
+	@printf "\033[32m."
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/*.h
-	@mkdir -p obj
-	@$(CC) $(FLAGS) $(INCS) -c -o $@ $<
-	@echo "Linking" [ $< ] $(OK)
+clean :
+	@make -C libft/ clean
+	@/bin/rm -f $(OBJ)
+	@/bin/rm -f libft_malloc.so
+	@echo "\033[31m$(NAME) objects deleted\033[0m"
 
-clean:
-	@rm -f $(OBJS)
-	@rm -rf $(OBJ_DIR)
-	@make -C $(LIB_PATH) clean
-	@echo "Cleaning" [ $(NAME) ] "..." $(OK)
+fclean : allclean
+	@/bin/rm -f $(NAME)
+	@echo "\033[31m$(NAME) deleted\033[0m"
 
-fclean: clean
-	@rm -f $(NAME)
-	@make -C $(LIB_PATH) fclean
-	@echo "Delete" [ $(NAME) ] $(OK)
+allclean :
+	@make -C libft/ fclean
+	@/bin/rm -f libft_malloc.so
+	@/bin/rm -f $(OBJ)
+	@echo "\033[31m$(NAME) objects deleted\033[0m"
 
-re: fclean all
-
-.PHONY: clean all re fclean
+re : fclean all

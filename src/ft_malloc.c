@@ -172,7 +172,7 @@ void	*add_fat(size_t lenght)
 	return (tmp->ptr);
 }
 
-void *ft_malloc(size_t size)
+void *malloc(size_t size)
 {
 	if (size <= 0)
 		return (NULL);
