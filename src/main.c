@@ -17,8 +17,6 @@ char	*str_new_cpy(char c, size_t i)
 return (str);
 }
 
-
-
 int	main(int ac, char **av)
 {
 	char	c;
@@ -43,8 +41,8 @@ int	main(int ac, char **av)
 		str[j] = str_new_cpy('b', 1);
 		str1[j] = str_new_cpy('a', 1023);
 	//	str2[j] = str_new_cpy('a', 15000);
-		dprintf(3,"str1 :%lu\n", strlen(str1[j]));
-	//	dprintf(4,"str1 :%lu\n", strlen(str1[j]));
+		dprintf(3,"str1 :%p\n", str1[j]);
+		dprintf(3,"\t\tstr :%p\n", str1[j]);
 //		if (!(j %1000))
 //			printf("%d\n",j);
 	//	show_alloc_mem();
@@ -52,31 +50,28 @@ int	main(int ac, char **av)
 	printf("\n\n\n");
 	ft_free(str1[4]);
 	ft_free(str1[3]);
+	show_alloc_mem();
 	ft_free(str1[5]);
-	ft_free(str1[1]);
 	ft_free(str[1]);
 	ft_free(str[2]);
-	show_alloc_mem();
-	exit (1);
-	show_alloc_mem();
-	exit (1);
-	ft_free(str1[2]);
-	exit (1);
+	ft_free(str1[1]);
+	ft_free(str1[2]); //bug quand je supprime un header
 	ft_free(str[5]);
 	ft_free(str1[0]);
+	show_alloc_mem();
 	str1[0] = str_new_cpy('a', 1023);
 	str1[1] = str_new_cpy('a', 1023);
 	str1[2] = str_new_cpy('a', 1023);
 	str1[3] = str_new_cpy('a', 1023);
 	str1[4] = str_new_cpy('a', 1023);
 	str1[5] = str_new_cpy('a', 1023);
-	show_alloc_mem();
 //	ft_malloc(11);
+	show_alloc_mem();
 	ft_realloc(str1[5], 11);
-	//ft_free(str1[0]);
-	//ft_free(str1[1]);
-	//ft_free(str1[2]);
-	//str_new_cpy('a', 1020);
+	ft_free(str1[0]);
+	ft_free(str1[1]);
+	ft_free(str1[2]);
+	str_new_cpy('a', 1000);
 	show_alloc_mem();
 	return (0);
 }

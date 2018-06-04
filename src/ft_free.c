@@ -16,12 +16,9 @@ short	get_type(void *ptr)
 {
 	t_start	*start;
 
-	if (!get_start(ptr, 0))
-	{
-		printf("Eror %p doesn't exist\n", ptr);
-		exit (4);
-	}
+printf("get type ptr %p\n", ptr);
 	start = get_start(ptr, 0);
+
 	if (ptr < start->start + MAX_TINY && ptr >= start->start)
 		return (0);
 	else if (ptr < start->start + MAX_TINY + MAX_MED && ptr >= start->start + MAX_TINY)
@@ -35,6 +32,7 @@ short	get_type(void *ptr)
 	{
 	show_alloc_mem();
 		printf("Error free %p doesn't exist\n", ptr);
+		return (0);
 		exit (4);
 	}
 }
@@ -49,7 +47,7 @@ static bool	not_begin_data(t_tny *tofree)
 		return (0);
 	return (1);
 }
-static bool	not_diff_data(t_tny *tofree)
+bool	not_diff_data(t_tny *tofree)
 {
 	if (get_start(tofree->ptr, 0)->start == get_start((tofree + 1)->ptr, 0)->start)
 	{
@@ -57,7 +55,7 @@ static bool	not_diff_data(t_tny *tofree)
 		return (1);
 	}
 	printf("not_diff_data ret 0\n");
-	return (0);
+	return (4);
 }
 
 t_tny	*ret_node(t_tny	*tofree, void *ptr)
@@ -65,7 +63,10 @@ t_tny	*ret_node(t_tny	*tofree, void *ptr)
 	short	type;
 	size_t	node;
 
+printf("ret_node get_type %p\n", ptr);
 	type = get_type(ptr);
+	if (type == 4)
+	return (NULL);
 	if (!type)
 		node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 	else
@@ -116,26 +117,30 @@ static	void	rm_h_start(t_tny	*node, t_tny	*node1)
 		MED_SIZE++;
 	}
 }
-
+//ici ca bug,  changement du ptr
 static bool check_header_free(t_tny *tofree)
 {
 	t_start	*start;
 	t_tny	*node;
 	void	*ptr;
 
+printf("check_header_free %p\n", tofree->ptr);
 	start = get_start(tofree->ptr, 0);
 	if (start->start == tofree->ptr)
 	{
+	printf("0\n");
 		node = H_MED;
 		ptr = start->start + MAX_TINY;
 	}
 	else
 	{
+	printf("1\n");
 		node = H_TINY;
 		ptr = start->start;
 	}
 	if (tofree->size == - MAX_TINY)
 	{
+	printf("before node check_header_free %p\n", ptr);
 		node = ret_node(node, ptr);
 		if (!node || node->size == - MAX_TINY)
 			rm_h_start(tofree, node);
@@ -148,6 +153,7 @@ void	try_defragment(t_tny *tofree)
 {
 	short	type;
 
+printf("try_defragment get_type %p\n", tofree->ptr);
 	type = get_type(tofree->ptr);
 	printf("tofree + 1 %p\n",(tofree + 1)->ptr);
 	printf("0\n");
@@ -165,7 +171,8 @@ void	try_defragment(t_tny *tofree)
 		else
 		{
 			printf("0.2\n");
-			tofree->size = -((uintptr_t)(tofree + 2)->ptr - (uintptr_t)tofree->ptr);
+			tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr) + (tofree + 1)->size;
+			printf("tofree size %d\n", tofree->size);
 		}
 		ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tofree + 2));
 		printf("tofree + 1)->ptr %p %p\n", (tofree + 1)->ptr, tofree->ptr);
@@ -189,7 +196,7 @@ void	try_defragment(t_tny *tofree)
 			if (!not_diff_data(tofree))
 				(tofree - 1)->size += tofree->size;
 			else
-				(tofree- 1)->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)(tofree - 1)->ptr);
+				(tofree- 1)->size = -((uintptr_t)(tofree)->ptr - (uintptr_t)(tofree - 1)->ptr) + (tofree)->size;
 			ft_memmove(tofree, tofree + 1, ((void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T))) - (void *)(tofree + 1));
 			printf("tofree->size %d\n", tofree->size);
 			if (!type)
@@ -206,6 +213,7 @@ void	try_defragment(t_tny *tofree)
 
 static void free_tny_small(t_tny *tofree, void *ptr)
 {
+	printf("before node free_tny_small %p\n", ptr);
 	tofree = ret_node(tofree, ptr);
 	if (!tofree)
 	{
@@ -250,6 +258,7 @@ void ft_free(void *ptr)
 {
 	short	type;
 
+printf("free ptr %p\n", ptr);
 	if (!ptr)
 	{
 		printf("!ptr n existe pas\n");

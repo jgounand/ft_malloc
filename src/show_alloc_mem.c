@@ -52,24 +52,12 @@ void show_alloc_mem(void)
 		printf("%p : %lu octets\n", fat->ptr, fat->size);
 		fat++;
 	}
-	printf("HEADER_A left %lu\n",A_SIZE );
-	/*
-	printf("S_HEADER_A %d\n", S_HEADER_A);
-	printf("S_HEADER_T %d\n", S_HEADER_T);
-	printf("S_HEADER_M %d\n", S_HEADER_M);
-	printf("S_HEADER_F %d\n", S_HEADER_F);
-	printf("HEADER_A %p\n", (t_start *)(g_mem + 1));
-	printf("HEADER_T %p\n", H_TINY);
-	printf("HEADER_M %p\n", H_MED);
-	printf("HEADER_F %p\n", H_FAT);
-	printf("TINY_SIZE %lu\n", TINY_SIZE);
-	printf("MED_SIZE %lu\n", MED_SIZE);
-	printf("FAT_SIZE %lu\n", FAT_SIZE);
-	printf("aaa size %d\n", 0);
-	printf("S_HEADER_A %d\n", S_HEADER_A);
-	printf("S_HEADER_T %d\n", S_HEADER_T);
-	printf("S_HEADER_M %d\n", S_HEADER_M);
-	printf("S_HEADER_F %d\n", S_HEADER_F);
-	printf("A_SIZE %lu\n", MAX_HEADER(t_start,S_HEADER_A) - A_SIZE);
-*/
+	nb_node = MAX_HEADER(t_start, S_HEADER_A) -  A_SIZE;
+	start = (void *)(g_mem + 1);
+	printf("HEADER_A %lu\n",MAX_HEADER(t_start, S_HEADER_A) - A_SIZE);
+	while (nb_node--)
+	{
+		printf("%p : %p octets\n", start->start, start->start + MAX_TINY);
+		start++;;
+	}
 	}
