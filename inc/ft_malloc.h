@@ -19,7 +19,7 @@
 
 # define TINY	256
 # define SMALL	1024
-# define NB_PAGES		32 //32 pour le projet
+# define NB_PAGES		1 //32 pour le projet
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
 # define H_TINY (t_tny *)((void *)(g_mem + 1) + getpagesize() * S_HEADER_A)
@@ -65,6 +65,10 @@ extern	t_mem	*g_mem;
 void *malloc(size_t size);
 void show_alloc_mem(void);
 void *realloc(void *ptr, size_t size);
+void *ft_malloc(size_t size);
+void *ft_realloc(void *ptr, size_t size);
+void ft_free(void *ptr);
+
 t_mem	*init_mem(void);
 void free(void *ptr);
 short gettype(void *ptr);

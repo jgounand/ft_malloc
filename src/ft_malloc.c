@@ -47,6 +47,10 @@ void	*add_small(short type, size_t lenght)
 		dprintf(2,"il faut realouer !! type nbr %d %lu\n", type, g_mem->max_size[(int)type] - 1);
 		add_mem_header(type);
 	}
+	/**
+	 * chercher le nombre de header deja utilise,
+	 * Init == 1 header avec la size negatif
+	 */
 	if (type == 1)
 	{
 		tmp = H_MED;
@@ -57,9 +61,7 @@ void	*add_small(short type, size_t lenght)
 		tmp = H_TINY;
 		node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 	}
-
 	dprintf(2,"\t\t\t\ttype %d %p node %lu\n", type, tmp, node);
-
 	while (node)
 	{
 		if (tmp->size < 0 && lenght <= (size_t)-tmp->size)
@@ -72,15 +74,27 @@ void	*add_small(short type, size_t lenght)
 	dprintf(2,"node %lu tmp->size %d lenght %lu\n", node, tmp->size, lenght);
 	//printf("10 lenght %lu => %lu type %d %d node %llu\n",lenght ,((tmp + 1)->ptr - get_addr(tmp->ptr + lenght + 1)), type, (type ? TINY + 1 : 1), node) ;
 	//		printf("+");
+	/**
+	 * Hypothese si node === 0  => parcout toute les nodes sans trouver de place
+	 * Donc pas la place dans la data.
+	 *
+	 */
 	if (!node)
 	{
 		if (!(tmp-1)->ptr)
 		{
+			/**
+			 * Erreur ca ne devrait par arriver
+			 */
 			show_alloc_mem();
-			dprintf(2, "tmp -1 ptr %p, tmp-2 ptr %p tmp -3 ptr %p\n", (tmp - 1)->ptr, (tmp -2)->ptr, (tmp -3)->ptr);
+			dprintf(2, "tmp -1 ptr %p, tmp-2 ptr %p tmp -3 ptr %p\n error exit 9\n", (tmp - 1)->ptr, (tmp -2)->ptr, (tmp -3)->ptr);
 			exit (9);
 		}
-		if (!(g_mem->max_size[(int)type] - 2))
+		/**
+		 * Si la place header === 1 => plus de place, il faut reallouer header
+		 * et recommencer le processus
+		 */
+		if (!(g_mem->max_size[(int)type])) // C'etait -2 avant
 		{
 			add_mem_header(type);
 			exit (254);
@@ -89,19 +103,41 @@ void	*add_small(short type, size_t lenght)
 		}
 		dprintf(2,"1\n");
 		dprintf(2,"\til faut realouer data !! type %d\n", type);
+		/**
+		 * New start, tmp - 1 dernier alloue
+		 */
 		t_start	*start = get_new_data((tmp - 1)->ptr);
 		printf("=>start->start %p\n", start->start);
-		if (type)
+
+		if (type) /// Med
 		{
+			/**
+			 * Ajout dans les header tiny le nouveau clear header
+			 */
+			if (!TINY_SIZE)
+			{
+				dprintf(2,"Cant add to Header Med size");
+				exit (3);
+			}
 			tmp2 = H_TINY + MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 			tmp2->ptr = get_addr(start->start);
 			tmp->ptr = get_addr(start->start + MAX_TINY);
+			TINY_SIZE--;
 		}
-		else
+		else /// Tiny
 		{
+			/**
+			 * Ajout dans les header med le nouveau clear header
+			 */
+			if (!MED_SIZE)
+			{
+				dprintf(2,"Cant add to Header Med size");
+				exit (2);
+			}
 			tmp2 = H_MED + MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
 			tmp->ptr = get_addr(start->start);
 			tmp2->ptr = get_addr(start->start + MAX_TINY);
+			MED_SIZE--;
 		}
 		printf("get_start->start %p ptr- %p\n", tmp->ptr, get_start(tmp->ptr, 0)->start + MAX_TINY);
 		tmp->size = - MAX_MED;
@@ -111,37 +147,51 @@ void	*add_small(short type, size_t lenght)
 		TINY_SIZE--;
 		MED_SIZE--;
 	}
+	/**
+	 * tmp + 1 => dernier header qui doit etre negatif car c est la place qui reste dans data.
+	 * recherche le prochaine addresse avec % 8, puis la taille est calucle entre le ptr le MAX
+	 *
+	 */
 	if (!(node - 1))
 	{
-		dprintf(2,"2\n");
-		dprintf(2,"\ttmp size %d ptr %p\n", (tmp)->size, tmp->ptr);
+		dprintf(2,"\n-----2 \n");
+		dprintf(2,"\ttmp->size %d tmp->ptr %p\n", (tmp)->size, tmp->ptr);
 		(tmp + 1)->ptr = get_addr(tmp->ptr + lenght + 1);
-		dprintf(2, "(tmp+1)->ptr %p max %p\n",(tmp+1)->ptr, (get_start(tmp->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY)));
-		(tmp + 1)->size = (tmp + 1)->ptr - (get_start(tmp->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
+		dprintf(2, "(tmp+1)->ptr %p max %p\n",(tmp+1)->ptr, (get_start((tmp + 1)->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY)));
+		(tmp + 1)->size = (tmp + 1)->ptr - (get_start((tmp + 1)->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
 		dprintf(2,"\ttmp+1 size %d ptr %p\n", (tmp +1)->size, (tmp +1)->ptr);
 		if ((tmp + 1)->size > 0)
 		{
 			show_alloc_mem();
-			exit(22);
+			dprintf(2,"tmp + 1 ne doit jamais etre positif")
+			exit(3);
 		}
+		dprintf(2,"\n-----\n");
 	}
+	/**
+	 * add node free si il la diffenrence de taille est superieur a 8
+	 * Exemple : node -24, need 8 ===> decallage de (node +1,...x) a (node + 2,...x), puis  node = 8, node + 1 = -16.
+	 */
 	else if (-tmp->size - lenght >= 8)
 	{
 		// ajouter un free apres tmp et le mmemove
-		add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
 		dprintf(2,"3\n");
 		dprintf(2,"\tajouter free apres\n");
+		show_alloc_mem();
+		add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
+		show_alloc_mem();
 		//	if (!type)
 		//		TINY_SIZE++;
 		//	else
 		//		MED_SIZE++;
+		exit (4);
 	}
 	tmp->size = lenght;
 	if (!type)
 		TINY_SIZE--;
 	else
 		MED_SIZE--;
-	clear_header();
+	//clear_header();
 	return (tmp->ptr);
 }
 
@@ -172,7 +222,7 @@ void	*add_fat(size_t lenght)
 	return (tmp->ptr);
 }
 
-void *malloc(size_t size)
+void *ft_malloc(size_t size)
 {
 	if (size <= 0)
 		return (NULL);

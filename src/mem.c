@@ -31,7 +31,10 @@ static t_mem	*mem_header(unsigned int nb_pages[4])
 	printf("size init %lu nb page %lu\n", sizeof(t_mem) + getpagesize () * size ,size);
 	return (new);
 }
-
+/**
+ *
+ * @return new data mmap size MAX_TINY + MAX_MED
+ */
 static void	*mem_data(void)
 {
 	t_mem	*new;
@@ -48,6 +51,7 @@ static void	*mem_data(void)
 
 void	clear_header(void)
 {
+
 	t_tny	*tny;
 	size_t	node;
 
@@ -149,6 +153,8 @@ void	add_mem_header(short type)
 		exit (1);
 	S_HEADER_A--;
 	ft_memcpy(new, g_mem, sizeof(t_mem) + getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F) + sizeof(t_mem));
+   // ft_memcpy(new, g_mem, sizeof(t_mem) + getpagesize() * (S_HEADER_A + S_HEADER_T + S_HEADER_M + S_HEADER_F));
+   // exit (13);
 	if (type == 0)
 	{
 		printf("reset 0\n");
@@ -214,14 +220,30 @@ void	add_mem_header(short type)
 	if (TINY_SIZE > 300 || MED_SIZE >300)
 		exit(1);
 }
+/**
+ *
+ * @param ptr
+ * @param next
+ * @return t_start * start , if next === 1 => node restant apres celle de start
+ *
+ */
 t_start	*get_start(void *ptr, bool next)
 {
 	t_start	*start;
 	size_t	node;
 
+	/**
+	 * node = nbr de HEADER A
+	 * start = ou commence les HEADER A
+	 **/
 	node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
 	start = (t_start *)(g_mem + 1);
 	printf ("get_start ptr %p node %lu\n", ptr, node);
+	/**
+	 * Tant qu il y a un Header
+	 *  Si ptr est entre start->start et start + MAX_MED + MAX_TINY  (la plage allouee par get_data)
+	 *  break;
+	 */
 	while (node--)
 	{
 		if (ptr >= start->start && ptr <= start->start + MAX_MED + MAX_TINY)
@@ -235,17 +257,36 @@ t_start	*get_start(void *ptr, bool next)
 	}
 	return (start);
 }
-
+/**
+ *
+ * @param ptr
+ * @return t_start *start + 1 of the ptr si il existe pas il le creer
+ */
 t_start	*get_new_data(void *ptr)
 {
 	t_start	*new;
 
 	dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
 	dprintf(2, "ptr %p\n", ptr);
+	/**
+	 * SI !A_SIZE === 0 => plus de place pour un HEADER_A.
+	 */
 	if (!A_SIZE)
 		add_mem_header (3);
+	/**
+	 * SI get_start(ptr) next existe
+	 * return le start du ptr
+	*	////////////// revoir lao
+	 **/
 	if (get_start(ptr, 1) != (t_start *)0)
-		return (get_start(ptr,0));
+	{
+		return (get_start(ptr,0) + 1); // ajoute + 1 car je veux start + 1 un new data et pas le meme
+	}
+/**
+ * se positioner apres le dernier header A (qui  ne doit pas etre utilise)
+ * allocation d une nouvelle plage
+ * decrimenter la taille de Header A
+ */
 	new = get_start(ptr, 0) + 1;
 	new->start = mem_data();
 	A_SIZE--;

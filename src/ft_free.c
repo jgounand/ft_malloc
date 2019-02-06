@@ -256,7 +256,7 @@ static int	free_fat(void *ptr)
 	return (0);
 }
 
-void free(void *ptr)
+void ft_free(void *ptr)
 {
 	short	type;
 
