@@ -23,15 +23,33 @@ void *get_addr(void *ptr)
 
 void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 {
-	ft_memmove(tmp + 2, tmp + 1,(void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, 0 + (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tmp + 1));
+    if (type == 0)
+	{
+    	void *max = H_TINY + MAX_HEADER(t_tny,S_HEADER_T);
+    	size_t bytes_cpy = (size_t)(max) - (size_t)(tmp + 1) - sizeof(t_tny) * TINY_SIZE;
+        dprintf(2, "tmp %p tmp + 1 %p\n", max, tmp + 1);
+		dprintf(2, "size to move %lu tiny size %lu\n", bytes_cpy, TINY_SIZE * sizeof(t_tny));
+		ft_memmove(tmp + 2, tmp + 1, bytes_cpy);
+		TINY_SIZE--;
+	}
+    else
+	{
+		void *max = H_MED + MAX_HEADER(t_med,S_HEADER_T);
+		size_t bytes_cpy = (size_t)(max) - (size_t)(tmp + 1) - sizeof(t_tny) * MED_SIZE;
+		ft_memmove(tmp + 2, tmp + 1, bytes_cpy);
+		dprintf(2, "size to move %lu\n", (size_t)((void *)(H_MED) + MAX_HEADER(t_tny, 0 + S_HEADER_M) - (void *)(tmp + 1)));
+		MED_SIZE--;
+	}
 	(tmp + 1)->ptr = ptr;
 	if (!not_diff_data(tmp + 1))
 		(tmp + 1)->size = -((uintptr_t)(tmp + 2)->ptr - (uintptr_t)(tmp + 1)->ptr);
 	else
 	{
 		(tmp + 1)->size = -((uintptr_t)((void *)(get_start(tmp->ptr, 0)->start) + MAX_TINY  + (type ? MAX_MED : 0)) - (uintptr_t)(tmp + 1)->ptr);
-		show_alloc_mem();
+	//	show_alloc_mem();
 	}
+//	show_alloc_mem();
+//	exit (5);
 	return (NULL);
 }
 
@@ -122,7 +140,7 @@ void	*add_small(short type, size_t lenght)
 			tmp2 = H_TINY + MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 			tmp2->ptr = get_addr(start->start);
 			tmp->ptr = get_addr(start->start + MAX_TINY);
-			TINY_SIZE--;
+			//TINY_SIZE--;
 		}
 		else /// Tiny
 		{
@@ -137,7 +155,7 @@ void	*add_small(short type, size_t lenght)
 			tmp2 = H_MED + MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
 			tmp->ptr = get_addr(start->start);
 			tmp2->ptr = get_addr(start->start + MAX_TINY);
-			MED_SIZE--;
+			//MED_SIZE--;
 		}
 		printf("get_start->start %p ptr- %p\n", tmp->ptr, get_start(tmp->ptr, 0)->start + MAX_TINY);
 		tmp->size = - MAX_MED;
@@ -152,6 +170,7 @@ void	*add_small(short type, size_t lenght)
 	 * recherche le prochaine addresse avec % 8, puis la taille est calucle entre le ptr le MAX
 	 *
 	 */
+	int exit_ = 0;
 	if (!(node - 1))
 	{
 		dprintf(2,"\n-----2 \n");
@@ -163,7 +182,7 @@ void	*add_small(short type, size_t lenght)
 		if ((tmp + 1)->size > 0)
 		{
 			show_alloc_mem();
-			dprintf(2,"tmp + 1 ne doit jamais etre positif")
+			dprintf(2,"tmp + 1 ne doit jamais etre positif");
 			exit(3);
 		}
 		dprintf(2,"\n-----\n");
@@ -184,7 +203,7 @@ void	*add_small(short type, size_t lenght)
 		//		TINY_SIZE++;
 		//	else
 		//		MED_SIZE++;
-		exit (4);
+		exit_++;
 	}
 	tmp->size = lenght;
 	if (!type)
@@ -192,6 +211,12 @@ void	*add_small(short type, size_t lenght)
 	else
 		MED_SIZE--;
 	//clear_header();
+	if (exit_ == 2)
+	{
+		show_alloc_mem();
+		dprintf(2,"\ttmp->size %d tmp->ptr %p lenght %lu\n", (tmp)->size, tmp->ptr,lenght);
+		exit(4);
+	}
 	return (tmp->ptr);
 }
 

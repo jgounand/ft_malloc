@@ -10,15 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18986e72-0b27-47a8-9054-dea9b785bfb3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/ft_malloc.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/ft_malloc.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_free.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_free.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ft_malloc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_malloc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_realloc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_realloc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mem.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/show_alloc_mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/show_alloc_mem.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,8 +24,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inc/ft_malloc.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+            <state relative-caret-position="985">
+              <caret line="82" column="9" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -50,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/src/mem.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="474">
-              <caret line="248" column="21" lean-forward="true" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
+              <caret line="248" column="21" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -76,8 +69,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="172" column="77" selection-start-line="172" selection-start-column="77" selection-end-line="172" selection-end-column="77" />
+            <state relative-caret-position="435">
+              <caret line="215" column="88" selection-start-line="215" selection-start-column="88" selection-end-line="215" selection-end-column="88" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ft_realloc.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="590">
+              <caret line="52" column="8" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -99,11 +101,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/inc/ft_malloc.h" />
         <option value="$PROJECT_DIR$/src/mem.c" />
         <option value="$PROJECT_DIR$/Makefile" />
         <option value="$PROJECT_DIR$/src/main.c" />
         <option value="$PROJECT_DIR$/src/show_alloc_mem.c" />
+        <option value="$PROJECT_DIR$/inc/ft_malloc.h" />
         <option value="$PROJECT_DIR$/src/ft_malloc.c" />
       </list>
     </option>
@@ -173,12 +175,12 @@
       <workItem from="1548932485065" duration="19982000" />
       <workItem from="1549048681443" duration="1734000" />
       <workItem from="1549101635704" duration="5174000" />
-      <workItem from="1549221819533" duration="24475000" />
+      <workItem from="1549221819533" duration="29260000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57654000" />
+    <option name="totallyTimeSpent" value="62439000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -219,20 +221,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/tools.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inc/ft_malloc.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Makefile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -257,14 +245,35 @@
     <entry file="file://$PROJECT_DIR$/src/mem.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="474">
-          <caret line="248" column="21" lean-forward="true" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
+          <caret line="248" column="21" selection-start-line="248" selection-start-column="21" selection-end-line="248" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ft_realloc.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="590">
+          <caret line="52" column="8" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inc/ft_malloc.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="985">
+          <caret line="82" column="9" selection-start-line="82" selection-start-column="9" selection-end-line="82" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="172" column="77" selection-start-line="172" selection-start-column="77" selection-end-line="172" selection-end-column="77" />
+        <state relative-caret-position="435">
+          <caret line="215" column="88" selection-start-line="215" selection-start-column="88" selection-end-line="215" selection-end-column="88" />
         </state>
       </provider>
     </entry>
