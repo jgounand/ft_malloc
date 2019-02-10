@@ -6,8 +6,11 @@ char	*str_new_cpy(char c, size_t i)
 	char	*str;
 
 	j = 0;
+	printf("--->size = %zu<---\n", i+ 1);
 	str = ft_malloc(i + 1);
 	dprintf(2, "add => %p\n",str);
+	show_alloc_mem();
+	printf("--->fin alloc<---\n");
 	while (j < i)
 	{
 		str[j] = c;
@@ -40,7 +43,7 @@ int	main(int ac, char **av)
 //		ft_malloc(1024);
 		str[j] = str_new_cpy('b', 1);
 		str1[j] = str_new_cpy('a', 254);
-	//	str2[j] = str_new_cpy('c', 2055);
+		str2[j] = str_new_cpy('c', 1022);
 	//	str2[j] = str_new_cpy('a', 15000);
 		dprintf(3,"str1 :%p\n", str1[j]);
 		dprintf(3,"\t\tstr :%p\n", str1[j]);

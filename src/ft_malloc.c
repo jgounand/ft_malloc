@@ -30,7 +30,7 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
         dprintf(2, "tmp %p tmp + 1 %p\n", max, tmp + 1);
 		dprintf(2, "size to move %lu tiny size %lu\n", bytes_cpy, TINY_SIZE * sizeof(t_tny));
 		ft_memmove(tmp + 2, tmp + 1, bytes_cpy);
-		TINY_SIZE--;
+		//TINY_SIZE--;
 	}
     else
 	{
@@ -38,15 +38,18 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 		size_t bytes_cpy = (size_t)(max) - (size_t)(tmp + 1) - sizeof(t_tny) * MED_SIZE;
 		ft_memmove(tmp + 2, tmp + 1, bytes_cpy);
 		dprintf(2, "size to move %lu\n", (size_t)((void *)(H_MED) + MAX_HEADER(t_tny, 0 + S_HEADER_M) - (void *)(tmp + 1)));
-		MED_SIZE--;
+		//MED_SIZE--;
 	}
 	(tmp + 1)->ptr = ptr;
 	if (!not_diff_data(tmp + 1))
+	{
+		dprintf(2,"tmp + 1 diff === false");
 		(tmp + 1)->size = -((uintptr_t)(tmp + 2)->ptr - (uintptr_t)(tmp + 1)->ptr);
+	}
 	else
 	{
-		(tmp + 1)->size = -((uintptr_t)((void *)(get_start(tmp->ptr, 0)->start) + MAX_TINY  + (type ? MAX_MED : 0)) - (uintptr_t)(tmp + 1)->ptr);
-	//	show_alloc_mem();
+	    dprintf(2,"tmp + 1 diff === true\n");
+		(tmp + 1)->size = -((uintptr_t)((void *)(get_start((tmp + 1)->ptr, 0)->start) + MAX_TINY  + (type ? MAX_MED : 0)) - (uintptr_t)(tmp + 1)->ptr);
 	}
 //	show_alloc_mem();
 //	exit (5);
@@ -115,6 +118,7 @@ void	*add_small(short type, size_t lenght)
 		if (!(g_mem->max_size[(int)type])) // C'etait -2 avant
 		{
 			add_mem_header(type);
+			printf("error 254\n");
 			exit (254);
 			return (add_small(type, lenght));
 			//ici plus de place need more header et plus de data
@@ -134,8 +138,8 @@ void	*add_small(short type, size_t lenght)
 			 */
 			if (!TINY_SIZE)
 			{
-				dprintf(2,"Cant add to Header Med size");
-				exit (3);
+				dprintf(2,"Cant add to Header Med size , size TINY_HEADER %zu", TINY_SIZE);
+				exit (30);
 			}
 			tmp2 = H_TINY + MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 			tmp2->ptr = get_addr(start->start);
@@ -173,19 +177,78 @@ void	*add_small(short type, size_t lenght)
 	int exit_ = 0;
 	if (!(node - 1))
 	{
-		dprintf(2,"\n-----2 \n");
+		dprintf(2,"\n----- 4 \n");
 		dprintf(2,"\ttmp->size %d tmp->ptr %p\n", (tmp)->size, tmp->ptr);
-		(tmp + 1)->ptr = get_addr(tmp->ptr + lenght + 1);
-		dprintf(2, "(tmp+1)->ptr %p max %p\n",(tmp+1)->ptr, (get_start((tmp + 1)->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY)));
-		(tmp + 1)->size = (tmp + 1)->ptr - (get_start((tmp + 1)->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
-		dprintf(2,"\ttmp+1 size %d ptr %p\n", (tmp +1)->size, (tmp +1)->ptr);
+		void *tmp_ptr = get_addr(tmp->ptr + lenght + 1);
+		size_t tmp_size = tmp_ptr - (get_start(tmp_ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
+		if (tmp_size != 0)
+		{
+			(tmp + 1)->ptr = tmp_ptr;
+			(tmp + 1)->size = tmp_size;
+		}
+		else
+		{
+			/////////////////////////////////////////////// ajout new data
+			t_start	*start = get_new_data(tmp_ptr);
+		printf("=>start->start %p\n", start->start);
+
+		if (type) /// Med
+		{
+			/**
+			 * Ajout dans les header tiny le nouveau clear header
+			 */
+			if (!TINY_SIZE)
+			{
+				dprintf(2,"Cant add to Header Med size");
+				exit (31);
+			}
+			tmp2 = H_TINY + MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+			tmp2->ptr = get_addr(start->start);
+			(tmp + 1)->ptr = get_addr(start->start + MAX_TINY);
+			//TINY_SIZE--;
+		}
+		else /// Tiny
+		{
+			/**
+			 * Ajout dans les header med le nouveau clear header
+			 */
+			if (!MED_SIZE)
+			{
+				dprintf(2,"Cant add to Header Med size");
+				exit (2);
+			}
+			tmp2 = H_MED + MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
+			(tmp +1)->ptr = get_addr(start->start);
+			tmp2->ptr = get_addr(start->start + MAX_TINY);
+			//MED_SIZE--;
+		}
+		printf("get_start->start %p ptr- %p\n", tmp->ptr, get_start(tmp->ptr, 0)->start + MAX_TINY);
+		(tmp + 1)->size = - MAX_MED;
+		tmp2->size = - MAX_MED;
+		node++;
+		dprintf(2, "tmp->ptr %p size %d\n", tmp->ptr, tmp->size);
+		if (type)
+		{
+			TINY_SIZE--;
+		}
+		else
+			MED_SIZE--;
+///////////////////////////////////////////////////////////////////
+		}
+
+		//(tmp + 1)->ptr = get_addr(tmp->ptr + lenght + 1);
+		//dprintf(2, "(tmp+1)->ptr %p max %p\n",(tmp+1)->ptr, (get_start((tmp + 1)->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY)));
+		//(tmp + 1)->size = (tmp + 1)->ptr - (get_start((tmp + 1)->ptr, 0)->start + (type ? MAX_TINY + MAX_MED : MAX_TINY));
+	//	dprintf(2,"\ttmp+1 size %d ptr %p\n", (tmp +1)->size, (tmp +1)->ptr);
 		if ((tmp + 1)->size > 0)
 		{
 			show_alloc_mem();
 			dprintf(2,"tmp + 1 ne doit jamais etre positif");
-			exit(3);
+			exit(33);
 		}
 		dprintf(2,"\n-----\n");
+	//	if ((tmp +1)->size == 0)
+	//		exit (7);
 	}
 	/**
 	 * add node free si il la diffenrence de taille est superieur a 8
@@ -196,27 +259,46 @@ void	*add_small(short type, size_t lenght)
 		// ajouter un free apres tmp et le mmemove
 		dprintf(2,"3\n");
 		dprintf(2,"\tajouter free apres\n");
-		show_alloc_mem();
+	//	show_alloc_mem();
 		add_node_free(tmp, get_addr(tmp->ptr + lenght + 1), type);
-		show_alloc_mem();
+	//	show_alloc_mem();
 		//	if (!type)
 		//		TINY_SIZE++;
 		//	else
 		//		MED_SIZE++;
-		exit_++;
+	}
+	else
+	{
+		exit_ = 1;
+		if (!type)
+			TINY_SIZE++;
+		else
+			MED_SIZE++;
+
 	}
 	tmp->size = lenght;
+	if (!TINY_SIZE || !MED_SIZE)
+	{
+		if (!TINY_SIZE)
+			add_mem_header(0);
+		else
+			add_mem_header(1);
+	    show_alloc_mem();
+	//	exit (8);
+	}
 	if (!type)
 		TINY_SIZE--;
 	else
 		MED_SIZE--;
 	//clear_header();
-	if (exit_ == 2)
-	{
-		show_alloc_mem();
-		dprintf(2,"\ttmp->size %d tmp->ptr %p lenght %lu\n", (tmp)->size, tmp->ptr,lenght);
-		exit(4);
-	}
+    if ((tmp + 1)->size > 0 && !exit_)
+    {
+        show_alloc_mem();
+        dprintf(2,"tmp + 1 ne doit jamais etre positif %p\n", (tmp + 1)->ptr);
+		printf("Let the Battle Begin!\n");
+		printf("Press Any Key to Continue\n");
+		getchar();
+    }
 	return (tmp->ptr);
 }
 

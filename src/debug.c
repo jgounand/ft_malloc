@@ -16,8 +16,9 @@ void	debug_check_MAX_HEADER(void)
 {
 	if (TINY_SIZE > 300 || MED_SIZE > 300)
 		{
+		dprintf(2,"debug_check_max_header");
 			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
-		//	show_alloc_mem();
+			show_alloc_mem();
 			exit (3);
 	}
 }
