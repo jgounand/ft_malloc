@@ -63,7 +63,7 @@ void	*add_small(short type, size_t lenght)
 	size_t	node;
 
 	debug_check_MAX_HEADER();
-	if (!(g_mem->max_size[(int)type] - 1))
+	if (!(g_mem->max_size[(int)type]))
 	{
 		dprintf(2,"il faut realouer !! type nbr %d %lu\n", type, g_mem->max_size[(int)type] - 1);
 		add_mem_header(type);
