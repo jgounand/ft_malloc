@@ -60,10 +60,11 @@ typedef struct	s_start
 	void *start;
 }				t_start;
 
+size_t current_size;
 extern	t_mem	*g_mem;
 
 void *malloc(size_t size);
-void show_alloc_mem(void);
+void show_alloc_mem(int fd);
 void *realloc(void *ptr, size_t size);
 void *ft_malloc(size_t size);
 void *ft_realloc(void *ptr, size_t size);
@@ -84,6 +85,7 @@ short	get_type(void *ptr);
 void	*add_node_free(t_tny *tmp, void *ptr, bool type);
 void	try_defragment(t_tny *tofree);
 bool	not_diff_data(t_tny *tofree);
+short check_header_left();
 
 
 //DEBUG

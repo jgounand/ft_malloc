@@ -45,7 +45,7 @@ printf("get type ptr %p\n", ptr);
 	}
 	else
 	{
-	show_alloc_mem();
+	show_alloc_mem(1);
 		printf("Error free %p doesn't exist\n", ptr);
 		return (0);
 		exit (4);
@@ -230,7 +230,7 @@ static void free_tny_small(t_tny *tofree, void *ptr)
 	tofree = ret_node(tofree, ptr);
 	if (!tofree)
 	{
-	show_alloc_mem();
+	show_alloc_mem(1);
 		printf("error tmp nulli %p\n", ptr);
 		exit(2);
 	}
