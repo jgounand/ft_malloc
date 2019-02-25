@@ -84,8 +84,9 @@ t_tny	*ret_node(t_tny	*tofree, void *ptr);
 short	get_type(void *ptr);
 void	*add_node_free(t_tny *tmp, void *ptr, bool type);
 void	try_defragment(t_tny *tofree);
-bool	not_diff_data(t_tny *tofree);
+bool	diff_data(t_tny *tofree);
 short check_header_left();
+void	add_mem_data(t_tny **tmp, short type, short position);
 
 
 //DEBUG

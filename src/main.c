@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <fcntl.h>
 //ligne 1161395
 char	*str_new_cpy(char c, size_t i)
 {
@@ -37,26 +38,30 @@ int	main(int ac, char **av)
 	char	*str1[i];
 	char	*str2[i];
 	int val = 0;
+	if (val)
+	val = 1;
+
 	(void)ac;
 	(void)(str);
 	(void)(str1);
 	(void)str2;
 	srand((unsigned) time(&t));
+	int fd = open("/dev/ttys001", O_RDWR);
 	for (size_t j = 0; j < i ; j++)
 	{
-	    current_size = j + 1;
+	    current_size = (j + 1 ) * 3;
 		printf("j = %zu\n", j);
 		write(1,"1",2);
 //		str1[j] = str_new_cpy(c+j, 1000);
 		write(1,"2\n",2);
 //		ft_malloc(256);
-		val = rand() % 2043;
+		//val = rand() % 1023;
         //dprintf(2,"j = %zu\n", j);
-		str[j] = str_new_cpy('b', val);
+		str[j] = str_new_cpy('b', 231);
 		//dprintf(2,"j = %zu\n", j);
-		//str1[j] = str_new_cpy('a', val);
+		str1[j] = str_new_cpy('a', 500);
 	//	dprintf(2,"j = %zu\n", j);
-		//str2[j] = str_new_cpy('c', val);
+		//str2[j] = str_new_cpy('c', 2000);
 	//	str2[j] = str_new_cpy('a', 15000);
 	//	dprintf(3,"str1 :%p\n", str1[j]);
 	//	dprintf(3,"\t\tstr :%p\n", str1[j]);
@@ -64,6 +69,10 @@ int	main(int ac, char **av)
 //			printf("%d\n",j);
 	//	show_alloc_mem();
 	}
+	show_alloc_mem(fd);
+	ft_free(str[4]);
+	ft_realloc(str1[atoi(av[3])],atoi(av[4]));
+	show_alloc_mem(fd);
 	/**
 	printf("ok pour le moment \n");
 	printf("\n\n\n");

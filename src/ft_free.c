@@ -34,7 +34,7 @@ short	get_type(void *ptr)
 
 printf("get type ptr %p\n", ptr);
 	start = get_start(ptr, 0);
-
+dprintf(2,"start %p start->start %p\n",start, start->start);
 	if (ptr < start->start + MAX_TINY && ptr >= start->start)
 		return (0);
 	else if (ptr < start->start + MAX_TINY + MAX_MED && ptr >= start->start + MAX_TINY)
@@ -45,10 +45,8 @@ printf("get type ptr %p\n", ptr);
 	}
 	else
 	{
-	show_alloc_mem(1);
 		printf("Error free %p doesn't exist\n", ptr);
-		return (0);
-		exit (4);
+		exit (76);
 	}
 }
 
@@ -62,15 +60,15 @@ static bool	not_begin_data(t_tny *tofree)
 		return (0);
 	return (1);
 }
-bool	not_diff_data(t_tny *tofree)
+bool	diff_data(t_tny *tofree)
 {
 	if (get_start(tofree->ptr, 0)->start == get_start((tofree + 1)->ptr, 0)->start)
 	{
 		printf("%p == %p return 1\n", get_start(tofree->ptr, 0),get_start((tofree + 1)->ptr, 0));
-		return (1);
+		return (0);
 	}
-	printf("not_diff_data ret 0\n");
-	return (4);
+    printf("%p == %p return 0\n", get_start(tofree->ptr, 0),get_start((tofree + 1)->ptr, 0));
+	return (1);
 }
 
 t_tny	*ret_node(t_tny	*tofree, void *ptr)
@@ -81,7 +79,7 @@ t_tny	*ret_node(t_tny	*tofree, void *ptr)
 printf("ret_node get_type %p\n", ptr);
 	type = get_type(ptr);
 	if (type == 4)
-	return (NULL);
+	    return (NULL);
 	if (!type)
 		node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
 	else
@@ -140,6 +138,8 @@ static bool check_header_free(t_tny *tofree)
 	void	*ptr;
 
 printf("check_header_free %p\n", tofree->ptr);
+if ((size_t)get_start(tofree->ptr,1) <= 1)
+	return (0);
 	start = get_start(tofree->ptr, 0);
 	if (start->start == tofree->ptr)
 	{
@@ -157,6 +157,7 @@ printf("check_header_free %p\n", tofree->ptr);
 	{
 	printf("before node check_header_free %p\n", ptr);
 		node = ret_node(node, ptr);
+		//si c est le dernier header ne pas supprimer !!!
 		if (!node || node->size == - MAX_TINY)
 			rm_h_start(tofree, node);
 	}
@@ -174,7 +175,7 @@ printf("try_defragment get_type %p\n", tofree->ptr);
 	if ((tofree + 1)->size < 0)
 	{
 		printf("tofree->size %d\n", tofree->size);
-		if (!not_diff_data(tofree +1))
+		if (!diff_data(tofree +1))
 		{
 			printf("0.1\n");
 			tofree->size = (uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr;
@@ -187,7 +188,9 @@ printf("try_defragment get_type %p\n", tofree->ptr);
 			tofree->size = -((uintptr_t)(tofree + 1)->ptr - (uintptr_t)tofree->ptr) + (tofree + 1)->size;
 			printf("tofree size %d\n", tofree->size);
 		}
-		ft_memmove(tofree + 1, tofree + 2, (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) - (void *)(tofree + 2));
+		size_t size =   (void *)(tofree + 2) - (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T));
+		printf("size to move %lu\n",size / sizeof(t_tny));
+		ft_memmove(tofree + 1, tofree + 2, size);
 		printf("tofree + 1)->ptr %p %p\n", (tofree + 1)->ptr, tofree->ptr);
 		if (!type)
 			TINY_SIZE++;
@@ -206,11 +209,12 @@ printf("try_defragment get_type %p\n", tofree->ptr);
 		if ((tofree -1)->size < 0)
 		{
 			printf("6\n");
-			if (!not_diff_data(tofree))
+			if (!diff_data(tofree))
 				(tofree - 1)->size += tofree->size;
 			else
 				(tofree- 1)->size = -((uintptr_t)(tofree)->ptr - (uintptr_t)(tofree - 1)->ptr) + (tofree)->size;
-			ft_memmove(tofree, tofree + 1, ((void *)(type ? H_MED : H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T))) - (void *)(tofree + 1));
+			size_t size =   (void *)(tofree + 1) - (void *)(type ? H_MED :H_TINY) + MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T));
+			ft_memmove(tofree, tofree + 1, size);
 			printf("tofree->size %d\n", tofree->size);
 			if (!type)
 				TINY_SIZE++;
@@ -218,9 +222,7 @@ printf("try_defragment get_type %p\n", tofree->ptr);
 				MED_SIZE++;
 		}
 	}
-	if (check_header_free(tofree))
-	{
-	}
+	check_header_free(tofree);
 }
 
 
@@ -230,7 +232,7 @@ static void free_tny_small(t_tny *tofree, void *ptr)
 	tofree = ret_node(tofree, ptr);
 	if (!tofree)
 	{
-	show_alloc_mem(1);
+		show_alloc_mem(1);
 		printf("error tmp nulli %p\n", ptr);
 		exit(2);
 	}
@@ -267,7 +269,7 @@ printf("free ptr %p\n", ptr);
 		return ;
 	}
 	type = get_type(ptr);
-	printf("type %d ptr %p\n", type, ptr);
+	printf("\ttype %d ptr %p\n", type, ptr);
 	if (type == 1 || type == 0)
 		free_tny_small(!type ? H_TINY : H_MED, ptr);
 	else

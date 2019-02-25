@@ -60,17 +60,17 @@ void show_alloc_mem(int fd)
 	dprintf(fd,"LARGE: %p %lu\n", (void *)g_mem + getpagesize() *3 + MAX_TINY + MAX_MED, nb_node);
 	while (nb_node--)
 	{
-		dprintf(fd,"%p : %lu octets\n", fat->ptr, fat->size);
+	//	dprintf(fd,"%p : %lu octets\n", fat->ptr, fat->size);
 		nb_positif++;
 		fat++;
 	}
 	nb_node = MAX_HEADER(t_start, S_HEADER_A) -  A_SIZE;
-	start = (void *)(g_mem + 1);
+	start = (t_start *)(g_mem + 1);
 	dprintf(fd,"HEADER_A %lu\n",MAX_HEADER(t_start, S_HEADER_A) - A_SIZE);
 	nb = 0;
 	while (nb_node--)
 	{
-		dprintf(fd,"%p : %p octets \tnumber : %zu\n", start->start, start->start + MAX_TINY, nb);
+		dprintf(fd,"%p : %p octets to %p \tnumber : %zu\n", start, start->start,start->start + MAX_TINY, nb);
 		start++;;
 		nb++;
 	}
@@ -82,7 +82,8 @@ void show_alloc_mem(int fd)
 		dprintf(fd,"------------------------------------------------------------------------\n");
 
 	if (nb_positif != current_size && fd == 1)
-		exit_ =1;
+		exit_ =0;
 	if (exit_)
-		exit(12);
+		;//exit(13);
+
 }

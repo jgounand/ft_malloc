@@ -49,8 +49,17 @@ static void	*ft_realloc_small(void *ptr, size_t size, short type)
 	}
 	else
 	{
+		size_t size_free = (node + 1)->ptr - (void *)node->ptr - size;
 		node->size = size;
-		add_node_free(node, ptr, type);
+		if (size_free > 8)
+        {
+			dprintf(2,"=======================\nsize next free %lu from ft_reaaloc\n===================\n",size_free);
+		    add_node_free(node, get_addr(node->ptr + size + 1), type);
+		    if (!type)
+		    	TINY_SIZE--;
+		    else
+		    	MED_SIZE--;
+        }
 	//	try_defragment(node +1);
 		return (node->ptr);
 	}
@@ -83,6 +92,7 @@ static	void	*ft_realloc_fat(void *ptr, size_t size)
 	ft_free(ptr);
 	return (new);
 }
+
 
 void *ft_realloc(void *ptr, size_t size)
 {

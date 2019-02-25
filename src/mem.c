@@ -362,7 +362,7 @@ t_start	*get_start(void *ptr, bool next)
 	 */
 	while (node--)
 	{
-		if (ptr >= start->start && ptr <= start->start + MAX_MED + MAX_TINY)
+		if (ptr >= start->start && ptr < start->start + MAX_MED + MAX_TINY)
 			break;
 		start++;
 	}
