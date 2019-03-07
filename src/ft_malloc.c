@@ -87,6 +87,8 @@ void	*add_small(short type, size_t lenght)
 {
 	t_tny *tmp;
 	size_t	node;
+	void *new;
+	new = NULL;
 
 	debug_check_MAX_HEADER();
 	dprintf(2,"add small start\n");
@@ -154,22 +156,24 @@ void	*add_small(short type, size_t lenght)
 		/**
 		 * New start, tmp - 1 dernier alloue
 		 */
-add_mem_data(&tmp,type,0);
-check_header_left();
-		return (add_small(type, lenght));
-}
+		 add_mem_data(&tmp,type,0);
+		 check_header_left();
+		 return (add_small(type, lenght));
+	}
 	/**
 	 * tmp + 1 => dernier header qui doit etre negatif car c est la place qui reste dans data.
 	 * recherche le prochaine addresse avec % 8, puis la taille est calucle entre le ptr le MAX
 	 *
 	 */
+
 	int exit_ = 0;
 	dprintf(2,"-tmp->size - lenght < 8 == %d\n",-tmp->size - lenght < 8);
 	if (!(node - 1) && -tmp->size - lenght < 8)
 	{
+		dprintf(2,"add_mem_data\n");
 		add_mem_data(&tmp,type,1);
-		node++;
-}
+	 	node++;
+	}
 	/**
 	 * add node free si il la diffenrence de taille est superieur a 8
 	 * Exemple : node -24, need 8 ===> decallage de (node +1,...x) a (node + 2,...x), puis  node = 8, node + 1 = -16.
@@ -179,6 +183,7 @@ check_header_left();
 	{
 		// ajouter un free apres tmp et le mmemove
 		dprintf(2,"3\n");
+		new = tmp->ptr;
 		dprintf(2,"\tajouter free apres\n");
 		dprintf(2,"TINY_SIZE %lu, MED_SIZE %lu, A_SIZE %lu\n",TINY_SIZE,MED_SIZE,A_SIZE);
 	//	show_alloc_mem();
@@ -190,25 +195,24 @@ check_header_left();
 		//		MED_SIZE++;
 	}
 	else
-	{
+		{
 		exit_ = 1;
 		if (!type)
-			TINY_SIZE++;
+	 		TINY_SIZE++;
 		else
 			MED_SIZE++;
-
-	}
-	tmp->size = lenght;
-	dprintf(2,"tmp->size = %d tmp %p\n",tmp->size, tmp);
-	if (check_header_left())
-		add_small(type,lenght);
-
-	if (!type)
+		new = tmp->ptr;
+	 	}
+	 tmp->size = lenght;
+	 dprintf(2,"tmp->size = %d tmp %p\n",tmp->size, tmp);
+	 if (check_header_left())
+	 	add_small(type,lenght);
+	 if (!type)
 		TINY_SIZE--;
-	else
+	 else
 		MED_SIZE--;
 	//clear_header();
-    if ((tmp + 1)->size > 0 && !exit_)
+	if ((tmp + 1)->size > 0 && !exit_)
     {
 		dprintf(2,"ft_malloc 6");
         show_alloc_mem(1);
@@ -222,7 +226,9 @@ check_header_left();
     check_header_left();
 
 	dprintf(2,"TINY_SIZE %lu, MED_SIZE %lu, A_SIZE %lu\n",TINY_SIZE,MED_SIZE,A_SIZE);
-	return (tmp->ptr);
+	if (!new)
+		new = tmp->ptr;
+	return (new);
 }
 void	add_mem_data(t_tny **tmp, short type, short position)
 {
@@ -230,6 +236,7 @@ void	add_mem_data(t_tny **tmp, short type, short position)
 
 	dprintf(2,"\n----- 4 \n");
 	dprintf(2,"type %d\n", type);
+    dprintf(2,"position %d\n", position);
 	dprintf(2,"\ttmp->size %d tmp->ptr %p tmp %p\n", (*tmp)->size, (*tmp)->ptr, *tmp);
 	dprintf(2,"g_mem %p\n",g_mem);
 	/////////////////////////////////////////////// ajout new data

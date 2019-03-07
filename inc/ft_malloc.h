@@ -70,6 +70,8 @@ void *ft_malloc(size_t size);
 void *ft_realloc(void *ptr, size_t size);
 void ft_free(void *ptr);
 
+t_fat	*get_fat(void *ptr);
+
 t_mem	*init_mem(void);
 void free(void *ptr);
 short gettype(void *ptr);
@@ -91,4 +93,5 @@ void	add_mem_data(t_tny **tmp, short type, short position);
 
 //DEBUG
 void	debug_check_MAX_HEADER(void);
+void check_ptr_prensent(char *tab[], size_t size);
 #endif

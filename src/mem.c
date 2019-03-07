@@ -354,7 +354,7 @@ t_start	*get_start(void *ptr, bool next)
 	 **/
 	node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
 	start = (t_start *)(g_mem + 1);
-	printf ("get_start ptr %p node %lu\n", ptr, node);
+//	printf ("get_start ptr %p node %lu\n", ptr, node);
 	/**
 	 * Tant qu il y a un Header
 	 *  Si ptr est entre start->start et start + MAX_MED + MAX_TINY  (la plage allouee par get_data)
@@ -366,7 +366,7 @@ t_start	*get_start(void *ptr, bool next)
 			break;
 		start++;
 	}
-	printf("get_start ret node %lu\n", node);
+//	printf("get_start ret node %lu\n", node);
 	if (next)
 	{
 		return ((t_start *)node);

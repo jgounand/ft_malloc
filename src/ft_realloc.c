@@ -12,12 +12,21 @@
 
 #include "../inc/ft_malloc.h"
 
-static bool	need_alloc(t_tny *node, size_t size)
+static short	need_alloc(t_tny *node, size_t size)
 {
-	if ((node + 1)->ptr - (void *)node->ptr >= (long)size)
+	size_t current_lenght;
+
+	if (!diff_data(node))
+	current_lenght = (node + 1)->ptr - (void *)node->ptr;
+	else
+		current_lenght = node->size;
+	if (current_lenght > size + 1)
 		return (0);
+	else if (!diff_data(node) && (node + 1)->size < 0 && current_lenght - (node + 1 )->size > size + 1)
+		return (2);
 	return (1);
 }
+/*
 
 static bool	same_node(size_t size, short type)
 {
@@ -25,34 +34,96 @@ static bool	same_node(size_t size, short type)
 		return (1);
 	return (0);
 }
+*/
 
 static void	*ft_realloc_small(void *ptr, size_t size, short type)
 {
 	t_tny	*node;
 	void	*new;
+	short	need_all;
 
 	if (!type)
 		node = H_TINY;
 	else
 		node = H_MED;
+	dprintf(2,"realloc type %u size %lu ptr %p\n",type,size,ptr);
 	if (!(node = ret_node(node, ptr)))
 	{
+		printf("5\n");
+		dprintf(2,"5\n");
 			printf("Error ptr inconnu\n");
 			exit (65);
 	}
-	if (need_alloc(node, size) || !same_node(size, type))
+	if ((need_all = need_alloc(node, size)) == 1)
 	{
+		dprintf(2,"5.1\n");
+		printf("5.1\n");
+		size_t node_size = node->size;
 		new = ft_malloc(size);
-		ft_memcpy(new, node, ((int)size < node->size ? size : node->size));
+		dprintf(2,"return malloc => realloc ptr %p\n",new);
+        dprintf(2,"size %lu node size %d\n",size ,node->size);
+		ft_memcpy(new, node->ptr, (size < node_size ? size : node_size));
 		ft_free(ptr);
+		show_alloc_mem(1);
+
+		dprintf(1,"return realloc ptr %p\n",new);
+		dprintf(2,"return realloc ptr %p\n",new);
 		return (new);
+	}
+	else if (need_all == 2)
+	{
+		dprintf(2,"5.2\n");
+		printf("5.2\n");
+		size_t current_lenght = (node + 1)->ptr - node->ptr - (node + 1)->size;
+		size_t size_to_move = ((void *)(type ? H_MED :H_TINY) + sizeof(t_tny) * MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) -  (void *)(node + 2));
+		ft_memmove(node + 1,node + 2,size_to_move);
+		node->size = size;
+		void *tmp_ptr = get_addr(node->ptr + size + 1);
+		if (current_lenght - size > 8)
+			add_node_free(node,tmp_ptr,type);
+		else
+		{
+
+			if (type)
+				MED_SIZE++;
+			else
+				TINY_SIZE++;
+		}
+	/*	size_t current_lenght = (node + 1)->ptr - node->ptr - (node + 1)->size;
+		size_t tmp_size = current_lenght - size;
+node->size = size;
+
+		if (type)
+			MED_SIZE++;
+		else
+			TINY_SIZE++;
+		show_alloc_mem(2);
+		if (tmp_size > 8)
+			add_node_free(node,tmp_ptr,type);
+		show_alloc_mem(2);
+		dprintf(2,"return realloc ptr %p\n",node->ptr);
+		*/return (node->ptr);
 	}
 	else
 	{
-		size_t size_free = (node + 1)->ptr - (void *)node->ptr - size;
+		printf("5.3\n");
+		dprintf(2,"5.3\n");
+		long size_free = 0;
+		if (diff_data(node))
+		{
+		size_free = node->size;
+		}
+		else
+		{
+			size_free = (node + 1)->ptr - (void *)node->ptr;
+		}
 		node->size = size;
-		if (size_free > 8)
+		if (size_free - size > 8)
         {
+
+			printf("5.4\n");
+			dprintf(2,"5.4\n");
+			dprintf(2,"size_free : %lu\n",size_free);
 			dprintf(2,"=======================\nsize next free %lu from ft_reaaloc\n===================\n",size_free);
 		    add_node_free(node, get_addr(node->ptr + size + 1), type);
 		    if (!type)
@@ -84,11 +155,12 @@ static	void	*ft_realloc_fat(void *ptr, size_t size)
 	{
 		printf("Error %p non reconnu\n", ptr);
 	}
-	new = malloc(size);
-	if (size < fat->size)
+	size_t size_current = fat->size;
+	new = ft_malloc(size);
+	if (size < size_current)
 		ft_memcpy(new, ptr, size);
 	else
-		ft_memcpy(new, ptr, fat->size);
+		ft_memcpy(new, ptr, size_current);
 	ft_free(ptr);
 	return (new);
 }
@@ -98,6 +170,11 @@ void *ft_realloc(void *ptr, size_t size)
 {
 	short	type;
 
+	if (!size)
+	{
+ft_free(ptr);
+		return (NULL);
+	}
 	type = get_type(ptr);
 	if (type != 2)
 		return (ft_realloc_small(ptr, size, type));

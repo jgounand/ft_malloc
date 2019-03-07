@@ -22,3 +22,56 @@ void	debug_check_MAX_HEADER(void)
 			exit (3);
 	}
 }
+short	get_type_debug(void *ptr)
+{
+	t_start	*start;
+
+	short fd2 = 2;
+	dprintf(fd2,"get type ptr %p\n", ptr);
+	start = get_start(ptr, 0);
+	dprintf(fd2,"start %p\nstart->start %p\nstart->start + MAX_TINY %p\n",start, start->start, start->start + MAX_TINY);
+	dprintf(fd2,"ptr < start + MAXTINY %u\n",ptr < start->start + MAX_TINY );
+	dprintf(fd2,"ptr >= start->start %u\n",ptr >= start->start);
+	if (ptr < start->start + MAX_TINY && ptr >= start->start)
+		return (0);
+	else if (ptr < start->start + MAX_TINY + MAX_MED && ptr >= start->start + MAX_TINY)
+		return (1);
+	else if (0)
+	{
+		return (2);
+	}
+	else
+	{
+		printf("Error free %p doesn't exist\n", ptr);
+		exit (76);
+	}
+}
+
+void check_ptr_prensent(char **tab, size_t size)
+{
+	size_t i = 0;
+	short type;
+	t_tny *node;
+
+	while (i <= size)
+	{
+		type = get_type(tab[i]);
+
+		if (!type)
+			node = H_TINY;
+		else
+			node = H_MED;
+		if (tab[i] && !ret_node(node, tab[i]) && !get_fat(tab[i]))
+		{
+			dprintf(2,"error check ptr present\n");
+			dprintf(2,"type %u\n",type);
+
+			dprintf(2,"type check %u\n",get_type_debug(tab[i]));
+			show_alloc_mem(2);
+			printf("i : %lu ptr : %p\n",i,tab[i]);
+			exit(69);
+		}
+		i++;
+	}
+}
+

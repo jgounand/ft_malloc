@@ -32,8 +32,17 @@ void show_alloc_mem(int fd)
 	while (nb_node--)
 	{
 		dprintf(fd,"H %p %p : %d octets \tnumber : %zu\n",tmp, tmp->ptr, tmp->size,nb);
-		if (tmp->size == 0 || (!(nb_node -1) && ((tmp+1)->size >= 0)))
+		if (tmp->size == 0)
+		{
+
+			dprintf(fd,"--------------------------------------------------------------------------\n");
 			exit_ = 1;
+		}
+		if (get_type(tmp->ptr))
+		{
+			dprintf(fd,"--------------------------------------------------------------------------\n");
+			exit_ = 2;
+		}
 		if (tmp->size > 0)
 			nb_positif++;
 		nb++;
@@ -47,8 +56,17 @@ void show_alloc_mem(int fd)
 	while (nb_node--)
 	{
 		dprintf(fd,"M  %p %p : %d octets \tnumber : %zu\n",tmp, tmp->ptr, tmp->size,nb);
-		if (tmp->size == 0 || (!(nb_node - 1) && ((tmp+1)->size >= 0)))
+		if (tmp->size == 0)
+		{
+
+			dprintf(fd,"--------------------------------------------------------------------------\n");
 			exit_ = 1;
+		}
+		if (!get_type(tmp->ptr))
+		{
+			dprintf(fd,"--------------------------------------------------------------------------\n");
+			exit_ = 2;
+		}
 		if (tmp->size > 0)
 			nb_positif++;
 		tmp++;
@@ -60,17 +78,18 @@ void show_alloc_mem(int fd)
 	dprintf(fd,"LARGE: %p %lu\n", (void *)g_mem + getpagesize() *3 + MAX_TINY + MAX_MED, nb_node);
 	while (nb_node--)
 	{
-	//	dprintf(fd,"%p : %lu octets\n", fat->ptr, fat->size);
+		dprintf(fd,"%p %p : %lu octets\n",fat, fat->ptr, fat->size);
 		nb_positif++;
 		fat++;
 	}
+	dprintf(fd,"%lu header fat left\n",FAT_SIZE);
 	nb_node = MAX_HEADER(t_start, S_HEADER_A) -  A_SIZE;
 	start = (t_start *)(g_mem + 1);
 	dprintf(fd,"HEADER_A %lu\n",MAX_HEADER(t_start, S_HEADER_A) - A_SIZE);
 	nb = 0;
 	while (nb_node--)
 	{
-		dprintf(fd,"%p : %p octets to %p \tnumber : %zu\n", start, start->start,start->start + MAX_TINY, nb);
+		dprintf(fd,"%p : %p octets to %p to %p \tnumber : %zu\n", start, start->start,start->start + MAX_TINY, start->start + MAX_TINY + MAX_MED, nb);
 		start++;;
 		nb++;
 	}
@@ -84,6 +103,6 @@ void show_alloc_mem(int fd)
 	if (nb_positif != current_size && fd == 1)
 		exit_ =0;
 	if (exit_)
-		;//exit(13);
+		exit(13);
 
 }
