@@ -42,16 +42,9 @@ dprintf(fd2,"start %p start->start %p\n",start, start->start);
 	else if (ptr < start->start + MAX_TINY + MAX_MED && ptr >= start->start + MAX_TINY)
 		return (1);
 	else if ( get_fat(ptr))
-	{
 		return (2);
-	}
 	else
-	{
-		printf("Error free %p doesn't exist\n", ptr);
-
-		dprintf(2,"Error free %p doesn't exist\n", ptr);
-		exit (33);
-	}
+        return (3);
 }
 
 
@@ -263,14 +256,9 @@ void	try_defragment(t_tny *tofree)
 
 static void free_tny_small(t_tny *tofree, void *ptr)
 {
-	printf("before node free_tny_small %p\n", ptr);
 	tofree = ret_node(tofree, ptr);
 	if (!tofree)
-	{
-		show_alloc_mem(1);
-		printf("error tmp nulli %p\n", ptr);
-		exit(2);
-	}
+		return;
 	else
 		try_defragment(tofree);
 }
@@ -282,7 +270,7 @@ static int	free_fat(void *ptr)
 	dprintf(2,"FREE FAT ptr => %p\n", ptr);
 	tofree = get_fat(ptr);
 	if (!tofree)
-		exit (55);
+		return (0);
 	dprintf (2,"tofree %p , ptr %p \n",tofree,tofree->ptr);
 	munmap(tofree->ptr, tofree->size);
     size_t size =  (void *)(H_FAT) + sizeof(t_tny) * MAX_HEADER(t_fat, S_HEADER_F) - (void *)(tofree + 1) ;

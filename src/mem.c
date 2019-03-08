@@ -366,11 +366,8 @@ t_start	*get_start(void *ptr, bool next)
 			break;
 		start++;
 	}
-//	printf("get_start ret node %lu\n", node);
 	if (next)
-	{
 		return ((t_start *)node);
-	}
 	return (start);
 }
 /**
