@@ -60,6 +60,12 @@ typedef struct	s_start
 	void *start;
 }				t_start;
 
+typedef struct	s_infonode
+{
+	size_t	left;
+	t_tny	*ptr_node;
+}				t_infonode;
+
 size_t current_size;
 extern	t_mem	*g_mem;
 
