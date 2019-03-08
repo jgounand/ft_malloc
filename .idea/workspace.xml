@@ -10,11 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18986e72-0b27-47a8-9054-dea9b785bfb3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_free.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_free.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ft_realloc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_realloc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mem.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -102,8 +98,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ft_realloc.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="132" selection-start-line="132" selection-end-line="132" />
+            <state relative-caret-position="567">
+              <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -228,12 +224,12 @@
       <workItem from="1551681515417" duration="4585000" />
       <workItem from="1551688248754" duration="6942000" />
       <workItem from="1551770465220" duration="4050000" />
-      <workItem from="1551915008158" duration="7658000" />
+      <workItem from="1551915008158" duration="8165000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205468000" />
+    <option name="totallyTimeSpent" value="205975000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -340,8 +336,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ft_realloc.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="132" selection-start-line="132" selection-end-line="132" />
+        <state relative-caret-position="567">
+          <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
         </state>
       </provider>
     </entry>
