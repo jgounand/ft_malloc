@@ -154,23 +154,23 @@ static void		*ft_realloc_small(void *ptr, size_t size, short type)
 		return (r_with_node(&node,size,type));
 }
 
+/**
+**	Input:	void *ptr
+**			size_t size
+**	Output:	void *new_ptr
+**	Purpose:	check if ptr exist
+**				malloc new size
+**				cpy the max possible
+**				free the old ptr
+*/
+
 static void			*ft_realloc_fat(void *ptr, size_t size)
 {
 	t_fat	*fat;
-	size_t	node;
 	void	*new;
 	size_t	c_lenght;
 
-	fat = H_FAT;
-	node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
-	while (node)
-	{
-		if (fat->ptr == ptr)
-			break ;
-		fat++;
-		node--;
-	}
-	if (!node)
+	if (!(fat = get_fat(ptr)))
 		return (NULL);
 	c_lenght = fat->size;
 	new = ft_malloc(size);
@@ -181,6 +181,16 @@ static void			*ft_realloc_fat(void *ptr, size_t size)
 	ft_free(ptr);
 	return (new);
 }
+
+/**
+**	Input:	void *ptr
+**			size_t size
+**	Output:	void *new_ptr
+**	Purpose:	check if ptr exist and if size > 0
+**				get the type [0-2]
+**					type 0 || 1 : realloc header tiny / small
+**					type 2 : realloc header fat
+*/
 
 void			*ft_realloc(void *ptr, size_t size)
 {
