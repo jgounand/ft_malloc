@@ -124,11 +124,6 @@ t_tny *get_free_node(short type,size_t lenght)
 		tmp++;
 		node_left--;
 	}
-	ft_putstr("\nstart get free node\n");
-	print_addrhex((uint16_t)tmp->ptr);
-	ft_putstr(" ");
-	ft_putnbr(node_left);
-	ft_putstr("\nfin get free node\n");
 	return (tmp);
 }
 /**
@@ -199,7 +194,6 @@ void	check_header_zero(short type)
 			break ;
 		if (!tmp->size)
 		{
-			ft_putstr("check header zero OK\n");
 			void *max;
 			size_t bytes_cpy;
 

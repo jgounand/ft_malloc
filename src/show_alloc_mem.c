@@ -13,29 +13,51 @@
 
 #include "../inc/ft_malloc.h"
 
+char	*ft_strrev(char *str)
+{
+	int		i;
+	int		length;
+	char	buff;
+
+	i = 0;
+	length = ft_strlen(str);
+	while (length - 1 > i)
+	{
+		buff = str[i];
+		str[i] = str[length - 1];
+		str[length - 1] = buff;
+		length--;
+		i++;
+	}
+	return (str);
+}
+
 void	print_addrhex(int p)
 {
 	char *str;
-	char result[7];
-	short i = 5;
+	char result[9];
+	short i = 0;
 
-	ft_bzero(result,7);
-	result[0] = '0';
-	result[1] = 'x';
+	ft_bzero(result,9);
+	ft_memset(result,'0',8);
 	str = "0123456789ABCDEF";
 	while (p)
 	{
-		result[i--] = (str[p % 16]);
+		result[i] = (str[p % 16]);
 		p /= 16;
+		i++;
 	}
-	ft_putstr(result);
+	ft_putstr("0x");
+	if (result[8] == '0')
+		result[8] = '\0';
+	ft_putstr(ft_strrev(result));
 }
 
 void	print_ligne_alloc(void *ptr, size_t size)
 {
-	print_addrhex((uint16_t)ptr);
+	print_addrhex((uint32_t)ptr);
 	ft_putstr(" - ");
-	print_addrhex((uint16_t)ptr + size);
+	print_addrhex((uint32_t)ptr + size);
 	ft_putstr(" : ");
 	ft_putnbr(size);
 	ft_putendl(" octets");
@@ -59,7 +81,7 @@ size_t	print_lignes_tymed(short type, t_tny *node)
 		nb_node = MAX_HEADER(t_tny, S_HEADER_M) - MED_SIZE;
 
 	}
-	print_addrhex((uint16_t) node->ptr);
+	print_addrhex((uint32_t)node->ptr);
 	ft_putstr("\n");
 	while (nb_node--)
 	{
@@ -83,8 +105,7 @@ size_t	print_lignes_fat(t_fat	*node)
 	if (nb_node == 0)
 		return (0);
 	ft_putstr("FAT : ");
-	ft_putnbr(MAX_HEADER(t_fat, S_HEADER_F) -  FAT_SIZE);
-	print_addrhex((uint16_t) node->ptr);
+	print_addrhex((uint32_t) node->ptr);
 	ft_putstr("\n");
 	while (nb_node--)
 	{

@@ -18,18 +18,12 @@ char	*str_new_cpy(char c, size_t i)
 
 	j = 0;
 	str = ft_malloc(i + 1);
-	print_addrhex((uint16_t)str);
-	ft_putstr(" size: ");
-	ft_putnbr(i + 1);
-	ft_putstr("\n");
-	printf("%p\n",str);
 	while (j < i)
 	{
 		str[j] = c;
 		j++;
 	}
 	str[j] = '\0';
-	show_alloc_mem_debug(2);
 return (str);
 }
 
@@ -71,7 +65,7 @@ int	main(int ac, char **av)
 		val = rand() % 4064;
 		str[j] = str_new_cpy('b', val);
 		total += val;
-		 if (j > 3 && rand()% 20 < 5 && 0)
+		 if (j > 3 && rand()% 20 < 5)
 		{
 			short tmp = rand() % (j);
 
@@ -81,7 +75,7 @@ int	main(int ac, char **av)
 				check_ptr_prensent(str,j);
 			}
 		}
-		if (j > 3 && rand()% 20 < 3 && 0)
+		if (j > 3 && rand()% 20 < 3)
 		{
 			short tmp = rand() % (j);
 			if (str[tmp] != NULL)

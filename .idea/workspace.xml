@@ -10,15 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18986e72-0b27-47a8-9054-dea9b785bfb3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/ft_malloc.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/ft_malloc.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libft/ft_putnbr.c" beforeDir="false" afterPath="$PROJECT_DIR$/libft/ft_putnbr.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/debug.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/debug.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_free.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_free.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_malloc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_malloc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_realloc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_realloc.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mem.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/show_alloc_mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/show_alloc_mem.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="50" column="16" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="16" />
+            <state relative-caret-position="86">
+              <caret line="20" selection-start-line="20" selection-end-line="20" />
             </state>
           </provider>
         </entry>
@@ -59,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/show_alloc_mem.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-238">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="585">
+              <caret line="51" column="22" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -86,7 +78,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="435">
@@ -136,7 +128,6 @@
       <find>FAT_SIZE++</find>
       <find>add_mem_header</find>
       <find>exit(5</find>
-      <find>show_all</find>
       <find>getc</find>
       <find>tmp fa</find>
       <find>dprint</find>
@@ -156,6 +147,7 @@
       <find>check_header</find>
       <find>add_sma</find>
       <find>remove</find>
+      <find>show_all</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -174,10 +166,10 @@
         <option value="$PROJECT_DIR$/src/ft_free.c" />
         <option value="$PROJECT_DIR$/src/ft_realloc.c" />
         <option value="$PROJECT_DIR$/src/mem.c" />
-        <option value="$PROJECT_DIR$/src/show_alloc_mem.c" />
         <option value="$PROJECT_DIR$/inc/ft_malloc.h" />
-        <option value="$PROJECT_DIR$/src/main.c" />
         <option value="$PROJECT_DIR$/src/ft_malloc.c" />
+        <option value="$PROJECT_DIR$/src/main.c" />
+        <option value="$PROJECT_DIR$/src/show_alloc_mem.c" />
       </list>
     </option>
   </component>
@@ -246,12 +238,12 @@
       <workItem from="1551915008158" duration="8601000" />
       <workItem from="1552081893837" duration="135000" />
       <workItem from="1552288781165" duration="3926000" />
-      <workItem from="1552327695508" duration="18619000" />
+      <workItem from="1552327695508" duration="20911000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="229091000" />
+    <option name="totallyTimeSpent" value="231383000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -338,24 +330,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/show_alloc_mem.c">
+    <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-238">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="435">
+          <caret line="269" selection-start-line="269" selection-end-line="269" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="50" column="16" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="16" />
+        <state relative-caret-position="86">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
+    <entry file="file://$PROJECT_DIR$/src/show_alloc_mem.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="269" selection-start-line="269" selection-end-line="269" />
+        <state relative-caret-position="585">
+          <caret line="51" column="22" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
         </state>
       </provider>
     </entry>
