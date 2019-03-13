@@ -69,8 +69,9 @@ typedef struct	s_infonode
 size_t current_size;
 extern	t_mem	*g_mem;
 
+void show_alloc_mem_debug(int fd);
 void *malloc(size_t size);
-void show_alloc_mem(int fd);
+void show_alloc_mem();
 void *realloc(void *ptr, size_t size);
 void *ft_malloc(size_t size);
 void *ft_realloc(void *ptr, size_t size);
@@ -82,7 +83,7 @@ t_mem	*init_mem(void);
 void free(void *ptr);
 short gettype(void *ptr);
 t_mem	*init_mem(void);
-void	add_mem_header(short type);
+bool	add_mem_header(short type);
 void	*get_data(void *ptr,short type, size_t lengh, t_tny *current);
 void *get_addr(void *ptr);
 t_start	*get_start(void *ptr, bool next);
@@ -95,6 +96,7 @@ void	try_defragment(t_tny *tofree);
 bool	diff_data(t_tny *tofree);
 short check_header_left();
 void	add_mem_data(t_tny **tmp, short type, short position);
+void	print_addrhex(int p);
 
 
 //DEBUG

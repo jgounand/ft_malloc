@@ -110,22 +110,50 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
  **				Break if they are no node left or node free > lenght
  */
 
-t_infonode get_free_node(short type,size_t lenght)
+t_tny *get_free_node(short type,size_t lenght)
 {
-	t_infonode node;
-	t_tny *tmp;
+	t_tny 	*tmp;
+	size_t	node_left;
 
 	tmp = type ? H_MED : H_TINY;
-	node.left = type ? MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE : MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
-	while (node.left)
+	node_left = type ? MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE : MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+	while (node_left)
 	{
-		if (!node.left || (tmp->size < 0 && lenght <= (size_t)-tmp->size))
+		if (!node_left || (tmp->size < 0 && lenght <= (size_t)-tmp->size))
 			break ;
 		tmp++;
-		node.left--;
+		node_left--;
 	}
-	node.ptr_node = tmp;
-	return (node);
+	ft_putstr("\nstart get free node\n");
+	print_addrhex((uint16_t)tmp->ptr);
+	ft_putstr(" ");
+	ft_putnbr(node_left);
+	ft_putstr("\nfin get free node\n");
+	return (tmp);
+}
+/**
+ **	Input:	short type
+ **			size_t lenght
+ **	Output:	t_infonode node
+ **	Purpose:	Get the number Header and the start of the header
+ **				Break if they are no node left or node free > lenght
+ */
+
+size_t get_free_nodeleft(short type,size_t lenght)
+{
+	t_tny 	*tmp;
+	size_t	node_left;
+
+	tmp = type ? H_MED : H_TINY;
+	node_left = type ? MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE : MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+	while (node_left)
+	{
+		if (!node_left || (tmp->size < 0 && lenght <= (size_t)-tmp->size))
+			break ;
+		tmp++;
+		node_left--;
+	}
+	return (node_left);
 }
 /**
  **	Input:	short add
@@ -157,6 +185,43 @@ void	add_rm_header(short add, short type)
 	}
 }
 
+void	check_header_zero(short type)
+{
+
+	size_t	node_left;
+	t_tny	*tmp;
+
+	tmp = type ? H_MED : H_TINY;
+	node_left = type ? MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE : MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
+	while (node_left)
+	{
+		if (!node_left)
+			break ;
+		if (!tmp->size)
+		{
+			ft_putstr("check header zero OK\n");
+			void *max;
+			size_t bytes_cpy;
+
+			if (type == 0)
+			{
+				max = H_TINY + MAX_HEADER(t_tny,S_HEADER_T);
+				bytes_cpy = (void *)(max) - (void *)(tmp + 1) - sizeof(t_tny) * TINY_SIZE;
+			}
+			else
+			{
+				max = H_MED + MAX_HEADER(t_med,S_HEADER_M);
+				bytes_cpy = (void *)(max) - (void *)(tmp + 1) - sizeof(t_tny) * MED_SIZE;
+			}
+			remove_header(&tmp,bytes_cpy,type);
+			check_header_left(type);
+			return ;
+		}
+		tmp++;
+		node_left--;
+	}
+}
+
 /**
  **	Input:	short type
  **			size_t lenght
@@ -172,28 +237,37 @@ void	add_rm_header(short add, short type)
 void	*add_small(short type, size_t lenght)
 {
 	void *new;
-	t_infonode node;
+	t_tny	*node;
+	size_t node_left;
+	short	error;
 
-	if (check_header_left())
-	return (add_small(type,lenght));
+	if ((error = check_header_left()))
+	return (error == 1 ? add_small(type,lenght): NULL);
 	node = get_free_node(type, lenght);
-	if (!node.left)
+	node_left = get_free_nodeleft(type,lenght);
+	if (!node_left)
 	{
-		add_mem_data(&node.ptr_node,type,0);
+		add_mem_data(&node,type,0);
 		return (add_small(type, lenght));
 	}
-		new = node.ptr_node->ptr;
-	if (!(node.left - 1) && -node.ptr_node->size - lenght < 8)
-		add_mem_data(&node.ptr_node,type,1);
-	else if (-node.ptr_node->size - lenght > 8)
-		add_node_free(node.ptr_node, get_addr(node.ptr_node->ptr + lenght + 1), type);
+	if (!node->ptr)
+		print_addrhex((uint16_t)node->ptr);
+	new = node->ptr;
+	if (!(node_left - 1) && -node->size - lenght < 8)
+		add_mem_data(&node,type,1);
+	else if (-node->size - lenght > 8)
+		add_node_free(node, get_addr(node->ptr + lenght + 1), type);
 	else
 		add_rm_header(1,type);
-	node.ptr_node->size = lenght;
-	if (check_header_left())
+	node->size = lenght;
+	if ((error = check_header_left()) == 1)
 		add_small(type,lenght);
+	if (error == 2)
+		return (NULL);
 	add_rm_header(0,type);
-	check_header_left();
+	if (check_header_left() == 2)
+		return (NULL);
+	check_header_zero(type);
 	return (new);
 }
 
@@ -235,40 +309,49 @@ void	add_mem_data(t_tny **tmp, short type, short position)
 }
 
 /**
- **	Input:
- **	Output:
- **	Purpose:	Check if they are place on headers => add_mem_header
+**	Input:
+**	Output:
+**	Purpose:	Check if they are place on headers => add_mem_header
 **				
- */
+*/
 
 short	check_header_left()
 {
-	if (!TINY_SIZE || !MED_SIZE || !A_SIZE)
+	short ret;
+
+	ret = 0;
+	if (!TINY_SIZE || !MED_SIZE || !A_SIZE || !FAT_SIZE)
 	{
 		if (!TINY_SIZE)
-			add_mem_header(0);
+			ret = add_mem_header(0);
 		else if (!MED_SIZE)
-			add_mem_header(1);
+			ret = add_mem_header(1);
 		else if (!A_SIZE)
-			add_mem_header(3);
+			ret = add_mem_header(3);
 		else if (!FAT_SIZE)
-			add_mem_header(2);
-		return (1);
+			ret = add_mem_header(2);
+		return (ret + 1);
 	}
 	return (0);
 }
+
+/**
+**	Input:	size_t lenght
+**	Output: void *ptr
+**	Purpose:	Check if they are place on headers => add_mem_header
+**				Allez sur la derniere node
+**				Mmap la taille
+*/
+
 void	*add_fat(size_t lenght)
 {
 	t_fat *tmp;
 	size_t	node;
 
+	if (check_header_left() == 2)
+		return (NULL);
 	node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
-	if (!g_mem->max_size[2])
-	{
-		add_mem_header(2);
-		return (add_fat(lenght));
-	}
-	tmp = H_FAT; 
+	tmp = H_FAT;
 	while (node--)
 		tmp++;
 	tmp->ptr = mmap(NULL,lenght, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
@@ -277,16 +360,22 @@ void	*add_fat(size_t lenght)
 	return (tmp->ptr);
 }
 
+/**
+**	Input:	size_t lenght
+**	Output: void *ptr
+**	Purpose:	Init global and call the right function depend of the size
+*/
+
 void *ft_malloc(size_t size)
 {
 	if (size <= 0)
 		return (NULL);
-	init_mem();
+	if (!init_mem())
+		return (NULL);
 	if (size <= TINY)
 		return (add_small(0,size));
 	else if (size <= SMALL)
 		return (add_small(1,size));
 	else
 		return (add_fat(size));
-	return (NULL);
 }

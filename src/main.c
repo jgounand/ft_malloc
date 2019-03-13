@@ -17,19 +17,19 @@ char	*str_new_cpy(char c, size_t i)
 	char	*str;
 
 	j = 0;
-	printf("--->size = %zu<---\n", i+ 1);
 	str = ft_malloc(i + 1);
-	dprintf(2, "add => %p\n",str);
-	dprintf(2,"main 1\n");
-	show_alloc_mem(2);
-	dprintf(2,"--->fin alloc<---\n");
-	show_alloc_mem(1);
+	print_addrhex((uint16_t)str);
+	ft_putstr(" size: ");
+	ft_putnbr(i + 1);
+	ft_putstr("\n");
+	printf("%p\n",str);
 	while (j < i)
 	{
 		str[j] = c;
 		j++;
 	}
 	str[j] = '\0';
+	show_alloc_mem_debug(2);
 return (str);
 }
 
@@ -62,57 +62,37 @@ int	main(int ac, char **av)
 	(void)str2;
 	srand((unsigned) time(&t));
 	int fd = open("/dev/ttys001", O_RDWR);
-	int fd2 = open("/dev/ttys002", O_RDWR);
 	if (fd)
 		;
+	size_t total = 0;
 	for (size_t j = 0; j < i ; j++)
 	{
 	    current_size = (j + 1 ) * 3;
-		printf("j = %zu\n", j);
-		write(1,"1",2);
-		write(1,"2\n",2);
-		val = rand() % 2056;
+		val = rand() % 4064;
 		str[j] = str_new_cpy('b', val);
-	show_alloc_mem(fd2);
-	show_table(str,j);
-	dprintf(2,"check ptr after new alloc\n");
-	check_ptr_prensent(str,j);
-		dprintf(2,"check done\n");
-		show_alloc_mem(2);
-		 if (j > 3 && rand()% 20 < 5)
+		total += val;
+		 if (j > 3 && rand()% 20 < 5 && 0)
 		{
 			short tmp = rand() % (j);
 
 			if (str[tmp] != NULL)
 			{
-
-				dprintf(fd," tmp %d %p\n",tmp, str[tmp]);
 				str[tmp] = ft_realloc(str[tmp],rand() % 2056);
-				dprintf(fd,"new realloc ptr %p\n",str[tmp]);
-				show_alloc_mem(fd2);
-				dprintf(2,"check ptr after realloc\n");
 				check_ptr_prensent(str,j);
-				dprintf(2,"check done\n");
-				show_alloc_mem(2);
 			}
 		}
-		if (j > 3 && rand()% 20 < 3)
+		if (j > 3 && rand()% 20 < 3 && 0)
 		{
 			short tmp = rand() % (j);
 			if (str[tmp] != NULL)
 			{
 				ft_free(str[tmp]);
 				str[tmp] = NULL;
-				dprintf(2,"check ptr after free\n");
 				check_ptr_prensent(str,j);
-				dprintf(2,"check done\n");
-				show_alloc_mem(2);
 			}
 		}
 	}
-	dprintf(2,"main 2\n");
 	show_alloc_mem(1);
-	test_05();
 	return (0);
 }
 

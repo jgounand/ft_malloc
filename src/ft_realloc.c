@@ -122,7 +122,8 @@ static void		*r_with_node(t_tny **node, size_t size, short type)
 			else
 				MED_SIZE--;
 			ptr = (*node)->ptr;
-			check_header_left();
+			if (check_header_left() == 2)
+                return (NULL);
 		}
 		return (ptr);
 }
