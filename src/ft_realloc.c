@@ -38,97 +38,6 @@ static short	need_alloc(t_tny *node, size_t size)
 }
 
 /**
-**	Input:	t_tny *node
-**			size_t size
-**	Output:	void *new_ptr
-**	Purpose:	malloc size
-**				cpy max size possible of node->ptr
-**				free node->ptr
-*/
-
-static void		*r_mall_free(t_tny *node, size_t size)
-{
-	void	*new_ptr;
-	t_tny	tmp;
-
-		tmp.size = node->size;
-		tmp.ptr = node->ptr;
-		new_ptr = ft_malloc(size);
-		ft_memcpy(new_ptr, node->ptr, (size < (size_t)tmp.size ? size : tmp.size));
-		ft_free(tmp.ptr);
-		return (new_ptr);
-}
-
-/**
-**	Input:	t_tny **node
-**			size_t size
-**			short type
-**	Output:	void *same_ptr
-**	Purpose:	Place to fit the realloc with node + 1
-**				Save the size beetwen node->ptr and (node+1)->ptr
-**					and (node+1)->size
-**				Dell the node + 1,
-**				Add node free if size > 8 (addr every % 8)
-*/
-
-static void		*r_with_node1(t_tny **node, size_t size, short type)
-{
-	size_t c_lenght;
-
-		c_lenght = ((*node) + 1)->ptr - (*node)->ptr - ((*node) + 1)->size;
-		ft_memmove((*node) + 1, (*node) + 2, ((void *)(type ? H_MED :H_TINY) +
-		sizeof(t_tny) * MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) -
-		(void *)((*node) + 2)));
-		(*node)->size = size;
-		if (c_lenght - size > 8)
-			add_node_free(*node, get_addr((*node)->ptr + size + 1), type);
-		else
-		{
-			if (type)
-				MED_SIZE++;
-			else
-				TINY_SIZE++;
-		}
-		return ((*node)->ptr);
-}
-
-/**
-**	Input:	t_tny **node
-**			size_t size
-**			short type
-**	Output:	void *same_ptr
-**	Purpose:	Place to fit the realloc with node
-**				Save the size beetwen node->ptr and (node+1)->ptr
-**				Add node free if size > 8 (addr every % 8)
-**				Add size HEADER if add_free
-*/
-
-static void		*r_with_node(t_tny **node, size_t size, short type)
-{
-		long	size_free = 0;
-		void	*ptr;
-
-		if (diff_data(*node))
-			size_free = (*node)->size;
-		else
-			size_free = ((*node) + 1)->ptr - (void *)(*node)->ptr;
-		(*node)->size = size;
-		ptr = (*node)->ptr;
-		if (size_free - size > 8)
-		{
-			add_node_free((*node), get_addr((*node)->ptr + size + 1), type);
-			if (!type)
-				TINY_SIZE--;
-			else
-				MED_SIZE--;
-			ptr = (*node)->ptr;
-			if (check_header_left() == 2)
-                return (NULL);
-		}
-		return (ptr);
-}
-
-/**
 **	Input:	void *ptr
 **			size_t size
 **			short type
@@ -146,13 +55,13 @@ static void		*ft_realloc_small(void *ptr, size_t size, short type)
 
 	node = !type ? H_TINY : H_MED;
 	if (!(node = ret_node(node, ptr)))
-		return(NULL);
+		return (NULL);
 	if ((need_all = need_alloc(node, size)) == 1)
-		return (r_mall_free(node,size));
+		return (r_mall_free(node, size));
 	else if (need_all == 2)
-		return (r_with_node1(&node,size,type));
+		return (r_with_node1(&node, size, type));
 	else
-		return (r_with_node(&node,size,type));
+		return (r_with_node(&node, size, type));
 }
 
 /**

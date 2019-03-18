@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../inc/ft_malloc.h"
 
 char	*ft_strrev(char *str)
@@ -38,8 +37,8 @@ void	print_addrhex(int p)
 	char result[9];
 	short i = 0;
 
-	ft_bzero(result,9);
-	ft_memset(result,'0',8);
+	ft_bzero(result, 9);
+	ft_memset(result, '0', 8);
 	str = "0123456789ABCDEF";
 	while (p)
 	{
@@ -101,7 +100,7 @@ size_t	print_lignes_fat(t_fat	*node)
 	size_t	total;
 
 	total = 0;
-	nb_node = MAX_HEADER(t_fat, S_HEADER_F) -  FAT_SIZE;
+	nb_node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
 	if (nb_node == 0)
 		return (0);
 	ft_putstr("FAT : ");
@@ -111,7 +110,7 @@ size_t	print_lignes_fat(t_fat	*node)
 	{
 		if (node->size > 0)
 		{
-			print_ligne_alloc(node->ptr,node->size);
+			print_ligne_alloc(node->ptr, node->size);
 			total += node->size;
 		}
 		node++;

@@ -97,7 +97,28 @@ bool	diff_data(t_tny *tofree);
 short check_header_left();
 void	add_mem_data(t_tny **tmp, short type, short position);
 void	print_addrhex(int p);
+void	add_rm_header(short add, short type);
+short	check_header_left(void);
 
+size_t get_free_nodeleft(short type, size_t lenght);
+t_tny	*get_free_node(short type, size_t lenght);
+
+
+void		*r_mall_free(t_tny *node, size_t size);
+
+void		*r_with_node1(t_tny **node, size_t size, short type);
+
+void		*r_with_node(t_tny **node, size_t size, short type);
+
+
+size_t push_header(t_tny **tmp, short type);
+size_t	remove_header(t_tny **tmp, size_t bytes_cpy, short type);
+bool	not_begin_data(t_tny *tofree);
+
+void	check_header_zero(short type);
+
+void		*mem_data(void);
+t_mem	*mem_header(unsigned int nb_pages[4]);
 
 //DEBUG
 void	debug_check_MAX_HEADER(void);
