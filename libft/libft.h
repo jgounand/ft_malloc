@@ -86,7 +86,7 @@ char			*ft_itoa(int n);
 void			ft_putchar(char c);
 void			ft_putstr(const char *s);
 void			ft_putendl(char const *s);
-void			ft_putnbr(int n);
+void			ft_putnbr(long long n);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *s, int fd);
 void			ft_putstr_fd(char const *s, int fd);

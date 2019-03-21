@@ -72,9 +72,9 @@ void	*add_small(short type, size_t lenght)
 		return (add_small(type, lenght));
 	}
 	new = node->ptr;
-	if (!(node_left - 1) && -node->size - lenght < 8)
+	if (!(node_left - 1) && -node->size - lenght < 16)
 		add_mem_data(&node, type, 1);
-	else if (-node->size - lenght > 8)
+	else if (-node->size - lenght > 16)
 		add_node_free(node, get_addr(node->ptr + lenght + 1), type);
 	else
 		add_rm_header(1, type);
@@ -86,7 +86,6 @@ void	*add_small(short type, size_t lenght)
 	add_rm_header(0, type);
 	if (check_header_left() == 2)
 		return (NULL);
-	check_header_zero(type);
 	return (new);
 }
 
@@ -122,8 +121,11 @@ void	*add_fat(size_t lenght)
  **	Purpose:	Init global and call the right function depend of the size
  */
 
-void *ft_malloc(size_t size)
+void *malloc(size_t size)
 {
+	ft_putstr("malloc: ");
+	ft_putnbr(size);
+	write(1,"\n",1);
 	if (size <= 0)
 		return (NULL);
 	if (!init_mem())

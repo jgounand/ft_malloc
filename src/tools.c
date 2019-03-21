@@ -20,7 +20,7 @@
 
 void *get_addr(void *ptr)
 {
-	while ((uintptr_t)ptr % 8)
+	while ((uint32_t)ptr % 16)
 		ptr++;
 	return (ptr);
 }

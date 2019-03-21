@@ -45,7 +45,7 @@ static short	need_alloc(t_tny *node, size_t size)
 **	Purpose:	check if need to alloc
 **					need_alloc 1 => need_alloc  function r_mall_free()
 **					need_alloc 2 => have the place to fit with node + 1
-**				Add node free if size > 8 (addr every % 8)
+**				Add node free if size > 16 (addr every % 8)
 */
 
 static void		*ft_realloc_small(void *ptr, size_t size, short type)
@@ -83,12 +83,12 @@ static void			*ft_realloc_fat(void *ptr, size_t size)
 	if (!(fat = get_fat(ptr)))
 		return (NULL);
 	c_lenght = fat->size;
-	new = ft_malloc(size);
+	new = malloc(size);
 	if (size < c_lenght)
 		ft_memcpy(new, ptr, size);
 	else
 		ft_memcpy(new, ptr, c_lenght);
-	ft_free(ptr);
+	free(ptr);
 	return (new);
 }
 
@@ -102,16 +102,17 @@ static void			*ft_realloc_fat(void *ptr, size_t size)
 **					type 2 : realloc header fat
 */
 
-void			*ft_realloc(void *ptr, size_t size)
+void			*realloc(void *ptr, size_t size)
 {
 	short	type;
 
-	if (size <= 0 || !ptr)
-	{
-		if (ptr)
-			ft_free(ptr);
+    ft_putstr("realloc :");
+    ft_putnbr(size);
+	write(1,"\n",1);
+	if (size <= 0)
 		return (NULL);
-	}
+	if (!ptr)
+		return (malloc(size));
 	type = get_type(ptr);
 	if (type == 0 || type == 1)
 		return (ft_realloc_small(ptr, size, type));

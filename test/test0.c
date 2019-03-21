@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                        :+:      :+:    :+:   */
+/*   test0.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgounand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marene <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/07 18:03:34 by jgounand          #+#    #+#             */
-/*   Updated: 2017/11/08 10:17:51 by jgounand         ###   ########.fr       */
+/*   Created: 2016/05/17 17:17:34 by marene            #+#    #+#             */
+/*   Updated: 2016/05/17 17:20:34 by marene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
 
-void	ft_putnbr(long long n)
+int		main(void)
 {
-	size_t	nb;
+	int		i;
+	void	*ptr;
 
-	nb = n;
-	if (n < 0)
+	i = 0;
+	ptr = NULL;
+	write(1, "test0\n", 6);
+	while (i < 1024)
 	{
-		ft_putchar('-');
-		nb = -n;
+		++i;
 	}
-	if (nb > 9)
-	{
-		ft_putnbr(nb / 10);
-		ft_putnbr(nb % 10);
-	}
-	if (nb <= 9)
-		ft_putchar(nb + '0');
+	return (0);
 }

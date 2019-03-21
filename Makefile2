@@ -10,7 +10,7 @@ LIB = libft/libft.a
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC_BASE		=	main.c ft_malloc.c  show_alloc_mem.c ft_free.c mem.c debug.c ft_realloc.c
+SRC_BASE		=	ft_malloc.c  show_alloc_mem.c ft_free.c mem.c debug.c ft_realloc.c realloc_node.c move_header.c clear_node.c tools.c free_tools.c defragment.c add_mem_header.c
 
 OBJ = $(SRC:.c=.o)
 

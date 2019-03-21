@@ -6,7 +6,7 @@
  **	Purpose:	Cpy from the old g_mem to the new one
  */
 
-void	add_mem_header_0(t_mem **new)
+static void	add_mem_header_0(t_mem **new)
 {
 	void	*dest;
 	void	*src;
@@ -24,7 +24,7 @@ void	add_mem_header_0(t_mem **new)
 	(*new)->max_size[0] = MAX_HEADER(t_tny, 1);
 }
 
-void	add_mem_header_1(t_mem **new)
+static void	add_mem_header_1(t_mem **new)
 {
 	void	*dest;
 	void	*src;
@@ -43,7 +43,7 @@ void	add_mem_header_1(t_mem **new)
 	(*new)->max_size[1] = MAX_HEADER(t_med, 1);
 }
 
-void	add_mem_header_2(t_mem **new)
+static void	add_mem_header_2(t_mem **new)
 {
 	ft_memcpy(*new, g_mem, sizeof(t_mem) + getpagesize() * (S_HEADER_A +
 	S_HEADER_T + S_HEADER_M + S_HEADER_F));
@@ -52,7 +52,7 @@ void	add_mem_header_2(t_mem **new)
 	(*new)->max_size[2] = MAX_HEADER(t_fat, 1);
 }
 
-void	add_mem_header_3(t_mem **new)
+static void	add_mem_header_3(t_mem **new)
 {
 	void	*dest;
 	void	*src;

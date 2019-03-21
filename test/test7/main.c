@@ -1,7 +1,9 @@
 
-#include "../inc/ft_malloc.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+#include <string.h>
 #include <time.h>
 #include <fcntl.h>
 int test_00();
@@ -17,7 +19,7 @@ char	*str_new_cpy(char c, size_t i)
 	char	*str;
 
 	j = 0;
-	str = ft_malloc(i + 1);
+	str = malloc(i + 1);
 	while (j < i)
 	{
 		str[j] = c;
@@ -61,7 +63,6 @@ int	main(int ac, char **av)
 	size_t total = 0;
 	for (size_t j = 0; j < i ; j++)
 	{
-	    current_size = (j + 1 ) * 3;
 		val = rand() % 4064;
 		str[j] = str_new_cpy('b', val);
 		total += val;
@@ -71,8 +72,7 @@ int	main(int ac, char **av)
 
 			if (str[tmp] != NULL)
 			{
-				str[tmp] = ft_realloc(str[tmp],rand() % 2056);
-				check_ptr_prensent(str,j);
+				str[tmp] = realloc(str[tmp],rand() % 2056);
 			}
 		}
 		if (j > 3 && rand()% 20 < 3)
@@ -80,13 +80,11 @@ int	main(int ac, char **av)
 			short tmp = rand() % (j);
 			if (str[tmp] != NULL)
 			{
-				ft_free(str[tmp]);
+				free(str[tmp]);
 				str[tmp] = NULL;
-				check_ptr_prensent(str,j);
 			}
 		}
 	}
-	show_alloc_mem(1);
 	return (0);
 }
 
@@ -99,13 +97,12 @@ void print(char *s)
 
 int test_00()
  {
- 	ft_malloc(25);
- 	ft_malloc(1024);
- 	ft_malloc(1024 * 32);
- 	ft_malloc(1024 * 1024);
- 	ft_malloc(1024 * 1024 * 16);
- 	ft_malloc(1024 * 1024 * 128);
- 	show_alloc_mem(1);
+ 	malloc(25);
+ 	malloc(1024);
+ 	malloc(1024 * 32);
+ 	malloc(1024 * 1024);
+ 	malloc(1024 * 1024 * 16);
+ 	malloc(1024 * 1024 * 128);
  	return 0;
  }
 
@@ -113,10 +110,10 @@ int test_00()
  {
  	char *addr;
 
- 	addr = ft_malloc(16);
- 	ft_free(NULL);
-	 ft_free((void*)addr + 5);
- 	if (ft_realloc((void*) + 5, 10) == NULL)
+ 	addr = malloc(16);
+ 	free(NULL);
+	 free((void*)addr + 5);
+ 	if (realloc((void*) + 5, 10) == NULL)
  	{
  		print("Bonjour\n");
  	}
@@ -129,11 +126,11 @@ int test_00()
  	char *addr2;
  	char *addr3;
 
- 	addr1 = (char*)ft_malloc(16 * M);
+ 	addr1 = (char*)malloc(16 * M);
  	strcpy(addr1, "Bonjour\n");
  	print(addr1);
- 	addr2 = (char*)ft_malloc(16 * M);
- 	addr3 = ft_realloc(addr1, 128 * M);
+ 	addr2 = (char*)malloc(16 * M);
+ 	addr3 = realloc(addr1, 128 * M);
  	addr3[127 * M] = 42;
  	print(addr3);
  	return 0;
@@ -148,17 +145,16 @@ int	test_03()
 	i = 0;
 	while (i < 1024)
 	{
-		addr = (char*)ft_malloc(1024);
+		addr = (char*)malloc(1024);
 		if (addr == NULL)
 		{
-			ft_putstr("NULL returned!\n");
+			print("NULL returned!\n");
 			return 0;
 		}
 		addr[0] = 42;
-		ft_free(addr);
+		free(addr);
 		i++;
 	}
-	show_alloc_mem(1);
 	return 0;
 }
 
@@ -172,40 +168,39 @@ int	test_03()
  	i = 0;
  	while (i < 1024)
  	{
- 		addr = (char*)ft_malloc(1024);
- 		addr = ft_realloc(addr, 64);
+ 		addr = (char*)malloc(1024);
+ 		addr = realloc(addr, 64);
  		if (addr == NULL)
  		{
- 			ft_putstr("NULL returned!\n");
+ 			print("NULL returned!\n");
  			return 0;
  		}
  		addr[0] = 42;
-		ft_free(addr);
+		free(addr);
  		i++;
  	}
- 	addr = (char*)ft_malloc(1024);
+ 	addr = (char*)malloc(1024);
  	strcpy(addr, "Bonjour\n");
- 	tmp = (char*)ft_malloc(128);
- 	addr = ft_realloc(addr, 64);
-	 ft_free(tmp);
+ 	tmp = (char*)malloc(128);
+ 	addr = realloc(addr, 64);
+	 free(tmp);
  	print(addr);
-	 ft_free(addr);
-	 ft_free(NULL);
- 	if (ft_realloc(NULL, 0) == NULL)
+	 free(addr);
+	 free(NULL);
+ 	if (realloc(NULL, 0) == NULL)
  		print("Bonjour\n");
  	return 0;
  }
 
  int	test_05()
  {
- 	ft_putstr("Malloc...\n");
- 	ft_malloc(0);
- 	ft_putstr("Free...\n");
-	 ft_free(NULL);
- 	ft_putstr("Realloc...\n");
- 	ft_realloc(NULL, 0);
- 	ft_putstr("Show alloc mem...\n");
- 	show_alloc_mem(1);
+ 	print("Malloc...\n");
+ 	malloc(0);
+ 	print("Free...\n");
+	 free(NULL);
+ 	print("realloc(...\n");
+ 	realloc(NULL, 0);
+ 	print("Show alloc mem...\n");
  	printf("Page Size: %d", getpagesize());
  	return 0;
  }

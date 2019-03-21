@@ -16,9 +16,9 @@ void		*r_mall_free(t_tny *node, size_t size)
 
 	tmp.size = node->size;
 	tmp.ptr = node->ptr;
-	new_ptr = ft_malloc(size);
+	new_ptr = malloc(size);
 	ft_memcpy(new_ptr, node->ptr, (size < (size_t)tmp.size ? size : tmp.size));
-	ft_free(tmp.ptr);
+	free(tmp.ptr);
 	return (new_ptr);
 }
 
@@ -31,7 +31,7 @@ void		*r_mall_free(t_tny *node, size_t size)
 **				Save the size beetwen node->ptr and (node+1)->ptr
 **					and (node+1)->size
 **				Dell the node + 1,
-**				Add node free if size > 8 (addr every % 8)
+**				Add node free if size > 16 (addr every % 8)
 */
 
 void		*r_with_node1(t_tny **node, size_t size, short type)
@@ -43,7 +43,7 @@ void		*r_with_node1(t_tny **node, size_t size, short type)
 	sizeof(t_tny) * MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) -
 	(void *)((*node) + 2)));
 	(*node)->size = size;
-	if (c_lenght - size > 8)
+	if (c_lenght - size > 16)
 		add_node_free(*node, get_addr((*node)->ptr + size + 1), type);
 	else
 	{
@@ -62,7 +62,7 @@ void		*r_with_node1(t_tny **node, size_t size, short type)
 **	Output:	void *same_ptr
 **	Purpose:	Place to fit the realloc with node
 **				Save the size beetwen node->ptr and (node+1)->ptr
-**				Add node free if size > 8 (addr every % 8)
+**				Add node free if size > 16 (addr every % 8)
 **				Add size HEADER if add_free
 */
 
@@ -77,7 +77,7 @@ void		*r_with_node(t_tny **node, size_t size, short type)
 		size_free = ((*node) + 1)->ptr - (void *)(*node)->ptr;
 	(*node)->size = size;
 	ptr = (*node)->ptr;
-	if (size_free - size > 8)
+	if (size_free - size > 16)
 	{
 		add_node_free((*node), get_addr((*node)->ptr + size + 1), type);
 		if (!type)

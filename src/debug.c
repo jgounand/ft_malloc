@@ -11,14 +11,14 @@
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
-
+/**
 void	debug_check_MAX_HEADER(void)
 {
 	if (TINY_SIZE > 300 || MED_SIZE > 300)
 		{
 		dprintf(2,"debug_check_max_header");
 			dprintf(2, "TINY_SIZE %lu MED_SIZE %lu\n", TINY_SIZE, MED_SIZE);
-			show_alloc_mem(1);
+			show_alloc_mem();
 			exit (3);
 	}
 }
@@ -63,7 +63,7 @@ void check_ptr_prensent(char **tab, size_t size)
 			dprintf(2,"type %u\n",type);
 
 			dprintf(2,"type check %u\n",get_type_debug(tab[i]));
-			show_alloc_mem(2);
+			show_alloc_mem();
 			printf("i : %lu ptr : %p\n",i,tab[i]);
 			exit(69);
 		}
@@ -75,6 +75,10 @@ void check_ptr_prensent(char **tab, size_t size)
 
 void show_alloc_mem_debug(int fd)
 {
+
+	ft_putstr("\n show alloc fat :");
+	ft_putnbr(FAT_SIZE);
+	ft_putstr("\n");
 	printf("\n##########################################################\n");
 	t_tny	*tmp;
 	t_fat	*fat;
@@ -108,6 +112,9 @@ void show_alloc_mem_debug(int fd)
 		nb++;
 		tmp++;
 	}
+	ft_putstr("\n fat :");
+	ft_putnbr(FAT_SIZE);
+	ft_putstr("\n");
 	dprintf(fd,"%lu header tiny left\n", TINY_SIZE);
 	tmp = H_MED;
 	nb_node = MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
@@ -164,5 +171,11 @@ void show_alloc_mem_debug(int fd)
 		exit_ =0;
 	if (exit_)
 		exit(13);
+	ft_putstr("\n fat :");
+	ft_putnbr(FAT_SIZE);
+	ft_putstr("\n");
+
 
 }
+
+ **/

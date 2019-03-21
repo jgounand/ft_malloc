@@ -70,7 +70,6 @@ t_mem	*mem_header(unsigned int nb_pages[4])
 		write(2, "ERROR MMAP in mem_header mem.c\n", 20);
 		return (NULL);
 	}
-	ft_bzero(new, sizeof(t_mem) + getpagesize() * size);
 	return (new);
 }
 
@@ -91,6 +90,7 @@ void		*mem_data(void)
 		write(2, "ERROR MMAP in mem_data() mem.c\n", 20);
 		return (NULL);
 	}
+	ft_bzero(new, MAX_TINY + MAX_MED);
 	return (new);
 }
 
@@ -148,7 +148,8 @@ t_mem	*init_mem(void)
 	MED_SIZE = MAX_HEADER(t_med, S_HEADER_M);
 	FAT_SIZE = MAX_HEADER(t_fat, S_HEADER_F);
 	A_SIZE = MAX_HEADER(t_start, S_HEADER_A);
-	init_headers();
+	if (init_headers())
+		return (NULL);
 	return (g_mem);
 }
 
