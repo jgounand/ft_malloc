@@ -123,9 +123,6 @@ void	*add_fat(size_t lenght)
 
 void *malloc(size_t size)
 {
-	ft_putstr("malloc: ");
-	ft_putnbr(size);
-	write(1,"\n",1);
 	if (size <= 0)
 		return (NULL);
 	if (!init_mem())

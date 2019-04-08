@@ -106,9 +106,6 @@ void			*realloc(void *ptr, size_t size)
 {
 	short	type;
 
-    ft_putstr("realloc :");
-    ft_putnbr(size);
-	write(1,"\n",1);
 	if (size <= 0)
 		return (NULL);
 	if (!ptr)

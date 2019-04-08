@@ -111,7 +111,6 @@ void free(void *ptr)
 {
 	short	type;
 
-	ft_putstr("free\n");
 	if (!ptr)
 		return ;
 	type = get_type(ptr);
@@ -121,6 +120,4 @@ void free(void *ptr)
 		free_tny_small(!type ? H_TINY : H_MED, ptr);
 	else if (type == 2)
 		free_fat(ptr);
-	show_alloc_mem();
-	ft_putstr("fin free\n");
 }
