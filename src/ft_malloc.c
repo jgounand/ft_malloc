@@ -6,24 +6,25 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:29:59 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:26:14 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
 t_mem	*g_mem = NULL;
-/**
- **	Input:	t_tny *tmp
- **			void *ptr
- **			bool type
- **	Output:	void* NULL
- **	Purpose:	Get size beetwen (tmp + 1) and end
- **				Push header tmp + 1 to have the place to put the need node free
- **				if same data tmp + 1 and tmp + 2 size = diff ptr tmp1 and tmp2
- **				else size = MAX - (tmp + 1)->ptr
- **				if new size == 0 => remove the header
- */
+
+/*
+**	Input:	t_tny *tmp
+**			void *ptr
+**			bool type
+**	Output:	void* NULL
+**	Purpose:	Get size beetwen (tmp + 1) and end
+**				Push header tmp + 1 to have the place to put the need node free
+**				if same data tmp + 1 and tmp + 2 size = diff ptr tmp1 and tmp2
+**				else size = MAX - (tmp + 1)->ptr
+**				if new size == 0 => remove the header
+*/
 
 void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 {
@@ -43,17 +44,17 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 	return (NULL);
 }
 
-/**
- **	Input:	short type
- **			size_t lenght
- **	Output: void* ptr
- **	Purpose:	Find a node with the place to fit the lenght
- **				Else add new data zone and try again
- **				Save ptr if they are update of the size Header during proscess
- **				The last header need to be a free node, Add data zone if they
- **				are not the place to add a free node
- **				if nothing of that happen i dont need to increment header
- */
+/*
+**	Input:	short type
+**			size_t lenght
+**	Output: void* ptr
+**	Purpose:	Find a node with the place to fit the lenght
+**				Else add new data zone and try again
+**				Save ptr if they are update of the size Header during proscess
+**				The last header need to be a free node, Add data zone if they
+**				are not the place to add a free node
+**				if nothing of that happen i dont need to increment header
+*/
 
 void	*add_small(short type, size_t lenght)
 {
@@ -63,7 +64,7 @@ void	*add_small(short type, size_t lenght)
 	short	error;
 
 	if ((error = check_header_left()))
-		return (error == 1 ? add_small(type, lenght): NULL);
+		return (error == 1 ? add_small(type, lenght) : NULL);
 	node = get_free_node(type, lenght);
 	node_left = get_free_nodeleft(type, lenght);
 	if (!node_left)
@@ -89,17 +90,17 @@ void	*add_small(short type, size_t lenght)
 	return (new);
 }
 
-/**
- **	Input:	size_t lenght
- **	Output: void *ptr
- **	Purpose:	Check if they are place on headers => add_mem_header
- **				Allez sur la derniere node
- **				Mmap la taille
- */
+/*
+**	Input:	size_t lenght
+**	Output: void *ptr
+**	Purpose:	Check if they are place on headers => add_mem_header
+**				Allez sur la derniere node
+**				Mmap la taille
+*/
 
 void	*add_fat(size_t lenght)
 {
-	t_fat *tmp;
+	t_fat	*tmp;
 	size_t	node;
 
 	if (check_header_left() == 2)
@@ -115,13 +116,13 @@ void	*add_fat(size_t lenght)
 	return (tmp->ptr);
 }
 
-/**
- **	Input:	size_t lenght
- **	Output: void *ptr
- **	Purpose:	Init global and call the right function depend of the size
- */
+/*
+**	Input:	size_t lenght
+**	Output: void *ptr
+**	Purpose:	Init global and call the right function depend of the size
+*/
 
-void *malloc(size_t size)
+void	*malloc(size_t size)
 {
 	if (size <= 0)
 		return (NULL);

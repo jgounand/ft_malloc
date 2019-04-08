@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   realloc_node.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 18:23:15 by jgounand          #+#    #+#             */
+/*   Updated: 2019/04/08 18:24:05 by jgounand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/ft_malloc.h"
 
-/**
+/*
 **	Input:	t_tny *node
 **			size_t size
 **	Output:	void *new_ptr
@@ -22,7 +34,7 @@ void		*r_mall_free(t_tny *node, size_t size)
 	return (new_ptr);
 }
 
-/**
+/*
 **	Input:	t_tny **node
 **			size_t size
 **			short type
@@ -39,7 +51,7 @@ void		*r_with_node1(t_tny **node, size_t size, short type)
 	size_t c_lenght;
 
 	c_lenght = ((*node) + 1)->ptr - (*node)->ptr - ((*node) + 1)->size;
-	ft_memmove((*node) + 1, (*node) + 2, ((void *)(type ? H_MED :H_TINY) +
+	ft_memmove((*node) + 1, (*node) + 2, ((void *)(type ? H_MED : H_TINY) +
 	sizeof(t_tny) * MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T)) -
 	(void *)((*node) + 2)));
 	(*node)->size = size;
@@ -55,7 +67,7 @@ void		*r_with_node1(t_tny **node, size_t size, short type)
 	return ((*node)->ptr);
 }
 
-/**
+/*
 **	Input:	t_tny **node
 **			size_t size
 **			short type
@@ -68,9 +80,10 @@ void		*r_with_node1(t_tny **node, size_t size, short type)
 
 void		*r_with_node(t_tny **node, size_t size, short type)
 {
-	long	size_free = 0;
+	long	size_free;
 	void	*ptr;
 
+	size_free = 0;
 	if (diff_data(*node))
 		size_free = (*node)->size;
 	else

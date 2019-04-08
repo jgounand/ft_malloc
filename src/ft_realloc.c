@@ -6,13 +6,13 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 12:27:24 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:58:23 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:29:45 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
-/**
+/*
 **	Input:	t_tny *node
 **			size_t size
 **	Output:	short [0-2]
@@ -37,7 +37,7 @@ static short	need_alloc(t_tny *node, size_t size)
 	return (1);
 }
 
-/**
+/*
 **	Input:	void *ptr
 **			size_t size
 **			short type
@@ -64,7 +64,7 @@ static void		*ft_realloc_small(void *ptr, size_t size, short type)
 		return (r_with_node(&node, size, type));
 }
 
-/**
+/*
 **	Input:	void *ptr
 **			size_t size
 **	Output:	void *new_ptr
@@ -74,7 +74,7 @@ static void		*ft_realloc_small(void *ptr, size_t size, short type)
 **				free the old ptr
 */
 
-static void			*ft_realloc_fat(void *ptr, size_t size)
+static void		*ft_realloc_fat(void *ptr, size_t size)
 {
 	t_fat	*fat;
 	void	*new;
@@ -92,7 +92,7 @@ static void			*ft_realloc_fat(void *ptr, size_t size)
 	return (new);
 }
 
-/**
+/*
 **	Input:	void *ptr
 **			size_t size
 **	Output:	void *new_ptr

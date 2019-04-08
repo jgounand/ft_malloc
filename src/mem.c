@@ -6,26 +6,26 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/20 17:26:46 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:20:08 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
-/**
- **	Input:	t_tny **tmp
- **			short type
- **			short position
- **	Output: void
- **	Purpose:	add data on both Header Tiny and Med
- **				
- */
+/*
+**	Input:	t_tny **tmp
+**			short type
+**			short position
+**	Output: void
+**	Purpose:	add data on both Header Tiny and Med
+*/
 
-void	add_mem_data(t_tny **tmp, short type, short position)
+void		add_mem_data(t_tny **tmp, short type, short position)
 {
 	t_tny	*tmp2;
+	t_start	*start;
 
-	t_start	*start = get_new_data(((*tmp) -1)->ptr);
+	start = get_new_data(((*tmp) - 1)->ptr);
 	if (type)
 	{
 		tmp2 = H_TINY + MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
@@ -35,35 +35,34 @@ void	add_mem_data(t_tny **tmp, short type, short position)
 	else
 	{
 		tmp2 = H_MED + MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
-		((*tmp) +position)->ptr = get_addr(start->start);
+		((*tmp) + position)->ptr = get_addr(start->start);
 		tmp2->ptr = get_addr(start->start + MAX_TINY);
 	}
 	((*tmp) + position)->size = -MAX_MED;
-	tmp2->size = - MAX_MED;
+	tmp2->size = -MAX_MED;
 	if (!position)
 	{
 		add_rm_header(4, type);
 		return ;
 	}
 	add_rm_header(0, type);
-	return;
+	return ;
 }
 
+/*
+**	Input:	unsigned int nb_pages[4]
+**	Output:	t_mem *new
+**	Purpose:	mmap the futur global, with the size of each header and the
+**				size of the global variable
+*/
 
-/**
- **	Input:	unsigned int nb_pages[4]
- **	Output:	t_mem *new
- **	Purpose:	mmap the futur global, with the size of each header and the
- **				size of the global variable
- */
-
-t_mem	*mem_header(unsigned int nb_pages[4])
+t_mem		*mem_header(unsigned int nb_pages[4])
 {
 	t_mem	*new;
 	size_t	size;
 
 	size = nb_pages[0] + nb_pages[1] + nb_pages[2] + nb_pages[3];
-	new = mmap(NULL, sizeof(t_mem) + getpagesize() * size *NB_PAGES ,
+	new = mmap(NULL, sizeof(t_mem) + getpagesize() * size * NB_PAGES,
 	PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	if (!new)
 	{
@@ -73,11 +72,11 @@ t_mem	*mem_header(unsigned int nb_pages[4])
 	return (new);
 }
 
-/**
- **	Input:
- **	Output:	void *new
- **	Purpose:	mmap the place where data will be
- */
+/*
+**	Input:
+**	Output:	void *new
+**	Purpose:	mmap the place where data will be
+*/
 
 void		*mem_data(void)
 {
@@ -94,13 +93,13 @@ void		*mem_data(void)
 	return (new);
 }
 
-/**
- **	Input:
- **	Output:
- **	Purpose:	Init the first header of Tiny, Small and Data
- */
+/*
+**	Input:
+**	Output:
+**	Purpose:	Init the first header of Tiny, Small and Data
+*/
 
-bool	init_headers(void)
+bool		init_headers(void)
 {
 	t_tny	*tny;
 	t_start	*start;
@@ -111,24 +110,24 @@ bool	init_headers(void)
 		return (1);
 	tny = H_TINY;
 	tny->ptr = get_addr(start->start);
-	tny->size = - MAX_TINY;
+	tny->size = -MAX_TINY;
 	tny = H_MED;
 	tny->ptr = get_addr(start->start + MAX_TINY);
-	tny->size = - MAX_MED;
+	tny->size = -MAX_MED;
 	TINY_SIZE--;
 	MED_SIZE--;
 	A_SIZE--;
 	return (0);
 }
 
-/**
- **	Input:
- **	Output:	t_mem *g_mem
- **	Purpose:	If g_mem doen t exit, need to alloc
- **				Init size of the header and init the first header
- */
+/*
+**	Input:
+**	Output:	t_mem *g_mem
+**	Purpose:	If g_mem doen t exit, need to alloc
+**				Init size of the header and init the first header
+*/
 
-t_mem	*init_mem(void)
+t_mem		*init_mem(void)
 {
 	unsigned int	header_size[4];
 
@@ -152,4 +151,3 @@ t_mem	*init_mem(void)
 		return (NULL);
 	return (g_mem);
 }
-

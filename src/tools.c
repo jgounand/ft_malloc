@@ -6,31 +6,31 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 04:00:29 by jgounand          #+#    #+#             */
-/*   Updated: 2018/04/23 04:02:30 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:22:23 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
-/**
- **	Input:	void *ptr
- **	Output:	void *ptr
- **	Purpose:	return the next ptr % 8
- */
+/*
+**	Input:	void *ptr
+**	Output:	void *ptr
+**	Purpose:	return the next ptr % 8
+*/
 
-void *get_addr(void *ptr)
+void	*get_addr(void *ptr)
 {
 	while ((uint32_t)ptr % 16)
 		ptr++;
 	return (ptr);
 }
 
-/**
- **	Input:	short add
- **			short type
- **	Output:
- **	Purpose:	add or remove header_size 
- */
+/*
+**	Input:	short add
+**			short type
+**	Output:
+**	Purpose:	add or remove header_size
+*/
 
 void	add_rm_header(short add, short type)
 {
@@ -54,12 +54,12 @@ void	add_rm_header(short add, short type)
 		MED_SIZE--;
 	}
 }
-/**
- **	Input:
- **	Output:
- **	Purpose:	Check if they are place on headers => add_mem_header
- **				
- */
+
+/*
+**	Input:
+**	Output:
+**	Purpose:	Check if they are place on headers => add_mem_header
+*/
 
 short	check_header_left(void)
 {
@@ -81,13 +81,13 @@ short	check_header_left(void)
 	return (0);
 }
 
-/**
- **	Input:	void *ptr
-			bool nextw
- **	Output:
- **	Purpose:	Find the node where ptr is inside of the range allocate of start
- **				If next return nb node else return the node find
- */
+/*
+**	Input:	void *ptr
+**			bool nextw
+**	Output:
+**	Purpose:	Find the node where ptr is inside of the range allocate of start
+**				If next return nb node else return the node find
+*/
 
 t_start	*get_start(void *ptr, bool next)
 {
@@ -99,7 +99,7 @@ t_start	*get_start(void *ptr, bool next)
 	while (node--)
 	{
 		if (ptr >= start->start && ptr < start->start + MAX_MED + MAX_TINY)
-			break;
+			break ;
 		start++;
 	}
 	if (next)
@@ -107,13 +107,13 @@ t_start	*get_start(void *ptr, bool next)
 	return (start);
 }
 
-/**
- **	Input:	void *ptr
- **	Output:
- **	Purpose:	If they are no Header palce left, alloc need place
- **				If its not the last header start return the next one
- **				Add new start at the end
- */
+/*
+**	Input:	void *ptr
+**	Output:
+**	Purpose:	If they are no Header palce left, alloc need place
+**				If its not the last header start return the next one
+**				Add new start at the end
+*/
 
 t_start	*get_new_data(void *ptr)
 {
@@ -128,7 +128,7 @@ t_start	*get_new_data(void *ptr)
 	tmp = mem_data();
 	if (!tmp)
 		return (NULL);
-	new->start= tmp;
+	new->start = tmp;
 	A_SIZE--;
 	return (new);
 }

@@ -1,17 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_header.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 18:30:21 by jgounand          #+#    #+#             */
+/*   Updated: 2019/04/08 18:32:34 by jgounand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/ft_malloc.h"
 
-/**
- **	Input:	t_tny **tmp
- **			short type
- **	Output:	size_t bytes_cpy
- **	Purpose:	Get size beetwen MAX position header and the current + 1
- **				Move tmp + 1 => tmp + 2 to have the place to add the free node
- */
+/*
+**	Input:	t_tny **tmp
+**			short type
+**	Output:	size_t bytes_cpy
+**	Purpose:	Get size beetwen MAX position header and the current + 1
+**				Move tmp + 1 => tmp + 2 to have the place to add the free node
+*/
 
-size_t push_header(t_tny **tmp, short type)
+size_t	push_header(t_tny **tmp, short type)
 {
-	void *max;
-	size_t bytes_cpy;
+	void	*max;
+	size_t	bytes_cpy;
 
 	if (type == 0)
 	{
@@ -29,17 +41,16 @@ size_t push_header(t_tny **tmp, short type)
 	return (bytes_cpy);
 }
 
-/**
- **	Input:	t_tny **tmp
- **			short type
- **			size_t bytes_cpy
- **	Output:	size_t bytes_cpy
- **	Purpose:	Move tmp + 2 => tmp + 1 to delete the node tmp + 1
- */
+/*
+**	Input:	t_tny **tmp
+**			short type
+**			size_t bytes_cpy
+**	Output:	size_t bytes_cpy
+**	Purpose:	Move tmp + 2 => tmp + 1 to delete the node tmp + 1
+*/
 
 size_t	remove_header(t_tny **tmp, size_t bytes_cpy, short type)
 {
-
 	ft_memmove((*tmp) + 1, (*tmp) + 2, bytes_cpy);
 	if (!type)
 		TINY_SIZE++;

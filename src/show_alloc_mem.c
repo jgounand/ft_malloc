@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/18 18:39:58 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:10:33 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ char	*ft_strrev(char *str)
 
 void	print_addrhex(int p)
 {
-	char *str;
-	char result[9];
-	short i = 0;
+	char	*str;
+	char	result[9];
+	short	i;
 
+	i = 0;
 	ft_bzero(result, 9);
 	ft_memset(result, '0', 8);
 	str = "0123456789ABCDEF";
@@ -57,7 +58,7 @@ void	print_ligne_alloc(void *ptr, long size)
 	print_addrhex((uint32_t)ptr);
 	ft_putstr(" - ");
 	if (size >= 0)
-	print_addrhex((uint32_t)ptr + size);
+		print_addrhex((uint32_t)ptr + size);
 	else
 		print_addrhex((uint32_t)ptr - size);
 	ft_putstr(" : ");
@@ -75,41 +76,13 @@ size_t	print_lignes_tymed(short type, t_tny *node, bool all)
 	{
 		ft_putstr("TINY : ");
 		nb_node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
-
 	}
 	if (type == 1)
 	{
 		ft_putstr("SMALL : ");
 		nb_node = MAX_HEADER(t_tny, S_HEADER_M) - MED_SIZE;
-
 	}
 	print_addrhex((uint32_t)node->ptr);
-	ft_putstr("\n");
-	while (nb_node--)
-	{
-		if (node->size > 0 || all)
-		{
-			print_ligne_alloc(node->ptr,node->size);
-			total += node->size;
-		}
-		node++;
-	}
-	return (total);
-}
-
-size_t	print_lignes_fat(t_fat	*node, bool all)
-{
-	size_t nb_node;
-	size_t	total;
-
-	ft_putnbr(FAT_SIZE);
-	ft_putnbr(MAX_HEADER(t_fat, S_HEADER_F) );
-	total = 0;
-	nb_node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
-	if (nb_node == 0)
-		return (0);
-	ft_putstr("FAT : ");
-	print_addrhex((uint32_t) node->ptr);
 	ft_putstr("\n");
 	while (nb_node--)
 	{
@@ -123,15 +96,41 @@ size_t	print_lignes_fat(t_fat	*node, bool all)
 	return (total);
 }
 
-void show_alloc_mem()
+size_t	print_lignes_fat(t_fat *node, bool all)
+{
+	size_t	nb_node;
+	size_t	total;
+
+	ft_putnbr(FAT_SIZE);
+	ft_putnbr(MAX_HEADER(t_fat, S_HEADER_F));
+	total = 0;
+	nb_node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
+	if (nb_node == 0)
+		return (0);
+	ft_putstr("FAT : ");
+	print_addrhex((uint32_t)node->ptr);
+	ft_putstr("\n");
+	while (nb_node--)
+	{
+		if (node->size > 0 || all)
+		{
+			print_ligne_alloc(node->ptr, node->size);
+			total += node->size;
+		}
+		node++;
+	}
+	return (total);
+}
+
+void	show_alloc_mem(void)
 {
 	size_t	total;
 
 	init_mem();
 	total = 0;
-	total = print_lignes_tymed(0,H_TINY,0);
-	total += print_lignes_tymed(1,H_MED,0);
-	total += print_lignes_fat(H_FAT,0);
+	total = print_lignes_tymed(0, H_TINY, 0);
+	total += print_lignes_tymed(1, H_MED, 0);
+	total += print_lignes_fat(H_FAT, 0);
 	ft_putstr("Total : ");
 	ft_putnbr(total);
 	ft_putstr("\n");
