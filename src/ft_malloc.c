@@ -6,13 +6,13 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/08 18:26:14 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:29:43 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
-t_mem	*g_mem = NULL;
+t_mem		*g_mem = NULL;
 
 /*
 **	Input:	t_tny *tmp
@@ -26,7 +26,7 @@ t_mem	*g_mem = NULL;
 **				if new size == 0 => remove the header
 */
 
-void	*add_node_free(t_tny *tmp, void *ptr, bool type)
+void		*add_node_free(t_tny *tmp, void *ptr, bool type)
 {
 	size_t bytes_cpy;
 
@@ -44,7 +44,7 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 	return (NULL);
 }
 
-bool	add_small_check_error_routine(int type, size_t lenght)
+static bool	add_small_check_error_routine(int type, size_t lenght)
 {
 	short	error;
 
@@ -70,7 +70,7 @@ bool	add_small_check_error_routine(int type, size_t lenght)
 **				if nothing of that happen i dont need to increment header
 */
 
-void	*add_small(short type, size_t lenght)
+void		*add_small(short type, size_t lenght)
 {
 	void	*new;
 	t_tny	*node;
@@ -107,7 +107,7 @@ void	*add_small(short type, size_t lenght)
 **				Mmap la taille
 */
 
-void	*add_fat(size_t lenght)
+static void	*add_fat(size_t lenght)
 {
 	t_fat	*tmp;
 	size_t	node;
@@ -131,7 +131,7 @@ void	*add_fat(size_t lenght)
 **	Purpose:	Init global and call the right function depend of the size
 */
 
-void	*malloc(size_t size)
+void		*malloc(size_t size)
 {
 	if (size <= 0)
 		return (NULL);

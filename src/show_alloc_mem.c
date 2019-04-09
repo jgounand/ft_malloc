@@ -6,13 +6,13 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/08 18:10:33 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:30:27 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
-char	*ft_strrev(char *str)
+char			*ft_strrev(char *str)
 {
 	int		i;
 	int		length;
@@ -31,7 +31,7 @@ char	*ft_strrev(char *str)
 	return (str);
 }
 
-void	print_ligne_alloc(void *ptr, long size)
+static void		print_ligne_alloc(void *ptr, long size)
 {
 	print_addrhex((uint32_t)ptr);
 	ft_putstr(" - ");
@@ -44,7 +44,7 @@ void	print_ligne_alloc(void *ptr, long size)
 	ft_putendl(" octets");
 }
 
-size_t	print_lignes_tymed(short type, t_tny *node, bool all)
+static size_t	print_lignes_tymed(short type, t_tny *node, bool all)
 {
 	size_t	nb_node;
 	size_t	total;
@@ -70,7 +70,7 @@ size_t	print_lignes_tymed(short type, t_tny *node, bool all)
 	return (total);
 }
 
-size_t	print_lignes_fat(t_fat *node, bool all)
+static size_t	print_lignes_fat(t_fat *node, bool all)
 {
 	size_t	nb_node;
 	size_t	total;
@@ -96,7 +96,7 @@ size_t	print_lignes_fat(t_fat *node, bool all)
 	return (total);
 }
 
-void	show_alloc_mem(void)
+void			show_alloc_mem(void)
 {
 	size_t	total;
 

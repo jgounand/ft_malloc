@@ -27,7 +27,7 @@ OBJ_DIR =		./obj/
 
 FILENAMES =		free malloc realloc show_alloc_mem alloc_data
 
-FILENAMES =	ft_malloc show_alloc_mem ft_free mem debug ft_realloc realloc_node move_header clear_node tools free_tools defragment add_mem_header print_addrhex
+FILENAMES =	ft_malloc show_alloc_mem ft_free mem ft_realloc realloc_node move_header clear_node tools free_tools defragment add_mem_header print_addrhex
 
 
 OBJ_PATHS :=	$(addsuffix .o,$(FILENAMES))
@@ -44,7 +44,7 @@ $(NAME): $(LIBFT) $(OBJ_PATHS)
 	@ln -s $(NAME) $(LINK)
 	@echo "\033[2K\r\033[0;32m[OK] \033[0m       \033[0;33m $(NAME) created ✅\033[0m"
 
-$(OBJ_PATHS): $(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_PATHS): $(OBJ_DIR)%.o: $(SRC_DIR)%.c ./inc/ft_malloc.h
 	@/bin/mkdir -p $(OBJ_DIR)
 	@echo -e "\033[2K\r\033[0;32m[OK] \033[0m       \033[0;33m Compiling:\033[0m $<\c"
 	@$(CC) -c $(FLAGS) $(HEADERS) $< -o $@

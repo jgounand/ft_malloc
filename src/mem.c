@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/08 18:20:08 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:28:39 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void		*mem_data(void)
 **	Purpose:	Init the first header of Tiny, Small and Data
 */
 
-bool		init_headers(void)
+static bool	init_headers(void)
 {
 	t_tny	*tny;
 	t_start	*start;

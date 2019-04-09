@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 15:07:52 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:47:28 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include "../libft/inc/libft.h"
 
 # define TINY	512
-# define SMALL	2024
-# define NB_PAGES		32 //32 pour le projet
+# define SMALL	1024
+# define NB_PAGES		26
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
 # define H_TINY (t_tny *)((void *)(g_mem + 1) + getpagesize() * S_HEADER_A)
@@ -35,23 +35,23 @@
 # define A_SIZE g_mem->max_size[3]
 # define MAX_HEADER(s,n) getpagesize() * (n) / sizeof(s)
 
-typedef struct s_tiny
+typedef struct	s_tiny
 {
 	void			*ptr;
 	int				size;
 }				t_tny;
 
-typedef struct s_fat
+typedef struct	s_fat
 {
 	void			*ptr;
 	size_t			size;
 }				t_fat;
 
-typedef t_tny t_med;
+typedef t_tny	t_med;
 
 typedef struct	s_mem
 {
-	size_t				max_size[4]; // remplacer par nb_pages_data
+	size_t				max_size[4];
 	unsigned int		nb_pages_header[4];
 }				t_mem;
 
@@ -66,61 +66,52 @@ typedef struct	s_infonode
 	t_tny	*ptr_node;
 }				t_infonode;
 
-size_t current_size;
 extern	t_mem	*g_mem;
 
-void show_alloc_mem_debug(int fd);
-void show_alloc_mem(void);
-void *realloc(void *ptr, size_t size);
-void *malloc(size_t size);
-void free(void *ptr);
+void			show_alloc_mem(void);
+void			*realloc(void *ptr, size_t size);
+void			*malloc(size_t size);
+void			free(void *ptr);
 
-t_fat	*get_fat(void *ptr);
+bool			add_mem_header(short type);
 
-t_mem	*init_mem(void);
-void free(void *ptr);
-short gettype(void *ptr);
-t_mem	*init_mem(void);
-bool	add_mem_header(short type);
-void	*get_data(void *ptr,short type, size_t lengh, t_tny *current);
-void *get_addr(void *ptr);
-t_start	*get_start(void *ptr, bool next);
-t_start	*get_new_data(void *ptr);
-void	clear_header(void);
-t_tny	*ret_node(t_tny	*tofree, void *ptr);
-short	get_type(void *ptr);
-void	*add_node_free(t_tny *tmp, void *ptr, bool type);
-void	try_defragment(t_tny *tofree);
-bool	diff_data(t_tny *tofree);
-short check_header_left();
-void	add_mem_data(t_tny **tmp, short type, short position);
-void	print_addrhex(int p);
-void	add_rm_header(short add, short type);
-short	check_header_left(void);
-void	*add_small(short type, size_t lenght);
+size_t			get_free_nodeleft(short type, size_t lenght);
+t_tny			*get_free_node(short type, size_t lenght);
+void			check_header_zero(short type);
 
-size_t get_free_nodeleft(short type, size_t lenght);
-t_tny	*get_free_node(short type, size_t lenght);
+void			try_defragment(t_tny *tofree);
 
+short			get_type(void *ptr);
+bool			not_begin_data(t_tny *tofree);
+bool			diff_data(t_tny *tofree);
 
-void		*r_mall_free(t_tny *node, size_t size);
+t_fat			*get_fat(void *ptr);
+t_tny			*ret_node(t_tny *tofree, void *ptr);
 
-void		*r_with_node1(t_tny **node, size_t size, short type);
+void			*add_node_free(t_tny *tmp, void *ptr, bool type);
 
-void		*r_with_node(t_tny **node, size_t size, short type);
+void			*add_small(short type, size_t lenght);
 
+void			add_mem_data(t_tny **tmp, short type, short position);
+t_mem			*mem_header(unsigned int nb_pages[4]);
+void			*mem_data(void);
+t_mem			*init_mem(void);
 
-size_t push_header(t_tny **tmp, short type);
-size_t	remove_header(t_tny **tmp, size_t bytes_cpy, short type);
-bool	not_begin_data(t_tny *tofree);
+size_t			push_header(t_tny **tmp, short type);
+size_t			remove_header(t_tny **tmp, size_t bytes_cpy, short type);
 
-void	check_header_zero(short type);
+void			print_addrhex(int p);
 
-void		*mem_data(void);
-t_mem	*mem_header(unsigned int nb_pages[4]);
+void			*r_with_node(t_tny **node, size_t size, short type);
+void			*r_with_node1(t_tny **node, size_t size, short type);
+void			*r_mall_free(t_tny *node, size_t size);
 
-char	*ft_strrev(char *str);
-//DEBUG
-void	debug_check_MAX_HEADER(void);
-void check_ptr_prensent(char *tab[], size_t size);
+char			*ft_strrev(char *str);
+
+void			*get_addr(void *ptr);
+void			add_rm_header(short add, short type);
+short			check_header_left(void);
+t_start			*get_start(void *ptr, bool next);
+t_start			*get_new_data(void *ptr);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 18:34:14 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 11:43:12 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:26:41 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 **				Memove to delete tofree + 1
 */
 
-void	def_neg_samedata(t_tny **tofree, short type)
+static void	def_neg_samedata(t_tny **tofree, short type)
 {
 	size_t	size;
 
@@ -45,7 +45,7 @@ void	def_neg_samedata(t_tny **tofree, short type)
 **				Memove to delete tofree
 */
 
-void	def_neg_difdata(t_tny **tofree, short type)
+static void	def_neg_difdata(t_tny **tofree, short type)
 {
 	size_t	size;
 
@@ -72,7 +72,7 @@ void	def_neg_difdata(t_tny **tofree, short type)
 **					else tofree + 1 ->ptr - tofree->ptr
 */
 
-void	def_pos(t_tny **tofree, short type)
+static void	def_pos(t_tny **tofree, short type)
 {
 	if (!diff_data((*tofree)))
 		(*tofree)->size = -(((*tofree) + 1)->ptr - (*tofree)->ptr);
@@ -89,7 +89,7 @@ void	def_pos(t_tny **tofree, short type)
 **					else adjut size of the tofree - 1
 */
 
-void	def_prevneg_samedata(t_tny **tofree, short type)
+static void	def_prevneg_samedata(t_tny **tofree, short type)
 {
 	size_t	size;
 
@@ -114,7 +114,7 @@ void	def_prevneg_samedata(t_tny **tofree, short type)
 **	Purpose:	Try to fusion 2 free nodes together
 */
 
-void	try_defragment(t_tny *tofree)
+void		try_defragment(t_tny *tofree)
 {
 	short	type;
 
@@ -133,6 +133,4 @@ void	try_defragment(t_tny *tofree)
 		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1))
 			def_prevneg_samedata(&tofree, type);
 	}
-	if (tofree->size == -MAX_TINY)
-		exit (45);
 }

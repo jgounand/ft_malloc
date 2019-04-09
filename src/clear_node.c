@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 11:25:10 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 11:26:13 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:28:09 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 **				Break if they are no node left or node free > lenght
 */
 
-size_t	get_free_nodeleft(short type, size_t lenght)
+size_t			get_free_nodeleft(short type, size_t lenght)
 {
 	t_tny	*tmp;
 	size_t	node_left;
@@ -46,7 +46,7 @@ size_t	get_free_nodeleft(short type, size_t lenght)
 **				Break if they are no node left or node free > lenght
 */
 
-t_tny	*get_free_node(short type, size_t lenght)
+t_tny			*get_free_node(short type, size_t lenght)
 {
 	t_tny	*tmp;
 	size_t	node_left;
@@ -72,7 +72,7 @@ t_tny	*get_free_node(short type, size_t lenght)
 **				beetween tmp->ptr and the max
 */
 
-size_t	get_bytes_cpy(short type, t_tny **tmp)
+static size_t	get_bytes_cpy(short type, t_tny **tmp)
 {
 	void	*max;
 	size_t	bytes_cpy;
@@ -99,7 +99,7 @@ size_t	get_bytes_cpy(short type, t_tny **tmp)
 **				Delete it
 */
 
-void	check_header_zero(short type)
+void			check_header_zero(short type)
 {
 	t_tny	*tmp;
 	size_t	bytes_cpy;
