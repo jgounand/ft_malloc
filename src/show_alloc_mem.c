@@ -31,28 +31,6 @@ char	*ft_strrev(char *str)
 	return (str);
 }
 
-void	print_addrhex(int p)
-{
-	char	*str;
-	char	result[9];
-	short	i;
-
-	i = 0;
-	ft_bzero(result, 9);
-	ft_memset(result, '0', 8);
-	str = "0123456789ABCDEF";
-	while (p)
-	{
-		result[i] = (str[p % 16]);
-		p /= 16;
-		i++;
-	}
-	ft_putstr("0x");
-	if (result[8] == '0')
-		result[8] = '\0';
-	ft_putstr(ft_strrev(result));
-}
-
 void	print_ligne_alloc(void *ptr, long size)
 {
 	print_addrhex((uint32_t)ptr);
@@ -73,15 +51,11 @@ size_t	print_lignes_tymed(short type, t_tny *node, bool all)
 
 	total = 0;
 	if (type == 0)
-	{
 		ft_putstr("TINY : ");
-		nb_node = MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
-	}
 	if (type == 1)
-	{
 		ft_putstr("SMALL : ");
-		nb_node = MAX_HEADER(t_tny, S_HEADER_M) - MED_SIZE;
-	}
+	nb_node = type == 0 ? MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE :
+			MAX_HEADER(t_tny, S_HEADER_M) - MED_SIZE;
 	print_addrhex((uint32_t)node->ptr);
 	ft_putstr("\n");
 	while (nb_node--)
@@ -127,7 +101,6 @@ void	show_alloc_mem(void)
 	size_t	total;
 
 	init_mem();
-	total = 0;
 	total = print_lignes_tymed(0, H_TINY, 0);
 	total += print_lignes_tymed(1, H_MED, 0);
 	total += print_lignes_fat(H_FAT, 0);

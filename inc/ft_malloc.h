@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:50:33 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:07:52 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 # include <string.h>
 # include <sys/mman.h>
-# include "../libft/libft.h"
+# include "../libft/inc/libft.h"
 
-# define TINY	256
-# define SMALL	1024
+# define TINY	512
+# define SMALL	2024
 # define NB_PAGES		32 //32 pour le projet
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
@@ -97,6 +97,7 @@ void	add_mem_data(t_tny **tmp, short type, short position);
 void	print_addrhex(int p);
 void	add_rm_header(short add, short type);
 short	check_header_left(void);
+void	*add_small(short type, size_t lenght);
 
 size_t get_free_nodeleft(short type, size_t lenght);
 t_tny	*get_free_node(short type, size_t lenght);
@@ -118,6 +119,7 @@ void	check_header_zero(short type);
 void		*mem_data(void);
 t_mem	*mem_header(unsigned int nb_pages[4]);
 
+char	*ft_strrev(char *str);
 //DEBUG
 void	debug_check_MAX_HEADER(void);
 void check_ptr_prensent(char *tab[], size_t size);

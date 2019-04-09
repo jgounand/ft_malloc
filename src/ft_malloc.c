@@ -44,6 +44,20 @@ void	*add_node_free(t_tny *tmp, void *ptr, bool type)
 	return (NULL);
 }
 
+bool	add_small_check_error_routine(int type, size_t lenght)
+{
+	short	error;
+
+	if ((error = check_header_left()) == 1)
+		add_small(type, lenght);
+	if (error == 2)
+		return (1);
+	add_rm_header(0, type);
+	if (check_header_left() == 2)
+		return (1);
+	return (0);
+}
+
 /*
 **	Input:	short type
 **			size_t lenght
@@ -80,12 +94,7 @@ void	*add_small(short type, size_t lenght)
 	else
 		add_rm_header(1, type);
 	node->size = lenght;
-	if ((error = check_header_left()) == 1)
-		add_small(type, lenght);
-	if (error == 2)
-		return (NULL);
-	add_rm_header(0, type);
-	if (check_header_left() == 2)
+	if (add_small_check_error_routine(type, lenght))
 		return (NULL);
 	return (new);
 }

@@ -6,16 +6,16 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 21:15:30 by jgounand          #+#    #+#             */
-/*   Updated: 2018/05/24 14:50:22 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 11:23:13 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
 
-/**
- **	Input:	void *ptr
- **	Output:	t_fat *node
- **	Purpose:	Check on Header fat if ptr exist
+/*
+**	Input:	void *ptr
+**	Output:	t_fat *node
+**	Purpose:	Check on Header fat if ptr exist
 */
 
 t_fat		*get_fat(void *ptr)
@@ -28,19 +28,20 @@ t_fat		*get_fat(void *ptr)
 	while (node)
 	{
 		if (ptr == fat->ptr)
-			break;
+			break ;
 		fat++;
 		node--;
 	}
 	return ((node ? fat : NULL));
 }
-/**
- **	Input:	t_tny *tofree
- **	Output:	bool diff_data
- **	Purpose:	Check  if tofree->ptr and (tofree + 1)->ptr same header start
- */
 
-t_tny	*ret_node(t_tny	*tofree, void *ptr)
+/*
+**	Input:	t_tny *tofree
+**	Output:	bool diff_data
+**	Purpose:	Check  if tofree->ptr and (tofree + 1)->ptr same header start
+*/
+
+t_tny		*ret_node(t_tny *tofree, void *ptr)
 {
 	short	type;
 	size_t	node;
@@ -55,59 +56,61 @@ t_tny	*ret_node(t_tny	*tofree, void *ptr)
 	while (node)
 	{
 		if (ptr == tofree->ptr)
-			break;
+			break ;
 		tofree++;
 		node--;
 	}
-	return	(node ? tofree : NULL);
+	return (node ? tofree : NULL);
 }
 
-/**
- **	Input:	t_tny *tofree
+/*
+**	Input:	t_tny *tofree
 **			void *ptr
- **	Output:	void
- **	Purpose:	Check if the ptr exist on the Header and free it
- */
+**	Output:	void
+**	Purpose:	Check if the ptr exist on the Header and free it
+*/
 
-static void free_tny_small(t_tny *tofree, void *ptr)
+static void	free_tny_small(t_tny *tofree, void *ptr)
 {
 	tofree = ret_node(tofree, ptr);
 	if (!tofree)
-		return;
+		return ;
 	else
 		try_defragment(tofree);
 }
 
-/**
- **	Input:	void *ptr
- **	Output:	int
- **	Purpose:	Check if the ptr exist on the Header
- **				alloc new size
- **				cpy the maximum
- **				free ptr
- */
+/*
+**	Input:	void *ptr
+**	Output:	int
+**	Purpose:	Check if the ptr exist on the Header
+**				alloc new size
+**				cpy the maximum
+**				free ptr
+*/
 
 static int	free_fat(void *ptr)
 {
 	t_fat	*tofree;
+	size_t	size;
 
 	tofree = get_fat(ptr);
 	if (!tofree)
 		return (0);
 	munmap(tofree->ptr, tofree->size);
-	size_t size =  (void *)(H_FAT) + sizeof(t_tny) * MAX_HEADER(t_fat, S_HEADER_F) - (void *)(tofree + 1) ;
+	size = (void *)(H_FAT) + sizeof(t_tny) *
+			MAX_HEADER(t_fat, S_HEADER_F) - (void *)(tofree + 1);
 	ft_memmove(tofree, tofree + 1, size);
 	FAT_SIZE++;
 	return (0);
 }
 
-/**
- **	Input:	void *ptr
- **	Output:
- **	Purpose:	Check if the type and free 
- */
+/*
+**	Input:	void *ptr
+**	Output:
+**	Purpose:	Check if the type and free
+*/
 
-void free(void *ptr)
+void		free(void *ptr)
 {
 	short	type;
 
@@ -115,7 +118,7 @@ void free(void *ptr)
 		return ;
 	type = get_type(ptr);
 	if (type == 3)
-		return;
+		return ;
 	if (type == 1 || type == 0)
 		free_tny_small(!type ? H_TINY : H_MED, ptr);
 	else if (type == 2)

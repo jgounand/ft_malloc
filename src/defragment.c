@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 18:34:14 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/08 18:40:46 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 11:43:12 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ void	def_prevneg_samedata(t_tny **tofree, short type)
 	else
 		((*tofree) - 1)->size = -((*tofree)->ptr - ((*tofree) - 1)->ptr)
 			+ (*tofree)->size;
-	size =  (void *)(type ? H_MED :H_TINY) + sizeof(t_tny) *
+	size = (void *)(type ? H_MED : H_TINY) + sizeof(t_tny) *
 		MAX_HEADER(t_tny, (type ? S_HEADER_M : S_HEADER_T))
-		- (void *)((*tofree) + 1) ;
+		- (void *)((*tofree) + 1);
 	ft_memmove(*tofree, (*tofree) + 1, size);
 	if (!type)
 		TINY_SIZE++;
@@ -124,13 +124,15 @@ void	try_defragment(t_tny *tofree)
 		if (!diff_data(tofree))
 			def_neg_samedata(&tofree, type);
 		else
-			def_neg_difdata(&tofree,type);
+			def_neg_difdata(&tofree, type);
 	}
 	else
-		def_pos(&tofree,type);
+		def_pos(&tofree, type);
 	if (not_begin_data(tofree))
 	{
-		if ((tofree -1)->size < 0 && !diff_data(tofree - 1))
-		def_prevneg_samedata(&tofree,type);
+		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1))
+			def_prevneg_samedata(&tofree, type);
 	}
+	if (tofree->size == -MAX_TINY)
+		exit (45);
 }
