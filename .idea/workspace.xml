@@ -11,19 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="18986e72-0b27-47a8-9054-dea9b785bfb3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/inc/ft_malloc.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/ft_malloc.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/add_mem_header.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/add_mem_header.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/clear_node.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/clear_node.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/debug.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/defragment.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/defragment.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/free_tools.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/free_tools.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ft_malloc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/ft_malloc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mem.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/realloc_node.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/realloc_node.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/show_alloc_mem.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/show_alloc_mem.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test0.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/test0.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,11 +28,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/mem.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="131" column="32" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
+            <state relative-caret-position="530">
+              <caret line="84" column="39" selection-start-line="84" selection-start-column="39" selection-end-line="84" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -67,17 +58,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="49" selection-start-line="49" selection-end-line="49" />
+            <state relative-caret-position="1692">
+              <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inc/ft_malloc.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="54" column="36" lean-forward="true" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
+            <state relative-caret-position="795">
+              <caret line="53" column="35" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -131,9 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>show_all</find>
-      <find>show_alloc_mem(</find>
-      <find>&gt; 8</find>
       <find>get_addr(v</find>
       <find>bzero</find>
       <find>32</find>
@@ -159,8 +147,11 @@
       <find>get_new</find>
       <find>check_header_left</find>
       <find>max_size</find>
-      <find>nb_pages</find>
       <find>nb_pages[</find>
+      <find>nb_pages</find>
+      <find>MAX_TINY</find>
+      <find>mem_data</find>
+      <find>mem_data(</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -281,15 +272,16 @@
       <workItem from="1552894265116" duration="12928000" />
       <workItem from="1553170446411" duration="246000" />
       <workItem from="1554797275972" duration="3131000" />
-      <workItem from="1554808929547" duration="1783000" />
+      <workItem from="1554808929547" duration="2358000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="250145000" />
+    <option name="totallyTimeSpent" value="250720000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="2560" height="1440" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49879518" visible="true" weight="0.30420968" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -314,6 +306,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/ft_malloc.c</url>
+          <line>3</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/test" />
@@ -393,13 +396,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="49" selection-start-line="49" selection-end-line="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ft_realloc.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1665">
@@ -435,17 +431,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/mem.c">
+    <entry file="file://$PROJECT_DIR$/inc/ft_malloc.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="131" column="32" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
+        <state relative-caret-position="795">
+          <caret line="53" column="35" selection-start-line="53" selection-start-column="35" selection-end-line="53" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inc/ft_malloc.h">
+    <entry file="file://$PROJECT_DIR$/src/ft_malloc.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="54" column="36" lean-forward="true" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
+        <state relative-caret-position="1692">
+          <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/mem.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="84" column="39" selection-start-line="84" selection-start-column="39" selection-end-line="84" selection-end-column="39" />
         </state>
       </provider>
     </entry>

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:50:34 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 17:47:28 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/04/09 18:28:07 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # define TINY	512
 # define SMALL	1024
-# define NB_PAGES		26
+# define NB_PAGES		1
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
 # define H_TINY (t_tny *)((void *)(g_mem + 1) + getpagesize() * S_HEADER_A)
