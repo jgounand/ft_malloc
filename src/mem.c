@@ -22,29 +22,18 @@
 
 void		add_mem_data(t_tny **tmp, short type, short position)
 {
-	t_tny	*tmp2;
 	t_start	*start;
 
 	start = get_new_data(((*tmp) - 1)->ptr);
 	if (type)
 	{
-		tmp2 = H_TINY + MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE;
-		tmp2->ptr = get_addr(start->start);
-		((*tmp) + position)->ptr = get_addr(start->start + MAX_TINY);
+		((*tmp) + position)->ptr = get_addr(start->start_med);
 	}
 	else
 	{
-		tmp2 = H_MED + MAX_HEADER(t_med, S_HEADER_M) - MED_SIZE;
-		((*tmp) + position)->ptr = get_addr(start->start);
-		tmp2->ptr = get_addr(start->start + MAX_TINY);
+		((*tmp) + position)->ptr = get_addr(start->start_tiny);
 	}
-	((*tmp) + position)->size = -MAX_MED;
-	tmp2->size = -MAX_MED;
-	if (!position)
-	{
-		add_rm_header(4, type);
-		return ;
-	}
+	((*tmp) + position)->size = - getpagesize();
 	add_rm_header(0, type);
 	return ;
 }
@@ -78,18 +67,18 @@ t_mem		*mem_header(unsigned int nb_pages[4])
 **	Purpose:	mmap the place where data will be
 */
 
-void		*mem_data(void)
+void		*mem_data(short size)
 {
 	void	*new;
 
-	new = mmap(NULL, MAX_TINY + MAX_MED, PROT_READ | PROT_WRITE, MAP_ANON |
+	new = mmap(NULL, size * getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON |
 			MAP_PRIVATE, -1, 0);
 	if (!new)
 	{
 		write(2, "ERROR MMAP in mem_data() mem.c\n", 20);
 		return (NULL);
 	}
-	ft_bzero(new, MAX_TINY + MAX_MED);
+	ft_bzero(new, size * getpagesize());
 	return (new);
 }
 
@@ -103,17 +92,20 @@ static bool	init_headers(void)
 {
 	t_tny	*tny;
 	t_start	*start;
+	unsigned short	size;
 
+	size = 1;
 	start = (t_start *)(g_mem + 1);
-	start->start = mem_data();
-	if (!start->start)
+	start->start_tiny = mem_data(size);
+	start->start_med = mem_data(size);
+	if (!start->start_med || !start->start_tiny)
 		return (1);
 	tny = H_TINY;
-	tny->ptr = get_addr(start->start);
-	tny->size = -MAX_TINY;
+	tny->ptr = get_addr(start->start_tiny);
+	tny->size = - size * getpagesize();
 	tny = H_MED;
-	tny->ptr = get_addr(start->start + MAX_TINY);
-	tny->size = -MAX_MED;
+	tny->ptr = get_addr(start->start_med);
+	tny->size = - size * getpagesize();
 	TINY_SIZE--;
 	MED_SIZE--;
 	A_SIZE--;

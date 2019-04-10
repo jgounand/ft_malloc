@@ -36,8 +36,16 @@ void		*add_node_free(t_tny *tmp, void *ptr, bool type)
 		(tmp + 1)->size = -((tmp + 2)->ptr - (tmp + 1)->ptr);
 	else
 	{
-		(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start)
-		+ MAX_TINY + (type ? MAX_MED : 0)) - (tmp + 1)->ptr);
+	    if (type == 0)
+        {
+			(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start_tiny)
+								 + getpagesize()) - (tmp + 1)->ptr);
+        }
+	    else
+		{
+			(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start_med)
+								 + getpagesize()) - (tmp + 1)->ptr);
+		}
 		if (!(tmp + 1)->size)
 			remove_header(&tmp, bytes_cpy, type);
 	}

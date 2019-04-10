@@ -58,6 +58,8 @@ typedef struct	s_mem
 typedef struct	s_start
 {
 	void *start;
+    void *start_tiny;
+	void *start_med;
 }				t_start;
 
 typedef struct	s_infonode

@@ -49,8 +49,12 @@ static void	def_neg_difdata(t_tny **tofree, short type)
 {
 	size_t	size;
 
-	(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start)
-				+ MAX_TINY + (type ? MAX_MED : 0)) - (*tofree)->ptr);
+	if (type == 0)
+	(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_tiny)
+				+ getpagesize()) - (*tofree)->ptr);
+	if (type == 0)
+		(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_med)
+							 + getpagesize()) - (*tofree)->ptr);
 	if ((*tofree)->size > -8)
 	{
 		size = ((void *)(type ? H_MED : H_TINY) + (sizeof(t_tny))
@@ -76,9 +80,19 @@ static void	def_pos(t_tny **tofree, short type)
 {
 	if (!diff_data((*tofree)))
 		(*tofree)->size = -(((*tofree) + 1)->ptr - (*tofree)->ptr);
-	else
-		(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start)
-					+ MAX_TINY + (type ? MAX_MED : 0)) - (*tofree)->ptr);
+	else {
+		if (type == 0)
+		{
+			(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_tiny)
+								 + getpagesize()) - (*tofree)->ptr);
+
+		}
+		else {
+			(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_med)
+								 + getpagesize()) - (*tofree)->ptr);
+
+		}
+	}
 }
 
 /*

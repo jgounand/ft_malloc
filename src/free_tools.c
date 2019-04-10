@@ -28,10 +28,9 @@ short	get_type(void *ptr)
 	t_start	*start;
 
 	start = get_start(ptr, 0);
-	if (ptr < start->start + MAX_TINY && ptr >= start->start)
+	if (ptr < start->start_tiny + getpagesize() && ptr >= start->start_tiny)
 		return (0);
-	else if (ptr < start->start + MAX_TINY + MAX_MED && ptr >= start->start +
-			MAX_TINY)
+	else if (ptr < start->start_med + getpagesize() && ptr >= start->start_med)
 		return (1);
 	else if (get_fat(ptr))
 		return (2);
@@ -48,10 +47,10 @@ short	get_type(void *ptr)
 
 bool	not_begin_data(t_tny *tofree)
 {
-	void	*ptr;
+	t_start	*start;
 
-	ptr = get_start(tofree->ptr, 0)->start;
-	if (ptr == tofree->ptr || (ptr + MAX_TINY) == tofree->ptr)
+	start = get_start(tofree->ptr, 0);
+	if (start->start_tiny == tofree->ptr || start->start_med == tofree->ptr)
 		return (0);
 	return (1);
 }
@@ -62,10 +61,18 @@ bool	not_begin_data(t_tny *tofree)
 **	Purpose:	Check  if tofree->ptr and (tofree + 1)->ptr same header start
 */
 
-bool	diff_data(t_tny *tofree)
-{
-	if (get_start(tofree->ptr, 0)->start ==
-			get_start((tofree + 1)->ptr, 0)->start)
-		return (0);
+bool	diff_data(t_tny *tofree, bool type) {
+	if (type == 0)
+	{
+		if (get_start(tofree->ptr, 0)->start_tiny ==
+			get_start((tofree + 1)->ptr, 0)->start_tiny)
+			return (0);
+	}
+	else
+	{
+		if (get_start(tofree->ptr, 0)->start_med ==
+			get_start((tofree + 1)->ptr, 0)->start_med)
+			return (0);
+	}
 	return (1);
 }
