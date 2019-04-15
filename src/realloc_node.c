@@ -28,9 +28,9 @@ void		*r_mall_free(t_tny *node, size_t size)
 
 	tmp.size = node->size;
 	tmp.ptr = node->ptr;
-	new_ptr = ft_malloc(size);
+	new_ptr = malloc(size);
 	ft_memcpy(new_ptr, node->ptr, (size < (size_t)tmp.size ? size : tmp.size));
-	ft_free(tmp.ptr);
+	free(tmp.ptr);
 	return (new_ptr);
 }
 

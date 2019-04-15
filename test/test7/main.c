@@ -19,7 +19,7 @@ char	*str_new_cpy(char c, size_t i)
 	char	*str;
 
 	j = 0;
-	str = ft_malloc(i + 1);
+	str = malloc(i + 1);
 	while (j < i)
 	{
 		str[j] = c;

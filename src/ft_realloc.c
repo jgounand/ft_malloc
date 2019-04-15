@@ -95,12 +95,12 @@ static void		*ft_realloc_fat(void *ptr, size_t size)
 	if (!(fat = get_fat(ptr)))
 		return (NULL);
 	c_lenght = fat->size;
-	new = ft_malloc(size);
+	new = malloc(size);
 	if (size < c_lenght)
 		ft_memcpy(new, ptr, size);
 	else
 		ft_memcpy(new, ptr, c_lenght);
-	ft_free(ptr);
+	free(ptr);
 	return (new);
 }
 
@@ -114,7 +114,7 @@ static void		*ft_realloc_fat(void *ptr, size_t size)
 **					type 2 : realloc header fat
 */
 
-void			*ft_realloc(void *ptr, size_t size)
+void			*realloc(void *ptr, size_t size)
 {
 	short	type;
 
@@ -124,7 +124,7 @@ void			*ft_realloc(void *ptr, size_t size)
 	if (size <= 0)
 		return (NULL);
 	if (!ptr)
-		return (ft_malloc(size));
+		return (malloc(size));
 	type = get_type(ptr);
 	if (type == 0 || type == 1)
 		return (ft_realloc_small(ptr, size, type));

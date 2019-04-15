@@ -110,7 +110,7 @@ static int	free_fat(void *ptr)
 **	Purpose:	Check if the type and free
 */
 
-void		ft_free(void *ptr)
+void		free(void *ptr)
 {
 	short	type;
 

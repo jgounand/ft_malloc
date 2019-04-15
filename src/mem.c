@@ -36,7 +36,7 @@ void		add_mem_data(t_tny **tmp, short type, short position)
 	}
 	((*tmp) + position)->size = - getpagesize();
 	if (!position)
-	add_rm_header(0, type);
+	    add_rm_header(0, type);
 	return ;
 }
 
@@ -114,6 +114,35 @@ static bool	init_headers(void)
 	return (0);
 }
 
+void	init_data_firsttime()
+{
+    t_tny	*tny;
+    t_med	*med;
+    t_start	*start;
+	unsigned short	i;
+
+    tny = H_TINY + 1;
+    med = H_MED + 1;
+	start = (t_start *)(g_mem + 1) + 1;
+    i  = 0;
+    while (i++ < 25)
+    {
+    	start->start_tiny = mem_data(1);
+    	start->start_med = mem_data(1);
+    	A_SIZE--;
+    	tny->ptr = start->start_tiny;
+    	tny->size = - getpagesize();
+    	TINY_SIZE--;
+		med->ptr = start->start_med;
+		med->size = - getpagesize();
+		MED_SIZE--;
+		tny++;
+		med++;
+		start++;
+    }
+
+}
+
 /*
 **	Input:
 **	Output:	t_mem *g_mem
@@ -143,5 +172,6 @@ t_mem		*init_mem(void)
 	A_SIZE = MAX_HEADER(t_start, S_HEADER_A);
 	if (init_headers())
 		return (NULL);
+	init_data_firsttime();
 	return (g_mem);
 }

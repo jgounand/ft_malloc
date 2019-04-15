@@ -164,7 +164,7 @@ static void	*add_fat(size_t lenght)
 **	Purpose:	Init global and call the right function depend of the size
 */
 
-void		*ft_malloc(size_t size)
+void		*malloc(size_t size)
 {
 	ft_putstr("malloc size :");
 	ft_putnbr(size);

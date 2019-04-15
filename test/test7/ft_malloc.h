@@ -71,9 +71,9 @@ typedef struct	s_infonode
 extern	t_mem	*g_mem;
 
 void			show_alloc_mem(void);
-void			*ft_realloc(void *ptr, size_t size);
-void			*ft_malloc(size_t size);
-void			ft_free(void *ptr);
+void			*realloc(void *ptr, size_t size);
+void			*malloc(size_t size);
+void			free(void *ptr);
 
 bool			add_mem_header(short type);
 

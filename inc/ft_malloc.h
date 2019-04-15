@@ -17,8 +17,8 @@
 # include <sys/mman.h>
 # include "../libft/inc/libft.h"
 
-# define TINY	256
-# define SMALL	512
+# define TINY	512
+# define SMALL	1024
 # define NB_PAGES		1
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
@@ -71,9 +71,9 @@ typedef struct	s_infonode
 extern	t_mem	*g_mem;
 
 void			show_alloc_mem(void);
-void			*ft_realloc(void *ptr, size_t size);
-void			*ft_malloc(size_t size);
-void			ft_free(void *ptr);
+void			*realloc(void *ptr, size_t size);
+void			*malloc(size_t size);
+void			free(void *ptr);
 
 bool			add_mem_header(short type);
 
