@@ -3,5 +3,5 @@
 
 ./ft_malloc a 1024 2> tmp;
 while [ $? -eq 0 ]; do
-    ./a.out a 1024 2>tmp;
+    ./ft_malloc a 1024 2>tmp;
 done

@@ -1,6 +1,6 @@
 CC				=	gcc
 NAME			=	ft_malloc
-FLAGS			=	-g -fsanitize=address #-Wall -Wextra -Werror 
+FLAGS			=	-g  -Wall -Wextra -Werror #-fsanitize=address
 
 LIB_PATH		=	../../libft
 LIB				=	$(LIB_PATH)/libft.a
@@ -10,7 +10,8 @@ INC_DIR			=	../../inc
 INCS			=	-I $(LIB_PATH)/$(INC_DIR) -I $(INC_DIR)
 
 SRC_DIR			=	../../src
-SRC_BASE		=	main.c ft_malloc.c  show_alloc_mem.c ft_free.c mem.c debug.c ft_realloc.c realloc_node.c move_header.c clear_node.c tools.c free_tools.c defragment.c add_mem_header.c
+
+SRC_BASE =	ft_malloc.c show_alloc_mem.c ft_free.c mem.c ft_realloc.c realloc_node.c move_header.c clear_node.c tools.c free_tools.c defragment.c add_mem_header.c print_addrhex.c main.c debug.c
 OBJ_DIR			=	obj
 
 SRCS			=	$(addprefix $(SRC_DIR)/, $(SRC_BASE))
