@@ -96,6 +96,7 @@ t_start	*get_start(void *ptr, bool next)
 
 	node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
 	start = (t_start *)(g_mem + 1);
+	printf("node debut :%lu\n",node);
 	while (node--)
 	{
 	    if (ptr >= start->start_tiny && ptr < start->start_tiny + getpagesize())
@@ -104,8 +105,11 @@ t_start	*get_start(void *ptr, bool next)
 			break;
 		start++;
 	}
+	printf("node %lu, start->start_tiny %p\n",node,(start + node)->start_tiny);
 	if (next)
 		return ((t_start *)node);
+//	ft_putstr("ode get start :");
+//	printf("%p\n",start->start_tiny);
 	return (start);
 }
 
@@ -129,9 +133,10 @@ t_start	*get_next_start_null(bool type)
 			if (start->start_med == NULL)
 				return (start);
 			}
+		start++;
 	}
 	A_SIZE-- ; // ne pas jouter de header si il existe deja
-	return (start + 1);
+	return (start);
 }
 
 
@@ -150,19 +155,33 @@ t_start	*get_new_data(void *ptr, bool type)
 	if (!A_SIZE)
 		add_mem_header(3);
 	if (get_start(ptr, 1) != (t_start *)0)
-		return (get_start(ptr, 0) + 1);
+	{
+		ft_putstr("return NULL 0\n");
+
+	    if (type == 0 && (new_start = (get_start(ptr, 0) + 1)->start_tiny) != NULL)
+			return (new_start);
+	    else if (type && (new_start = (get_start(ptr, 0) + 1)->start_med) != NULL)
+			return (new_start);
+	}
 	//new_start = get_start(ptr, 0) + 1; // rechercher le new_start NULL si non aller au + 1;
 	new_start = get_next_start_null(type);
 	if (type == 0)
 	{
-		if (!(new_start->start_tiny = mem_data())
+		if (!(new_start->start_tiny = mem_data(1)))
+		{
+			ft_putstr("return NULL 1\n");
 			return (NULL);
+		}
 	}
 	else
 	{
-		new_start->start_med = mem_data();
-		if (!(new_start->start_med = mem_data())
+		if (!(new_start->start_med = mem_data(1)))
+		{
+
+			ft_putstr("return NULL 2\n");
 			return (NULL);
+		}
 	}
+	ft_putstr("return new start");
 	return (new_start);
 }

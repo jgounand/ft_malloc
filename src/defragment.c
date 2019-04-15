@@ -78,7 +78,7 @@ static void	def_neg_difdata(t_tny **tofree, short type)
 
 static void	def_pos(t_tny **tofree, short type)
 {
-	if (!diff_data((*tofree)))
+	if (!diff_data(*tofree,type))
 		(*tofree)->size = -(((*tofree) + 1)->ptr - (*tofree)->ptr);
 	else {
 		if (type == 0)
@@ -107,7 +107,7 @@ static void	def_prevneg_samedata(t_tny **tofree, short type)
 {
 	size_t	size;
 
-	if (!diff_data(*tofree))
+	if (!diff_data(*tofree,type))
 		((*tofree) - 1)->size += (*tofree)->size;
 	else
 		((*tofree) - 1)->size = -((*tofree)->ptr - ((*tofree) - 1)->ptr)
@@ -135,16 +135,28 @@ void		try_defragment(t_tny *tofree)
 	type = get_type(tofree->ptr);
 	if ((tofree + 1)->size < 0)
 	{
-		if (!diff_data(tofree))
+		ft_putendl("7");
+		if (!diff_data(tofree,type))
+		{
+			ft_putendl("7.1");
 			def_neg_samedata(&tofree, type);
+		}
 		else
+		{
+			ft_putendl("7.2");
 			def_neg_difdata(&tofree, type);
+		}
 	}
 	else
+	{
+
+		ft_putendl("8");
 		def_pos(&tofree, type);
+	}
 	if (not_begin_data(tofree))
 	{
-		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1))
+		ft_putendl("9");
+		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1,type))
 			def_prevneg_samedata(&tofree, type);
 	}
 }

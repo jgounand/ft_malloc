@@ -28,9 +28,9 @@ void		*r_mall_free(t_tny *node, size_t size)
 
 	tmp.size = node->size;
 	tmp.ptr = node->ptr;
-	new_ptr = malloc(size);
+	new_ptr = ft_malloc(size);
 	ft_memcpy(new_ptr, node->ptr, (size < (size_t)tmp.size ? size : tmp.size));
-	free(tmp.ptr);
+	ft_free(tmp.ptr);
 	return (new_ptr);
 }
 
@@ -84,7 +84,7 @@ void		*r_with_node(t_tny **node, size_t size, short type)
 	void	*ptr;
 
 	size_free = 0;
-	if (diff_data(*node))
+	if (diff_data(*node, type))
 		size_free = (*node)->size;
 	else
 		size_free = ((*node) + 1)->ptr - (void *)(*node)->ptr;

@@ -30,15 +30,23 @@ void		*add_node_free(t_tny *tmp, void *ptr, bool type)
 {
 	size_t bytes_cpy;
 
+	printf("tmp ->ptr %p\n",tmp->ptr);
 	bytes_cpy = push_header(&tmp, type);
 	(tmp + 1)->ptr = ptr;
-	if (!diff_data(tmp + 1))
+	if (!diff_data(tmp + 1,type))
+	{
+		printf("\n\t5\n tmp+2 ptr %p tmp + 1ptr %p\n",(tmp+2)->ptr, (tmp + 1)->ptr);
+
 		(tmp + 1)->size = -((tmp + 2)->ptr - (tmp + 1)->ptr);
+	}
 	else
 	{
+		printf("\n\t4 type %u\n",type);
 	    if (type == 0)
         {
-			(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start_tiny)
+
+			//print_addrhex((uint32_t)get_start((tmp + 1)->ptr,0)->start_tiny);
+	    	(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start_tiny)
 								 + getpagesize()) - (tmp + 1)->ptr);
         }
 	    else
@@ -89,21 +97,38 @@ void		*add_small(short type, size_t lenght)
 		return (error == 1 ? add_small(type, lenght) : NULL);
 	node = get_free_node(type, lenght);
 	node_left = get_free_nodeleft(type, lenght);
+	ft_putstr("node left :");
+	ft_putnbr(node_left);
+	ft_putstr("\n");
 	if (!node_left)
 	{
+		write (1,"0\n",2);
 		add_mem_data(&node, type, 0);
 		return (add_small(type, lenght));
 	}
 	new = node->ptr;
 	if (!(node_left - 1) && -node->size - lenght < 16)
+	{
+		write (1,"1\n",2 );
+		printf("node ptr %p\n",node->ptr);
 		add_mem_data(&node, type, 1);
+	}
 	else if (-node->size - lenght > 16)
+	{
+
+		write (1,"2\n",2);
 		add_node_free(node, get_addr(node->ptr + lenght + 1), type);
+	}
 	else
+	{
+
+		write (1,"3\n",2);
 		add_rm_header(1, type);
+	}
 	node->size = lenght;
 	if (add_small_check_error_routine(type, lenght))
 		return (NULL);
+
 	return (new);
 }
 
@@ -139,8 +164,11 @@ static void	*add_fat(size_t lenght)
 **	Purpose:	Init global and call the right function depend of the size
 */
 
-void		*malloc(size_t size)
+void		*ft_malloc(size_t size)
 {
+	ft_putstr("malloc size :");
+	ft_putnbr(size);
+	ft_putstr("\n");
 	if (size <= 0)
 		return (NULL);
 	if (!init_mem())

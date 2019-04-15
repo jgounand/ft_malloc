@@ -21,17 +21,17 @@
 **				return 1 => no place to fit the new size => need malloc
 */
 
-static short	need_alloc(t_tny *node, size_t size)
+static short	need_alloc(t_tny *node, size_t size, bool type)
 {
 	size_t	current_lenght;
 
-	if (!diff_data(node))
+	if (!diff_data(node,type))
 		current_lenght = (node + 1)->ptr - (void *)node->ptr;
 	else
 		current_lenght = node->size;
 	if (current_lenght > size + 1)
 		return (0);
-	else if (!diff_data(node) && (node + 1)->size < 0 && current_lenght
+	else if (!diff_data(node,type) && (node + 1)->size < 0 && current_lenght
 		- (node + 1)->size > size + 1)
 		return (2);
 	return (1);
@@ -55,13 +55,25 @@ static void		*ft_realloc_small(void *ptr, size_t size, short type)
 
 	node = !type ? H_TINY : H_MED;
 	if (!(node = ret_node(node, ptr)))
+	{
+	    ft_putendl("10");
 		return (NULL);
-	if ((need_all = need_alloc(node, size)) == 1)
+	}
+	if ((need_all = need_alloc(node, size, type)) == 1){
+
+		ft_putendl("11");
 		return (r_mall_free(node, size));
+	}
 	else if (need_all == 2)
+	{
+		ft_putendl("12");
 		return (r_with_node1(&node, size, type));
+	}
 	else
+	{
+		ft_putendl("13");
 		return (r_with_node(&node, size, type));
+	}
 }
 
 /*
@@ -83,12 +95,12 @@ static void		*ft_realloc_fat(void *ptr, size_t size)
 	if (!(fat = get_fat(ptr)))
 		return (NULL);
 	c_lenght = fat->size;
-	new = malloc(size);
+	new = ft_malloc(size);
 	if (size < c_lenght)
 		ft_memcpy(new, ptr, size);
 	else
 		ft_memcpy(new, ptr, c_lenght);
-	free(ptr);
+	ft_free(ptr);
 	return (new);
 }
 
@@ -102,14 +114,17 @@ static void		*ft_realloc_fat(void *ptr, size_t size)
 **					type 2 : realloc header fat
 */
 
-void			*realloc(void *ptr, size_t size)
+void			*ft_realloc(void *ptr, size_t size)
 {
 	short	type;
 
+	ft_putstr("realloc size :");
+	ft_putnbr(size);
+	ft_putstr("\n");
 	if (size <= 0)
 		return (NULL);
 	if (!ptr)
-		return (malloc(size));
+		return (ft_malloc(size));
 	type = get_type(ptr);
 	if (type == 0 || type == 1)
 		return (ft_realloc_small(ptr, size, type));

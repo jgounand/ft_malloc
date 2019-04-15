@@ -17,8 +17,8 @@
 # include <sys/mman.h>
 # include "../libft/inc/libft.h"
 
-# define TINY	512
-# define SMALL	1024
+# define TINY	256
+# define SMALL	512
 # define NB_PAGES		1
 # define MAX_TINY getpagesize() * NB_PAGES
 # define MAX_MED getpagesize() * NB_PAGES
@@ -71,9 +71,9 @@ typedef struct	s_infonode
 extern	t_mem	*g_mem;
 
 void			show_alloc_mem(void);
-void			*realloc(void *ptr, size_t size);
-void			*malloc(size_t size);
-void			free(void *ptr);
+void			*ft_realloc(void *ptr, size_t size);
+void			*ft_malloc(size_t size);
+void			ft_free(void *ptr);
 
 bool			add_mem_header(short type);
 
@@ -85,7 +85,7 @@ void			try_defragment(t_tny *tofree);
 
 short			get_type(void *ptr);
 bool			not_begin_data(t_tny *tofree);
-bool			diff_data(t_tny *tofree);
+bool			diff_data(t_tny *tofree, bool type);
 
 t_fat			*get_fat(void *ptr);
 t_tny			*ret_node(t_tny *tofree, void *ptr);
@@ -96,7 +96,7 @@ void			*add_small(short type, size_t lenght);
 
 void			add_mem_data(t_tny **tmp, short type, short position);
 t_mem			*mem_header(unsigned int nb_pages[4]);
-void			*mem_data(void);
+void			*mem_data(short size);
 t_mem			*init_mem(void);
 
 size_t			push_header(t_tny **tmp, short type);
@@ -114,6 +114,6 @@ void			*get_addr(void *ptr);
 void			add_rm_header(short add, short type);
 short			check_header_left(void);
 t_start			*get_start(void *ptr, bool next);
-t_start			*get_new_data(void *ptr);
+t_start			*get_new_data(void *ptr, bool type);
 
 #endif

@@ -110,10 +110,13 @@ static int	free_fat(void *ptr)
 **	Purpose:	Check if the type and free
 */
 
-void		free(void *ptr)
+void		ft_free(void *ptr)
 {
 	short	type;
 
+    ft_putstr("\nfree addr :");
+    print_addrhex((uint32_t)ptr);
+    ft_putstr("\n");
 	if (!ptr)
 		return ;
 	type = get_type(ptr);

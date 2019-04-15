@@ -24,7 +24,8 @@ void		add_mem_data(t_tny **tmp, short type, short position)
 {
 	t_start	*start;
 
-	start = get_new_data(((*tmp) - 1)->ptr);
+	start = get_new_data(((*tmp) - 1)->ptr, type);
+//	printf("tmp - 1 ->ptr %p start %p \n",((*tmp) -1)->ptr, start->start_tiny);
 	if (type)
 	{
 		((*tmp) + position)->ptr = get_addr(start->start_med);
@@ -34,6 +35,7 @@ void		add_mem_data(t_tny **tmp, short type, short position)
 		((*tmp) + position)->ptr = get_addr(start->start_tiny);
 	}
 	((*tmp) + position)->size = - getpagesize();
+	if (!position)
 	add_rm_header(0, type);
 	return ;
 }
