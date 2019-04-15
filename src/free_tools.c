@@ -63,11 +63,7 @@ bool	not_begin_data(t_tny *tofree)
 
 bool	diff_data(t_tny *tofree, bool type) {
 	if (!(tofree + 1))
-	{
-
-	    ft_putstr("tofree + 1 == NULL\n");
 		return (1);
-	}
 	if (type == 0)
 	{
 		if (get_start(tofree->ptr, 0)->start_tiny ==

@@ -152,32 +152,21 @@ t_start	*get_new_data(void *ptr, bool type)
 		add_mem_header(3);
 	if (get_start(ptr, 1) != (t_start *)0)
 	{
-		ft_putstr("return NULL 0\n");
-
 	    if (type == 0 && (new_start = (get_start(ptr, 0) + 1)->start_tiny) != NULL)
 			return (new_start);
 	    else if (type && (new_start = (get_start(ptr, 0) + 1)->start_med) != NULL)
 			return (new_start);
 	}
-	//new_start = get_start(ptr, 0) + 1; // rechercher le new_start NULL si non aller au + 1;
 	new_start = get_next_start_null(type);
 	if (type == 0)
 	{
 		if (!(new_start->start_tiny = mem_data(1)))
-		{
-			ft_putstr("return NULL 1\n");
 			return (NULL);
-		}
 	}
 	else
 	{
 		if (!(new_start->start_med = mem_data(1)))
-		{
-
-			ft_putstr("return NULL 2\n");
 			return (NULL);
-		}
 	}
-	ft_putstr("return new start");
 	return (new_start);
 }
