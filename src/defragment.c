@@ -135,27 +135,15 @@ void		try_defragment(t_tny *tofree)
 	type = get_type(tofree->ptr);
 	if ((tofree + 1)->size < 0)
 	{
-		ft_putendl("7");
 		if (!diff_data(tofree,type))
-		{
-			ft_putendl("7.1");
 			def_neg_samedata(&tofree, type);
-		}
 		else
-		{
-			ft_putendl("7.2");
 			def_neg_difdata(&tofree, type);
-		}
 	}
 	else
-	{
-
-		ft_putendl("8");
 		def_pos(&tofree, type);
-	}
 	if (not_begin_data(tofree))
 	{
-		ft_putendl("9");
 		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1,type))
 			def_prevneg_samedata(&tofree, type);
 	}

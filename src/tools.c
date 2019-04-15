@@ -96,7 +96,6 @@ t_start	*get_start(void *ptr, bool next)
 
 	node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
 	start = (t_start *)(g_mem + 1);
-	printf("node debut :%lu\n",node);
 	while (node--)
 	{
 	    if (ptr >= start->start_tiny && ptr < start->start_tiny + getpagesize())
@@ -105,11 +104,8 @@ t_start	*get_start(void *ptr, bool next)
 			break;
 		start++;
 	}
-	printf("node %lu, start->start_tiny %p\n",node,(start + node)->start_tiny);
 	if (next)
 		return ((t_start *)node);
-//	ft_putstr("ode get start :");
-//	printf("%p\n",start->start_tiny);
 	return (start);
 }
 

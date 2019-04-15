@@ -114,9 +114,6 @@ void		free(void *ptr)
 {
 	short	type;
 
-    ft_putstr("\nfree addr :");
-    print_addrhex((uint32_t)ptr);
-    ft_putstr("\n");
 	if (!ptr)
 		return ;
 	type = get_type(ptr);

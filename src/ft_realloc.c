@@ -55,25 +55,13 @@ static void		*ft_realloc_small(void *ptr, size_t size, short type)
 
 	node = !type ? H_TINY : H_MED;
 	if (!(node = ret_node(node, ptr)))
-	{
-	    ft_putendl("10");
 		return (NULL);
-	}
-	if ((need_all = need_alloc(node, size, type)) == 1){
-
-		ft_putendl("11");
+	if ((need_all = need_alloc(node, size, type)) == 1)
 		return (r_mall_free(node, size));
-	}
 	else if (need_all == 2)
-	{
-		ft_putendl("12");
 		return (r_with_node1(&node, size, type));
-	}
 	else
-	{
-		ft_putendl("13");
 		return (r_with_node(&node, size, type));
-	}
 }
 
 /*
@@ -118,9 +106,6 @@ void			*realloc(void *ptr, size_t size)
 {
 	short	type;
 
-	ft_putstr("realloc size :");
-	ft_putnbr(size);
-	ft_putstr("\n");
 	if (size <= 0)
 		return (NULL);
 	if (!ptr)
