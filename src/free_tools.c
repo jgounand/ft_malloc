@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 11:23:35 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 17:08:45 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/09 15:46:08 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ bool	not_begin_data(t_tny *tofree)
 **	Purpose:	Check  if tofree->ptr and (tofree + 1)->ptr same header start
 */
 
-bool	diff_data(t_tny *tofree, bool type) {
+bool	diff_data(t_tny *tofree, bool type)
+{
 	if (!(tofree + 1))
 		return (1);
 	if (type == 0)

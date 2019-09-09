@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/24 12:27:24 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/08 18:29:45 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/09 15:39:12 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ static short	need_alloc(t_tny *node, size_t size, bool type)
 {
 	size_t	current_lenght;
 
-	if (!diff_data(node,type))
+	if (!diff_data(node, type))
 		current_lenght = (node + 1)->ptr - (void *)node->ptr;
 	else
 		current_lenght = node->size;
 	if (current_lenght > size + 1)
 		return (0);
-	else if (!diff_data(node,type) && (node + 1)->size < 0 && current_lenght
+	else if (!diff_data(node, type) && (node + 1)->size < 0 && current_lenght
 		- (node + 1)->size > size + 1)
 		return (2);
 	return (1);

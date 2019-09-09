@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 18:34:14 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 17:26:41 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/09 15:45:28 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ static void	def_neg_difdata(t_tny **tofree, short type)
 	size_t	size;
 
 	if (type == 0)
-	(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_tiny)
+		(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_tiny)
 				+ getpagesize()) - (*tofree)->ptr);
 	if (type == 0)
 		(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_med)
-							 + getpagesize()) - (*tofree)->ptr);
+							+ getpagesize()) - (*tofree)->ptr);
 	if ((*tofree)->size > -8)
 	{
 		size = ((void *)(type ? H_MED : H_TINY) + (sizeof(t_tny))
@@ -78,19 +78,19 @@ static void	def_neg_difdata(t_tny **tofree, short type)
 
 static void	def_pos(t_tny **tofree, short type)
 {
-	if (!diff_data(*tofree,type))
+	if (!diff_data(*tofree, type))
 		(*tofree)->size = -(((*tofree) + 1)->ptr - (*tofree)->ptr);
-	else {
+	else
+	{
 		if (type == 0)
 		{
-			(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_tiny)
-								 + getpagesize()) - (*tofree)->ptr);
-
+			(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)
+							->start_tiny) + getpagesize()) - (*tofree)->ptr);
 		}
-		else {
-			(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)->start_med)
-								 + getpagesize()) - (*tofree)->ptr);
-
+		else
+		{
+			(*tofree)->size = -(((void *)(get_start((*tofree)->ptr, 0)
+							->start_med) + getpagesize()) - (*tofree)->ptr);
 		}
 	}
 }
@@ -107,7 +107,7 @@ static void	def_prevneg_samedata(t_tny **tofree, short type)
 {
 	size_t	size;
 
-	if (!diff_data(*tofree,type))
+	if (!diff_data(*tofree, type))
 		((*tofree) - 1)->size += (*tofree)->size;
 	else
 		((*tofree) - 1)->size = -((*tofree)->ptr - ((*tofree) - 1)->ptr)
@@ -135,7 +135,7 @@ void		try_defragment(t_tny *tofree)
 	type = get_type(tofree->ptr);
 	if ((tofree + 1)->size < 0)
 	{
-		if (!diff_data(tofree,type))
+		if (!diff_data(tofree, type))
 			def_neg_samedata(&tofree, type);
 		else
 			def_neg_difdata(&tofree, type);
@@ -144,7 +144,7 @@ void		try_defragment(t_tny *tofree)
 		def_pos(&tofree, type);
 	if (not_begin_data(tofree))
 	{
-		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1,type))
+		if ((tofree - 1)->size < 0 && !diff_data(tofree - 1, type))
 			def_prevneg_samedata(&tofree, type);
 	}
 }

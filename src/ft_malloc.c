@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/15 20:46:23 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 17:29:43 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/09 13:58:31 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,19 @@ void		*add_node_free(t_tny *tmp, void *ptr, bool type)
 
 	bytes_cpy = push_header(&tmp, type);
 	(tmp + 1)->ptr = ptr;
-	if (!diff_data(tmp + 1,type))
+	if (!diff_data(tmp + 1, type))
 		(tmp + 1)->size = -((tmp + 2)->ptr - (tmp + 1)->ptr);
 	else
 	{
-	    if (type == 0)
-        {
-
-	    	(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start_tiny)
-								 + getpagesize()) - (tmp + 1)->ptr);
-        }
-	    else
+		if (type == 0)
 		{
-			(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)->start_med)
-								 + getpagesize()) - (tmp + 1)->ptr);
+			(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)
+							->start_tiny) + getpagesize()) - (tmp + 1)->ptr);
+		}
+		else
+		{
+			(tmp + 1)->size = -(((void *)(get_start((tmp + 1)->ptr, 0)
+							->start_med) + getpagesize()) - (tmp + 1)->ptr);
 		}
 		if (!(tmp + 1)->size)
 			remove_header(&tmp, bytes_cpy, type);
@@ -105,7 +104,6 @@ void		*add_small(short type, size_t lenght)
 	node->size = lenght;
 	if (add_small_check_error_routine(type, lenght))
 		return (NULL);
-
 	return (new);
 }
 

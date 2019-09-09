@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 18:44:07 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/09 15:50:23 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void		add_mem_data(t_tny **tmp, short type, short position)
 	{
 		((*tmp) + position)->ptr = get_addr(start->start_tiny);
 	}
-	((*tmp) + position)->size = - getpagesize();
+	((*tmp) + position)->size = -getpagesize();
 	if (!position)
-	    add_rm_header(0, type);
+		add_rm_header(0, type);
 	return ;
 }
 
@@ -89,10 +89,10 @@ void		*mem_data(short size)
 **	Purpose:	Init the first header of Tiny, Small and Data
 */
 
-static bool	init_headers(void)
+static bool		init_headers(void)
 {
-	t_tny	*tny;
-	t_start	*start;
+	t_tny			*tny;
+	t_start			*start;
 	unsigned short	size;
 
 	size = 1;
@@ -103,42 +103,42 @@ static bool	init_headers(void)
 		return (1);
 	tny = H_TINY;
 	tny->ptr = get_addr(start->start_tiny);
-	tny->size = - size * getpagesize();
+	tny->size = -size * getpagesize();
 	tny = H_MED;
 	tny->ptr = get_addr(start->start_med);
-	tny->size = - size * getpagesize();
+	tny->size = -size * getpagesize();
 	TINY_SIZE--;
 	MED_SIZE--;
 	A_SIZE--;
 	return (0);
 }
 
-void	init_data_firsttime()
+static void		init_data_firsttime()
 {
-    t_tny	*tny;
-    t_med	*med;
-    t_start	*start;
+	t_tny	*tny;
+	t_med	*med;
+	t_start	*start;
 	unsigned short	i;
 
-    tny = H_TINY + 1;
-    med = H_MED + 1;
+	tny = H_TINY + 1;
+	med = H_MED + 1;
 	start = (t_start *)(g_mem + 1) + 1;
-    i  = 0;
-    while (i++ < 25)
-    {
-    	start->start_tiny = mem_data(1);
-    	start->start_med = mem_data(1);
-    	A_SIZE--;
-    	tny->ptr = start->start_tiny;
-    	tny->size = - getpagesize();
-    	TINY_SIZE--;
+	i = 0;
+	while (i++ < 25)
+	{
+		start->start_tiny = mem_data(1);
+		start->start_med = mem_data(1);
+		A_SIZE--;
+		tny->ptr = start->start_tiny;
+		tny->size = - getpagesize();
+		TINY_SIZE--;
 		med->ptr = start->start_med;
 		med->size = - getpagesize();
 		MED_SIZE--;
 		tny++;
 		med++;
 		start++;
-    }
+	}
 }
 
 /*
