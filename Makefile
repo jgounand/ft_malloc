@@ -25,7 +25,7 @@ SRC_DIR =		./src/
 OBJ_DIR_NAME =	obj
 OBJ_DIR =		./obj/
 
-FILENAMES =	ft_malloc show_alloc_mem ft_free mem ft_realloc realloc_node move_header clear_node tools free_tools defragment add_mem_header print_addrhex
+FILENAMES =	ft_malloc show_alloc_mem ft_free mem ft_realloc realloc_node move_header clear_node tools free_tools defragment add_mem_header print_addrhex show_alloc_mem_tools mem_tools tools2
 
 
 OBJ_PATHS :=	$(addsuffix .o,$(FILENAMES))

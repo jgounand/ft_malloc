@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 14:01:39 by jgounand          #+#    #+#             */
-/*   Updated: 2019/09/09 15:50:23 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/10 12:29:57 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void		*mem_data(short size)
 **	Purpose:	Init the first header of Tiny, Small and Data
 */
 
-static bool		init_headers(void)
+static bool	init_headers(void)
 {
 	t_tny			*tny;
 	t_start			*start;
@@ -111,34 +111,6 @@ static bool		init_headers(void)
 	MED_SIZE--;
 	A_SIZE--;
 	return (0);
-}
-
-static void		init_data_firsttime()
-{
-	t_tny	*tny;
-	t_med	*med;
-	t_start	*start;
-	unsigned short	i;
-
-	tny = H_TINY + 1;
-	med = H_MED + 1;
-	start = (t_start *)(g_mem + 1) + 1;
-	i = 0;
-	while (i++ < 25)
-	{
-		start->start_tiny = mem_data(1);
-		start->start_med = mem_data(1);
-		A_SIZE--;
-		tny->ptr = start->start_tiny;
-		tny->size = - getpagesize();
-		TINY_SIZE--;
-		med->ptr = start->start_med;
-		med->size = - getpagesize();
-		MED_SIZE--;
-		tny++;
-		med++;
-		start++;
-	}
 }
 
 /*

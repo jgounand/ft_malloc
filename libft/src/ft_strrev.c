@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*   ft_strrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2019/09/10 12:23:14 by jgounand         ###   ########.fr       */
+/*   Created: 2019/09/10 11:33:13 by jgounand          #+#    #+#             */
+/*   Updated: 2019/09/10 11:33:50 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/ft_malloc.h"
+#include "libft.h"
 
-void			show_alloc_mem(void)
+char			*ft_strrev(char *str)
 {
-	size_t	total;
+	int		i;
+	int		length;
+	char	buff;
 
-	init_mem();
-	total = print_lignes_tymed(0, H_TINY, 1);
-	total += print_lignes_tymed(1, H_MED, 1);
-	total += print_lignes_fat(H_FAT, 1);
-	ft_putstr("\n");
-	print_lignes_headers();
-	ft_putstr("\n");
-	ft_putstr("Total : ");
-	ft_putnbr(total);
-	ft_putstr("\n");
+	i = 0;
+	length = ft_strlen(str);
+	while (length - 1 > i)
+	{
+		buff = str[i];
+		str[i] = str[length - 1];
+		str[length - 1] = buff;
+		length--;
+		i++;
+	}
+	return (str);
 }

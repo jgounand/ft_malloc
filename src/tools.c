@@ -6,24 +6,11 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 04:00:29 by jgounand          #+#    #+#             */
-/*   Updated: 2019/04/09 17:20:51 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/10 12:40:58 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/ft_malloc.h"
-
-/*
-**	Input:	void *ptr
-**	Output:	void *ptr
-**	Purpose:	return the next ptr % 8
-*/
-
-void	*get_addr(void *ptr)
-{
-	while ((uint32_t)ptr % 16)
-		ptr++;
-	return (ptr);
-}
 
 /*
 **	Input:	short add
@@ -98,10 +85,10 @@ t_start	*get_start(void *ptr, bool next)
 	start = (t_start *)(g_mem + 1);
 	while (node--)
 	{
-	    if (ptr >= start->start_tiny && ptr < start->start_tiny + getpagesize())
-            break;
+		if (ptr >= start->start_tiny && ptr < start->start_tiny + getpagesize())
+			break ;
 		if (ptr >= start->start_med && ptr < start->start_med + getpagesize())
-			break;
+			break ;
 		start++;
 	}
 	if (next)
@@ -111,7 +98,6 @@ t_start	*get_start(void *ptr, bool next)
 
 t_start	*get_next_start_null(bool type)
 {
-
 	t_start	*start;
 	size_t	node;
 
@@ -125,16 +111,15 @@ t_start	*get_next_start_null(bool type)
 				return (start);
 		}
 		else
-			{
+		{
 			if (start->start_med == NULL)
 				return (start);
-			}
+		}
 		start++;
 	}
-	A_SIZE-- ; // ne pas jouter de header si il existe deja
+	A_SIZE--;
 	return (start);
 }
-
 
 /*
 **	Input:	void *ptr
@@ -152,9 +137,9 @@ t_start	*get_new_data(void *ptr, bool type)
 		add_mem_header(3);
 	if (get_start(ptr, 1) != (t_start *)0)
 	{
-	    if (type == 0 && (new_start = (get_start(ptr, 0) + 1)->start_tiny) != NULL)
+		if (type == 0 && (new_start = (get_start(ptr, 0) + 1)->start_tiny))
 			return (new_start);
-	    else if (type && (new_start = (get_start(ptr, 0) + 1)->start_med) != NULL)
+		else if (type && (new_start = (get_start(ptr, 0) + 1)->start_med))
 			return (new_start);
 	}
 	new_start = get_next_start_null(type);

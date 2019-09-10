@@ -20,7 +20,7 @@ ft_putstr_fd ft_putendl_fd ft_putnbr_fd ft_strnequ  \
 ft_lstnew ft_lstdelone ft_lstdel ft_lstadd ft_lstiter ft_lstmap \
 ft_realloc ft_lstaddback ft_strjoin_free ft_lstsort ft_lstsortif \
 ft_lstcmp ft_strchr_b ft_swap ft_cptnbr get_next_line open_dir	\
-ft_lststr ft_fork close_dir ft_split_whitespaces
+ft_lststr ft_fork close_dir ft_split_whitespaces ft_strrev
 
 OBJ_PATHS :=	$(addsuffix .o,$(FILENAMES))
 OBJ_PATHS :=	$(addprefix $(OBJ_DIR),$(OBJ_PATHS))
