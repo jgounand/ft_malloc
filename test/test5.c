@@ -6,11 +6,11 @@
 /*   By: marene <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 17:18:54 by marene            #+#    #+#             */
-/*   Updated: 2016/05/18 15:48:44 by marene           ###   ########.fr       */
+/*   Updated: 2019/09/10 15:15:43 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/ft_malloc.h"
+#include "./inc/ft_malloc.h"
 #include <string.h>
 
 int		main(void)

@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/20 19:31:21 by jgounand          #+#    #+#             */
-/*   Updated: 2019/09/10 12:23:14 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/10 15:32:41 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void			show_alloc_mem(void)
 	total = print_lignes_tymed(0, H_TINY, 1);
 	total += print_lignes_tymed(1, H_MED, 1);
 	total += print_lignes_fat(H_FAT, 1);
-	ft_putstr("\n");
-	print_lignes_headers();
 	ft_putstr("\n");
 	ft_putstr("Total : ");
 	ft_putnbr(total);

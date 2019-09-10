@@ -6,7 +6,7 @@
 /*   By: marene <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/17 17:18:47 by marene            #+#    #+#             */
-/*   Updated: 2016/05/18 17:11:11 by marene           ###   ########.fr       */
+/*   Updated: 2019/09/10 15:12:42 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,4 @@ int		main(void)
 	free((void *)addr + 5);
 	if (realloc((void *)addr + 5, 10) == NULL)
 		print("Bonjours\n");
-	print("Bonjours\n");
 }

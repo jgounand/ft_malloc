@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 12:26:21 by jgounand          #+#    #+#             */
-/*   Updated: 2019/09/10 12:30:13 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/10 15:20:39 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		init_data_firsttime(void)
 	med = H_MED + 1;
 	start = (t_start *)(g_mem + 1) + 1;
 	i = 0;
-	while (i++ < 25)
+	while (i++ < 0)
 	{
 		start->start_tiny = mem_data(1);
 		start->start_med = mem_data(1);

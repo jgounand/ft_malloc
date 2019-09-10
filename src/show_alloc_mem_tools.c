@@ -6,7 +6,7 @@
 /*   By: jgounand <joris@gounand.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 12:11:04 by jgounand          #+#    #+#             */
-/*   Updated: 2019/09/10 12:41:38 by jgounand         ###   ########.fr       */
+/*   Updated: 2019/09/10 15:31:37 by jgounand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,14 @@ size_t			print_lignes_tymed(short type, t_tny *node, bool all)
 {
 	size_t	nb_node;
 	size_t	total;
-	size_t	tmp_nb;
 
 	total = 0;
 	print_type(type);
 	nb_node = type == 0 ? MAX_HEADER(t_tny, S_HEADER_T) - TINY_SIZE :
 			MAX_HEADER(t_tny, S_HEADER_M) - MED_SIZE;
-	tmp_nb = nb_node;
-	ft_putstr("  nb_node : ");
-	ft_putnbr(TINY_SIZE);
+	if (!nb_node)
+		return (0);
+	print_addrhex((uint32_t)node->ptr);
 	ft_putstr("\n");
 	while (nb_node--)
 	{
@@ -53,7 +52,6 @@ size_t			print_lignes_tymed(short type, t_tny *node, bool all)
 		{
 			print_ligne_alloc(node->ptr, node->size);
 			total += node->size;
-			ft_putnbr(tmp_nb - nb_node);
 			ft_putstr("\n");
 		}
 		node++;
@@ -66,8 +64,6 @@ size_t			print_lignes_fat(t_fat *node, bool all)
 	size_t	nb_node;
 	size_t	total;
 
-	ft_putnbr(FAT_SIZE);
-	ft_putnbr(MAX_HEADER(t_fat, S_HEADER_F));
 	total = 0;
 	nb_node = MAX_HEADER(t_fat, S_HEADER_F) - FAT_SIZE;
 	if (nb_node == 0)
@@ -80,7 +76,6 @@ size_t			print_lignes_fat(t_fat *node, bool all)
 		if (node->size > 0 || all)
 		{
 			print_ligne_alloc(node->ptr, node->size);
-			ft_putnbr(nb_node);
 			ft_putstr("\n");
 			total += node->size;
 		}
@@ -95,8 +90,6 @@ size_t			print_lignes_headers(void)
 	t_start	*start;
 
 	start = (t_start *)(g_mem + 1);
-	ft_putnbr(A_SIZE);
-	ft_putnbr(MAX_HEADER(t_start, S_HEADER_A));
 	nb_node = MAX_HEADER(t_start, S_HEADER_A) - A_SIZE;
 	ft_putstr("HEADER : --------------------------------------------------");
 	ft_putstr("\n");
